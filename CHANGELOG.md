@@ -4,10 +4,10 @@
 
 ### Patch Changes
 
-- b3159d0: add useWatchBalance hook
-- 8d75411: - use burner-connector package
-  - Update useScaffoldEventHistory hook
-  - fix: types typo
+- use burner-connector package
+- Update useScaffoldEventHistory hook
+- fix: types typo
+- add useWatchBalance hook
 
 ## 0.0.39
 
