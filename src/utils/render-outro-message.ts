@@ -46,6 +46,10 @@ export async function renderOutroMessage(options: Options) {
   `;
 
   message += `
+  \t${chalk.bold.yellow("Check out the README.md for more information")}
+  `;
+
+  message += `
   ${chalk.bold.green("Thanks for using Scaffold-ETH 2 🙏, Happy Building!")}
   `;
 
