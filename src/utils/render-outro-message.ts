@@ -12,6 +12,18 @@ export async function renderOutroMessage(options: Options) {
   ${chalk.dim("cd")} ${options.project}
   `;
 
+  if (!options.install) {
+    message += `
+    \t${chalk.bold("Install dependencies")}
+    \t${chalk.dim("yarn")} install
+    `;
+
+    message += `
+    \t${chalk.bold("Format files with prettier")}
+    \t${chalk.dim("yarn")} format
+    `;
+  }
+
   if (
     options.extensions.includes("hardhat") ||
     options.extensions.includes("foundry")
@@ -46,7 +58,7 @@ export async function renderOutroMessage(options: Options) {
   `;
 
   message += `
-  \t${chalk.bold.yellow("Check out the README.md for more information")}
+  \t${chalk.bold("Check out the README.md for more information")}
   `;
 
   message += `
