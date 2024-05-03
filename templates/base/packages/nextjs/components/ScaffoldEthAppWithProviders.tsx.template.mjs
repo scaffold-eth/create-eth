@@ -2,9 +2,9 @@ import { withDefaults } from "../../../../utils.js";
 
 const contents = ({ providerNames, providerSetups, providerImports, providerProps }) => {
   // filter out empty strings
-  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]} />`);
+  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
 
-  const providerClosingTags = providerNames.filter(Boolean).map(name => `<${name} />`);
+  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`);
 
   return `"use client";
 
