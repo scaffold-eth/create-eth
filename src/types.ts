@@ -15,9 +15,7 @@ type NonNullableRawOptions = {
 
 export type Options = NonNullableRawOptions;
 
-export type Extension =
-  | "hardhat"
-  | "foundry"
+export type Extension = "hardhat" | "foundry" | "the-graph";
 type NullExtension = null;
 export type ExtensionOrNull = Extension | NullExtension;
 // corresponds to inquirer question types:
