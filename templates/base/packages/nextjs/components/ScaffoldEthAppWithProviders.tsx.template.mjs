@@ -1,14 +1,10 @@
 import { withDefaults } from "../../../../utils.js";
 
-const isEmptyString = str => Boolean(str);
-
 const contents = ({ providerNames, providerSetups, providerImports, providerProps }) => {
   // filter out empty strings
-  const providerOpeningTags = providerNames
-    .filter(isEmptyString)
-    .map((name, index) => `<${name} ${providerProps[index]} />`);
+  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]} />`);
 
-  const providerClosingTags = providerNames.filter(isEmptyString).map(name => `<${name} />`);
+  const providerClosingTags = providerNames.filter(Boolean).map(name => `<${name} />`);
 
   return `"use client";
 
@@ -25,7 +21,7 @@ import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { useGlobalState } from "~~/services/store/store";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-${providerImports.filter(isEmptyString).join("\n")}
+${providerImports.filter(Boolean).join("\n")}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   const price = useNativeCurrencyPrice();
@@ -57,7 +53,7 @@ export const queryClient = new QueryClient({
   },
 });
 
-${providerSetups.filter(isEmptyString).join("\n")}
+${providerSetups.filter(Boolean).join("\n")}
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
