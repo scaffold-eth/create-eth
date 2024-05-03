@@ -1,16 +1,34 @@
 import * as fs from "fs";
 import chalk from "chalk";
+const parseAndCorrectJSON = (input: string): any => {
+  // Add double quotes around keys
+  let correctedJSON = input.replace(/(\w+)(?=\s*:)/g, '"$1"');
 
-const graphDir = "./";
-const deploymentsDir = "../hardhat/deployments";
+  // Remove trailing commas
+  correctedJSON = correctedJSON.replace(/,(?=\s*[}\]])/g, "");
 
-function publishContract(contractName: string, networkName: string) {
   try {
-    let contract = fs
-      .readFileSync(`${deploymentsDir}/${networkName}/${contractName}.json`)
-      .toString();
-    let contractObject = JSON.parse(contract);
-    const graphConfigPath = `${graphDir}/networks.json`;
+    return JSON.parse(correctedJSON);
+  } catch (error) {
+    console.error("Failed to parse JSON", error);
+    throw new Error("Failed to parse JSON");
+  }
+};
+
+type Contract = {
+  address: string;
+  abi: any[];
+};
+
+const GRAPH_DIR = "./";
+
+function publishContract(
+  contractName: string,
+  contractObject: Contract,
+  networkName: string
+) {
+  try {
+    const graphConfigPath = `${GRAPH_DIR}/networks.json`;
     let graphConfig = "{}";
     try {
       if (fs.existsSync(graphConfigPath)) {
@@ -34,9 +52,9 @@ function publishContract(contractName: string, networkName: string) {
       graphConfigPath,
       JSON.stringify(graphConfigObject, null, 2)
     );
-    if (!fs.existsSync(`${graphDir}/abis`)) fs.mkdirSync(`${graphDir}/abis`);
+    if (!fs.existsSync(`${GRAPH_DIR}/abis`)) fs.mkdirSync(`${GRAPH_DIR}/abis`);
     fs.writeFileSync(
-      `${graphDir}/abis/${networkName}_${contractName}.json`,
+      `${GRAPH_DIR}/abis/${networkName}_${contractName}.json`,
       JSON.stringify(contractObject.abi, null, 2)
     );
 
@@ -50,17 +68,40 @@ function publishContract(contractName: string, networkName: string) {
   }
 }
 
+const DEPLOYED_CONTRACTS_FILE = "../nextjs/contracts/deployedContracts.ts";
 async function main() {
-  const directories = fs.readdirSync(deploymentsDir);
-  directories.forEach(function(directory) {
-    const files = fs.readdirSync(`${deploymentsDir}/${directory}`);
-    files.forEach(function(file) {
-      if (file.indexOf(".json") >= 0) {
-        const contractName = file.replace(".json", "");
-        publishContract(contractName, directory);
-      }
-    });
-  });
+  const fileContent = fs.readFileSync(DEPLOYED_CONTRACTS_FILE, "utf8");
+
+  const pattern = /const deployedContracts = ({[^;]+}) as const;/s;
+  const match = fileContent.match(pattern);
+
+  if (!match || !match[1]) {
+    throw new Error(
+      `Failed to find deployedContracts in the ${DEPLOYED_CONTRACTS_FILE}`
+    );
+  }
+  const jsonString = match[1];
+
+  // Parse the JSON string
+  const deployedContracts = parseAndCorrectJSON(jsonString);
+  const localContracts = deployedContracts[31337];
+
+  if (!localContracts) {
+    console.error("No contracts found for the local network.");
+    return;
+  }
+
+  for (const contractName in localContracts) {
+    const contractObject = localContracts[contractName];
+    if (!contractObject) {
+      console.error(
+        `Contract ${contractName} does not have an ABI or address. Skipping.`
+      );
+      continue;
+    }
+    publishContract(contractName, contractObject, "localhost");
+  }
+
   console.log("✅  Published contracts to the subgraph package.");
 }
 main()
