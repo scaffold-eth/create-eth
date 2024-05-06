@@ -6,6 +6,8 @@
 
 CLI to create decentralized applications (dapps) using Scaffold-ETH 2.
 
+This is an alternative method of installing Scaffold-ETH. Instead of directly [cloning SE-2](https://docs.scaffoldeth.io/quick-start/installation#option-1-setup-using-git-clone), you can use create-eth to create your own custom instance, where you can choose among several configurations and extensions.
+
 <h4 align="center">
   <a href="https://github.com/scaffold-eth/scaffold-eth-2">SE-2 Repo</a> |
   <a href="https://docs.scaffoldeth.io">SE-2 Docs</a> |
