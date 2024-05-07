@@ -12,7 +12,7 @@ const config: Config = {
     typedQuestion({
       type: "multi-select",
       name: "Extension",
-      message: "What extensions do you want to use?",
+      message: "Which extensions do you want to install?",
       extensions: ["the-graph"],
       default: undefined,
     }),
