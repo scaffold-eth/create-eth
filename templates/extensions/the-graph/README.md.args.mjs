@@ -28,16 +28,32 @@ This will spin up all the containers for The Graph using docker-compose. You wil
 
 ##### Linux Only
 
+**For hardhat**
+
 Update your package.json in packages/hardhat with the following command line option for the hardhat chain.
 
 \`\`\`
 "chain": "hardhat node --network hardhat --no-deploy --hostname 0.0.0.0"
 \`\`\`
 
+**For foundry**
+
+Update your package.json in packages/foundry with the following command line option for the anvil chain.
+
+\`\`\`
+"chain": "anvil --host 0.0.0.0 --config-out localhost.json",
+\`\`\`
+
 Save the file and then restart your chain in its original window.
 
 \`\`\`
 yarn chain
+\`\`\`
+
+Redeploy your smart contracts.
+
+\`\`\`
+yarn deploy
 \`\`\`
 
 You might also need to add a firewall exception for port 8432. As an example for Ubuntu... run the following command.
@@ -50,7 +66,7 @@ sudo ufw allow 8545/tcp
 
 #### ✅ Step 2: Create and ship our Subgraph ✅
 
-Now we can open up a fourth window to finish setting up The Graph. 😅 In this forth window we will create our local subgraph!
+Now we can open up a fifth window to finish setting up The Graph. 😅 In this fifth window we will create our local subgraph!
 
 > Note: You will only need to do this once.
 
@@ -121,7 +137,7 @@ Go ahead and head over to your subgraph endpoint and take a look!
 
 Matchstick is a [unit testing framework](https://thegraph.com/docs/en/developing/unit-testing-framework/), developed by [LimeChain](https://limechain.tech/), that enables subgraph developers to test their mapping logic in a sandboxed environment and deploy their subgraphs with confidence!
 
-The project comes with a pre-written test located in\`packages/subgraph/tests/asserts.test.ts\`
+The project comes with a pre-written test located in \`packages/subgraph/tests/asserts.test.ts\`
 
 To test simply type....
 
@@ -153,6 +169,8 @@ All 1 tests passed! 😎
 
 [Thu, 07 Mar 2024 15:10:26 -0800] Program executed in: 1.838s.
 \`\`\`
+
+> NOTE: If you get an error, you may trying passing \`-d\` flag \`yarn subgraph:test -d\`. This will run matchstick in docker container.
 
 &nbsp;
 
