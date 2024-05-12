@@ -1,112 +1,122 @@
 import * as fs from "fs";
 import chalk from "chalk";
-const parseAndCorrectJSON = (input: string): any => {
-  // Add double quotes around keys
-  let correctedJSON = input.replace(/(\w+)(?=\s*:)/g, '"$1"');
-
-  // Remove trailing commas
-  correctedJSON = correctedJSON.replace(/,(?=\s*[}\]])/g, "");
-
-  try {
-    return JSON.parse(correctedJSON);
-  } catch (error) {
-    console.error("Failed to parse JSON", error);
-    throw new Error("Failed to parse JSON");
-  }
-};
-
-type Contract = {
-  address: string;
-  abi: any[];
-};
+import {
+  ScaffoldETHGenericContract,
+  convertChainIdsKeysToNames,
+  deepMergeContracts,
+  parseAndCorrectJSON,
+} from "../utils/scaffoldETHContracts";
 
 const GRAPH_DIR = "./";
 
-function publishContract(
-  contractName: string,
-  contractObject: Contract,
-  networkName: string
-) {
-  try {
-    const graphConfigPath = `${GRAPH_DIR}/networks.json`;
-    let graphConfig = "{}";
-    try {
-      if (fs.existsSync(graphConfigPath)) {
-        graphConfig = fs.readFileSync(graphConfigPath).toString();
-      }
-    } catch (e) {
-      console.log(e);
-    }
-
-    let graphConfigObject = JSON.parse(graphConfig);
-    if (!(networkName in graphConfigObject)) {
-      graphConfigObject[networkName] = {};
-    }
-    if (!(contractName in graphConfigObject[networkName])) {
-      graphConfigObject[networkName][contractName] = {};
-    }
-    graphConfigObject[networkName][contractName].address =
-      contractObject.address;
-
-    fs.writeFileSync(
-      graphConfigPath,
-      JSON.stringify(graphConfigObject, null, 2)
-    );
-    if (!fs.existsSync(`${GRAPH_DIR}/abis`)) fs.mkdirSync(`${GRAPH_DIR}/abis`);
-    fs.writeFileSync(
-      `${GRAPH_DIR}/abis/${networkName}_${contractName}.json`,
-      JSON.stringify(contractObject.abi, null, 2)
-    );
-
-    return true;
-  } catch (e) {
-    console.log(
-      "Failed to publish " + chalk.red(contractName) + " to the subgraph."
-    );
-    console.log(e);
-    return false;
-  }
-}
-
+// Scaffold-ETH contracts files
 const DEPLOYED_CONTRACTS_FILE = "../nextjs/contracts/deployedContracts.ts";
+const EXTERNAL_CONTRACTS_FILE = "../nextjs/contracts/externalContracts.ts";
+
+const readConfigFile = (filePath: string): string => {
+  try {
+    return fs.readFileSync(filePath, "utf8");
+  } catch (e) {
+    console.error(chalk.red(`Error reading file at ${filePath}`), e);
+    throw e;
+  }
+};
+
+const publishContract = (
+  contractName: string,
+  contractObject: ScaffoldETHGenericContract,
+  networkName: string,
+) => {
+  const graphConfigPath = `${GRAPH_DIR}/networks.json`;
+  const abisDir = `${GRAPH_DIR}/abis`;
+  const configContent = fs.existsSync(graphConfigPath)
+    ? fs.readFileSync(graphConfigPath, "utf8")
+    : "{}";
+  const graphConfig = JSON.parse(configContent);
+
+  graphConfig[networkName] = graphConfig[networkName] || {};
+  graphConfig[networkName][contractName] = { address: contractObject.address };
+
+  fs.writeFileSync(graphConfigPath, JSON.stringify(graphConfig, null, 2));
+
+  if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir);
+  fs.writeFileSync(
+    `${abisDir}/${networkName}_${contractName}.json`,
+    JSON.stringify(contractObject.abi, null, 2),
+  );
+};
+
 async function main() {
-  const fileContent = fs.readFileSync(DEPLOYED_CONTRACTS_FILE, "utf8");
+  try {
+    const deployedContractsContent = readConfigFile(DEPLOYED_CONTRACTS_FILE);
+    const externalContractsContent = readConfigFile(EXTERNAL_CONTRACTS_FILE);
 
-  const pattern = /const deployedContracts = ({[^;]+}) as const;/s;
-  const match = fileContent.match(pattern);
-
-  if (!match || !match[1]) {
-    throw new Error(
-      `Failed to find deployedContracts in the ${DEPLOYED_CONTRACTS_FILE}`
+    const deployedContractsMatch = deployedContractsContent.match(
+      /const deployedContracts = ({[^;]+}) as const;/s,
     );
-  }
-  const jsonString = match[1];
 
-  // Parse the JSON string
-  const deployedContracts = parseAndCorrectJSON(jsonString);
-  const localContracts = deployedContracts[31337];
+    // matching all since we have example comment in extrenalContracts.ts
+    const externalContractsRegex =
+      /^const\s+externalContracts\s*=\s*({[\s\S]*?})\s*as\s*const;/gm;
+    const externalContractsMatches = [
+      ...externalContractsContent.matchAll(externalContractsRegex),
+    ];
 
-  if (!localContracts) {
-    console.error("No contracts found for the local network.");
-    return;
-  }
+    let externalContractsStringified = "{}";
 
-  for (const contractName in localContracts) {
-    const contractObject = localContracts[contractName];
-    if (!contractObject) {
-      console.error(
-        `Contract ${contractName} does not have an ABI or address. Skipping.`
-      );
-      continue;
+    if (
+      externalContractsMatches &&
+      externalContractsMatches.length > 0 &&
+      externalContractsMatches[0]?.length &&
+      externalContractsMatches[0].length > 0
+    ) {
+      externalContractsStringified = externalContractsMatches[0][1] || "{}";
     }
-    publishContract(contractName, contractObject, "localhost");
-  }
 
-  console.log("✅  Published contracts to the subgraph package.");
-}
-main()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.error(error);
+    const deployedContractsStringified = deployedContractsMatch
+      ? deployedContractsMatch[1]
+      : "{}";
+
+    if (!deployedContractsStringified || !externalContractsStringified) {
+      throw new Error("Failed to find deployedContracts or externalContracts.");
+    }
+
+    const deployedContracts = parseAndCorrectJSON(deployedContractsStringified);
+    const externalContracts = parseAndCorrectJSON(externalContractsStringified);
+
+    const mergedContracts = deepMergeContracts(
+      deployedContracts,
+      externalContracts,
+    );
+
+    // networks.json file uses network names as key instead of chainIds
+    const transformedContracts = convertChainIdsKeysToNames(mergedContracts);
+
+    Object.entries(transformedContracts).forEach(([networkName, contracts]) => {
+      if (!contracts) {
+        console.error(
+          chalk.red(`No contracts found for the network: ${networkName}`),
+        );
+        return;
+      }
+      Object.entries(contracts).forEach(([contractName, contractObject]) => {
+        if (!contractObject || !contractObject.abi || !contractObject.address) {
+          console.error(
+            chalk.red(
+              `Contract ${contractName} does not have an ABI or address. Skipping.`,
+            ),
+          );
+          return;
+        }
+        publishContract(contractName, contractObject, networkName);
+      });
+    });
+
+    console.log(chalk.green("✅ Published contracts to the subgraph package."));
+  } catch (error) {
+    console.error(chalk.red("An error occurred during the process."), error);
     process.exit(1);
-  });
+  }
+}
+
+main();
