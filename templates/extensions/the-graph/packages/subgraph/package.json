@@ -6,6 +6,7 @@
     "abi-copy": "node --loader ts-node/esm --experimental-specifier-resolution=node scripts/abi_copy.ts",
     "codegen": "graph codegen",
     "build": "graph build",
+    "graph": "graph",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ GITHUB_USERNAME/your-contract",
     "local-create": "graph create --node http://localhost:8020/ scaffold-eth/your-contract",
     "local-remove": "graph remove --node http://localhost:8020/ scaffold-eth/your-contract",
