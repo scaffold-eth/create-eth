@@ -177,64 +177,55 @@ All 1 tests passed! 😎
 ## Shipping to TheGraph Studio
 
 1. Generate \`packages/subgraph/networks.json\` from contracts present:
-
-\`\`\`sh
-yarn abi-copy
-\`\`\`
-
-The above command will update the \`packages/subgraph/networks.json\` file and also put the ABI files in the \`packages/subgraph/abis\` folder.
+   \`\`\`sh
+   yarn abi-copy
+   \`\`\`
+   The above command will update the \`packages/subgraph/networks.json\` file and also put the ABI files in the \`packages/subgraph/abis\` folder.
 
 2. Generate AssemblyScript types from the subgraph schema and the contract ABIs:
-
-\`\`\`sh
-yarn codegen
-\`\`\`
+   \`\`\`sh
+   yarn codegen
+   \`\`\`
 
 3. Build the subgraph and pass the network name as an argument:
+   \`\`\`sh
+   yarn graph build --network <network-name>
+   \`\`\`
+   e.g: \`yarn graph build --network sepolia\` checkout [the graph supported networks and thier names](https://thegraph.com/docs/en/developing/supported-networks/), this command should update the \`packages/subgraph/subgraph.yaml\` file with the network name, contract address.
 
-\`\`\`sh
-yarn graph build --network <network-name>
-\`\`\`
 
-e.g., \`yarn graph build --network sepolia\`, this command should update the \`packages/subgraph/subgraph.yaml\` file with the network name, contract address.
+4. Update the \`packages/subgraph/subgraph.yaml\` file with your contract abi file location and startBlock number (optional):
+   \`\`\`diff
+   ...
+         source:
+           abi: YourContract
+           address: "0x54FE7f8Db97e102D3b7d86cc34D885B735E31E8e"
+   +       startBlock: 5889410
+   ...
+         abis:
+           - name: YourContract
+   +         file: ./abis/sepolia_YourContract.json
+   ...
+   \`\`\`
 
-4. Update the \`packages/subgraph/subgraph.yaml\` file with your contract abi file location and startBlock number (optional)
-
-\`\`\`diff
-...
-      source:
-        abi: YourContract
-        address: "0x54FE7f8Db97e102D3b7d86cc34D885B735E31E8e"
-+       startBlock: 5889410
-...
-      abis:
-        - name: YourContract
-+         file: ./abis/sepolia_YourContract.json
-...
-\`\`\`
-
-5. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY"
+5. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
 
 6. Authenticate with the graph CLI:
-
-\`\`\`sh
-yarn graph auth --studio <DEPLOY KEY>
-\`\`\`
+   \`\`\`sh
+   yarn graph auth --studio <DEPLOY KEY>
+   \`\`\`
 
 7. Deploy the subgraph to TheGraph Studio:
+   \`\`\`sh
+   yarn graph deploy --studio <SUBGRAPH SLUG>
+   \`\`\`
+   Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
 
-\`\`\`sh
-yarn graph deploy --studio <SUBGRAPH SLUG>
-\`\`\`
-
-Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
-
-8. Update \`packages/nextjs/components/ScaffoldEthAppWithProviders.tsx\` to use the new subgraph endpoint.
-
-\`\`\`diff
-- const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
-+ const subgraphUri = 'https://api.studio.thegraph.com/query/31430/final/0.0.6'
-\`\`\`
+8. Update \`packages/nextjs/components/ScaffoldEthAppWithProviders.tsx\` to use the new subgraph endpoint:
+   \`\`\`diff
+   - const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
+   + const subgraphUri = 'https://api.studio.thegraph.com/query/31430/final/0.0.6'
+   \`\`\`
 
 &nbsp;
 
