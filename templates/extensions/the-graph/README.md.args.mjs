@@ -174,6 +174,44 @@ All 1 tests passed! 😎
 
 &nbsp;
 
+## Shipping to TheGraph studio
+
+1. Make sure you have the contract verified on Etherscan:
+   \`\`\`sh
+   yarn verify --network <network_name>
+   \`\`\`
+   Check out scaffold-eth [docs](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#4-verify-your-smart-contract) for other methods of verifying the contract.
+
+2. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
+
+3. Init the subgraph:
+   \`\`\`sh
+   graph init --skip-git --studio <SUBGRAPH_SLUG> packages/<SUBGRAPH_SLUG>
+   \`\`\`
+   > NOTE: Make sure to pass \`--skip-git\` to avoid committing unstaged changes of the repo and lint checks. Also, the source directory should be created inside \`packages\` directory else \`yarn install\` should fail.
+
+4. Auth with the deploy key:
+   \`\`\`sh
+   graph auth --studio <DEPLOY_KEY>
+   \`\`\`
+
+5. CD into the subgraph directory:
+   \`\`\`sh
+   cd packages/<SUBGRAPH_SLUG>
+   \`\`\`
+
+6. Build the subgraph:
+   \`\`\`sh
+   graph codegen && graph build
+   \`\`\`
+
+7. Deploy the subgraph:
+   \`\`\`sh
+   graph deploy --studio <SUBGRAPH_SLUG>
+   \`\`\`
+
+&nbsp;
+
 ## A list of all available commands
 
 ### run-node
