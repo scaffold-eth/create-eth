@@ -13,7 +13,7 @@ const config: Config = {
       type: "multi-select",
       name: "Extension",
       message: "Which extensions do you want to install?",
-      extensions: ["the-graph"],
+      extensions: ["subgraph"],
       default: undefined,
     }),
   ],
