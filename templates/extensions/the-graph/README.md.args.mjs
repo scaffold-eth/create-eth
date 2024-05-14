@@ -174,7 +174,7 @@ All 1 tests passed! 😎
 
 &nbsp;
 
-## Shipping to TheGraph studio
+## Shipping to Subgraph Studio
 
 1. Make sure you have the contract verified on Etherscan:
    \`\`\`sh
