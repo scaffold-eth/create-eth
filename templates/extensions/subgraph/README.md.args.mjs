@@ -174,7 +174,9 @@ All 1 tests passed! 😎
 
 &nbsp;
 
-## Shipping to Subgraph Studio
+## Shipping to Subgraph Studio 🚀
+
+> NOTE: This step requires [deployment of contracts](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to your preferred network or the contracts name, abi & address are present in \`packages/nextjs/contracts/externalContracts.ts\`
 
 1. Generate \`packages/subgraph/networks.json\` from contracts present:
    \`\`\`sh
@@ -194,7 +196,7 @@ All 1 tests passed! 😎
    e.g: \`yarn graph build --network sepolia\` checkout [the graph supported networks and thier cli names](https://thegraph.com/docs/en/developing/supported-networks/), this command should update the \`packages/subgraph/subgraph.yaml\` file with the network name, contract address.
 
 
-4. Update the \`packages/subgraph/subgraph.yaml\` file with your contract abi file location and startBlock number (optional):
+4. Update the \`packages/subgraph/subgraph.yaml\` file with your contract start block number(optional) and abi file location(present in \`abis\` dir):
    \`\`\`diff
    ...
          source:
@@ -207,9 +209,9 @@ All 1 tests passed! 😎
    +         file: ./abis/sepolia_YourContract.json
    ...
    \`\`\`
-  NOTE: We have used sepolia as the network name, you can replace it with the network name you used to build the subgraph.
+  TIP: You can use block number of your deployed contract (which can be found by visiting deployed transaction hash in blockexplorer) as \`startBlock\`.
 
-5. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
+5. Create a new subgraph on [Subgraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
 
 6. Authenticate with the graph CLI:
    \`\`\`sh
@@ -222,10 +224,10 @@ All 1 tests passed! 😎
    \`\`\`
    Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
 
-8. Update \`packages/nextjs/components/ScaffoldEthAppWithProviders.tsx\` to use the new subgraph endpoint:
+8. Update \`packages/nextjs/components/ScaffoldEthAppWithProviders.tsx\` to use the above HTTP subgraph endpoint:
    \`\`\`diff
    - const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
-   + const subgraphUri = 'https://api.studio.thegraph.com/query/31430/final/0.0.6'
+   + const subgraphUri = 'YOUR_SUBGRAPH_ENDPOINT';
    \`\`\`
 
 &nbsp;
