@@ -25,7 +25,7 @@ const readConfigFile = (filePath: string): string => {
 const publishContract = (
   contractName: string,
   contractObject: ScaffoldETHGenericContract,
-  networkName: string,
+  networkName: string
 ) => {
   const graphConfigPath = `${GRAPH_DIR}/networks.json`;
   const abisDir = `${GRAPH_DIR}/abis`;
@@ -42,7 +42,7 @@ const publishContract = (
   if (!fs.existsSync(abisDir)) fs.mkdirSync(abisDir);
   fs.writeFileSync(
     `${abisDir}/${networkName}_${contractName}.json`,
-    JSON.stringify(contractObject.abi, null, 2),
+    JSON.stringify(contractObject.abi, null, 2)
   );
 };
 
@@ -52,30 +52,28 @@ async function main() {
     const externalContractsContent = readConfigFile(EXTERNAL_CONTRACTS_FILE);
 
     const deployedContractsMatch = deployedContractsContent.match(
-      /const deployedContracts = ({[^;]+}) as const;/s,
+      /const deployedContracts = ({[^;]+}) as const;/s
     );
 
-    // matching all since we have example comment in extrenalContracts.ts
+    // doing global match since we have example comment in extrenalContracts.ts
     const externalContractsRegex =
       /^const\s+externalContracts\s*=\s*({[\s\S]*?})\s*as\s*const;/gm;
     const externalContractsMatches = [
       ...externalContractsContent.matchAll(externalContractsRegex),
     ];
 
-    let externalContractsStringified = "{}";
-
-    if (
-      externalContractsMatches &&
-      externalContractsMatches.length > 0 &&
-      externalContractsMatches[0]?.length &&
-      externalContractsMatches[0].length > 0
-    ) {
-      externalContractsStringified = externalContractsMatches[0][1] || "{}";
-    }
-
     const deployedContractsStringified = deployedContractsMatch
       ? deployedContractsMatch[1]
       : "{}";
+
+    let externalContractsStringified = "{}";
+
+    if (externalContractsMatches && externalContractsMatches.length > 0) {
+      const firstMatch = externalContractsMatches[0];
+      if (firstMatch && firstMatch.length > 0 && firstMatch[1]) {
+        externalContractsStringified = firstMatch[1];
+      }
+    }
 
     if (!deployedContractsStringified || !externalContractsStringified) {
       throw new Error("Failed to find deployedContracts or externalContracts.");
@@ -86,7 +84,7 @@ async function main() {
 
     const mergedContracts = deepMergeContracts(
       deployedContracts,
-      externalContracts,
+      externalContracts
     );
 
     // networks.json file uses network names as key instead of chainIds
@@ -95,7 +93,7 @@ async function main() {
     Object.entries(transformedContracts).forEach(([networkName, contracts]) => {
       if (!contracts) {
         console.error(
-          chalk.red(`No contracts found for the network: ${networkName}`),
+          chalk.red(`No contracts found for the network: ${networkName}`)
         );
         return;
       }
@@ -103,8 +101,8 @@ async function main() {
         if (!contractObject || !contractObject.abi || !contractObject.address) {
           console.error(
             chalk.red(
-              `Contract ${contractName} does not have an ABI or address. Skipping.`,
-            ),
+              `Contract ${contractName} does not have an ABI or address. Skipping.`
+            )
           );
           return;
         }
