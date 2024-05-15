@@ -174,40 +174,40 @@ All 1 tests passed! 😎
 
 &nbsp;
 
-## Shipping to Subgraph Studio
+## Shipping to Subgraph Studio 🚀
 
-1. Make sure you have the contract verified on Etherscan:
-   \`\`\`sh
-   yarn verify --network <network_name>
+> NOTE: This step requires [deployment of contract](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to live network. Checkout list of [supported networks](https://thegraph.com/docs/networks).
+
+1. Update the \`packages/subgraph/subgraph.yaml\` file with your contract address, network name, start block number(optional) :
+   \`\`\`diff
+   ...
+   -     network: localhost
+   +     network: sepolia
+         source:
+           abi: YourContract
+   +       address: "0x54FE7f8Db97e102D3b7d86cc34D885B735E31E8e"
+   +       startBlock: 5889410
+   ...
    \`\`\`
-   Check out scaffold-eth [docs](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#4-verify-your-smart-contract) for other methods of verifying the contract.
+  TIP: For \`startBlock\` you can use block number of your deployed contract, which can be found by visiting deployed transaction hash in blockexplorer.
 
-2. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
+2. Create a new subgraph on [Subgraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
 
-3. Init the subgraph:
+3. Authenticate with the graph CLI:
    \`\`\`sh
-   graph init --skip-git --studio <SUBGRAPH_SLUG> packages/<SUBGRAPH_SLUG>
-   \`\`\`
-   > NOTE: Make sure to pass \`--skip-git\` to avoid committing unstaged changes of the repo and lint checks. Also, the source directory should be created inside \`packages\` directory else \`yarn install\` should fail.
-
-4. Auth with the deploy key:
-   \`\`\`sh
-   graph auth --studio <DEPLOY_KEY>
-   \`\`\`
-
-5. CD into the subgraph directory:
-   \`\`\`sh
-   cd packages/<SUBGRAPH_SLUG>
+   yarn graph auth --studio <DEPLOY KEY>
    \`\`\`
 
-6. Build the subgraph:
+4. Deploy the subgraph to TheGraph Studio:
    \`\`\`sh
-   graph codegen && graph build
+   yarn graph deploy --studio <SUBGRAPH SLUG>
    \`\`\`
+   Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
 
-7. Deploy the subgraph:
-   \`\`\`sh
-   graph deploy --studio <SUBGRAPH_SLUG>
+5. Update \`packages/nextjs/components/ScaffoldEthAppWithProviders.tsx\` to use the above HTTP subgraph endpoint:
+   \`\`\`diff
+   - const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
+   + const subgraphUri = 'YOUR_SUBGRAPH_ENDPOINT';
    \`\`\`
 
 &nbsp;
