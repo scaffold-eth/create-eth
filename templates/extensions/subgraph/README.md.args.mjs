@@ -191,7 +191,7 @@ All 1 tests passed! 😎
    \`\`\`sh
    yarn graph build --network <network-name>
    \`\`\`
-   e.g: \`yarn graph build --network sepolia\` checkout [the graph supported networks and thier names](https://thegraph.com/docs/en/developing/supported-networks/), this command should update the \`packages/subgraph/subgraph.yaml\` file with the network name, contract address.
+   e.g: \`yarn graph build --network sepolia\` checkout [the graph supported networks and thier cli names](https://thegraph.com/docs/en/developing/supported-networks/), this command should update the \`packages/subgraph/subgraph.yaml\` file with the network name, contract address.
 
 
 4. Update the \`packages/subgraph/subgraph.yaml\` file with your contract abi file location and startBlock number (optional):
@@ -207,6 +207,7 @@ All 1 tests passed! 😎
    +         file: ./abis/sepolia_YourContract.json
    ...
    \`\`\`
+  NOTE: We have used sepolia as the network name, you can replace it with the network name you used to build the subgraph.
 
 5. Create a new subgraph on [TheGraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
 
