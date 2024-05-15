@@ -209,7 +209,7 @@ All 1 tests passed! 😎
    +         file: ./abis/sepolia_YourContract.json
    ...
    \`\`\`
-  TIP: You can use block number of your deployed contract (which can be found by visiting deployed transaction hash in blockexplorer) as \`startBlock\`.
+  TIP: For \`startBlock\` you can use block number of your deployed contract, which can be found by visiting deployed transaction hash in blockexplorer.
 
 5. Create a new subgraph on [Subgraph Studio](https://thegraph.com/studio) and get "SUBGRAPH SLUG" and "DEPLOY KEY".
 
