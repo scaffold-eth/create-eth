@@ -176,7 +176,7 @@ All 1 tests passed! 😎
 
 ## Shipping to Subgraph Studio 🚀
 
-> NOTE: This step requires [deployment of contracts](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to your preferred network or the contracts name, abi & address are present in \`packages/nextjs/contracts/externalContracts.ts\`
+> NOTE: This step requires [deployment of contracts](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to live network or the contracts name, abi & address are present in \`packages/nextjs/contracts/externalContracts.ts\`
 
 1. Generate \`packages/subgraph/networks.json\` from contracts present:
    \`\`\`sh
@@ -217,6 +217,7 @@ All 1 tests passed! 😎
    \`\`\`sh
    yarn graph auth --studio <DEPLOY KEY>
    \`\`\`
+   Once deployed, the CLI should output the Subgraph endpoints. Copy the HTTP endpoint and test your queries.
 
 7. Deploy the subgraph to TheGraph Studio:
    \`\`\`sh
