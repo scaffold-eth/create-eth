@@ -4,8 +4,6 @@ Now that we have spun up our blockchain, started our frontend application and de
 
 > Before following these steps be sure Docker is running!
 
-&nbsp;
-
 #### ✅ Step 1: Clean up any old data and spin up our docker containers ✅
 
 First run the following to clean up any old data. Do this if you need to reset everything.
@@ -62,8 +60,6 @@ You might also need to add a firewall exception for port 8432. As an example for
 sudo ufw allow 8545/tcp
 \`\`\`
 
-&nbsp;
-
 #### ✅ Step 2: Create and ship our subgraph ✅
 
 Now we can open up a fifth window to finish setting up The Graph. 😅 In this fifth window we will create our local subgraph!
@@ -106,8 +102,6 @@ Deployed to http://localhost:8000/subgraphs/name/scaffold-eth/your-contract/grap
 Subgraph endpoints:
 Queries (HTTP):     http://localhost:8000/subgraphs/name/scaffold-eth/your-contract
 \`\`\`
-
-&nbsp;
 
 #### ✅ Step 3: Test your Subgraph ✅
 
@@ -172,8 +166,6 @@ All 1 tests passed! 😎
 
 > NOTE: If you get an error, you may trying passing \`-d\` flag \`yarn subgraph:test -d\`. This will run matchstick in docker container.
 
-&nbsp;
-
 ## Shipping to Subgraph Studio 🚀
 
 > NOTE: This step requires [deployment of contract](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts) to live network. Checkout list of [supported networks](https://thegraph.com/docs/networks).
@@ -209,8 +201,6 @@ All 1 tests passed! 😎
    - const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
    + const subgraphUri = 'YOUR_SUBGRAPH_ENDPOINT';
    \`\`\`
-
-&nbsp;
 
 ## A list of all available commands
 
