@@ -36,30 +36,30 @@ export async function createProject(options: Options) {
       task: () =>
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },
-    {
-      title: `📦 Installing dependencies with yarn, this could take a while`,
-      task: () => installPackages(targetDirectory),
-      skip: () => {
-        if (!options.install) {
-          return "Manually skipped";
-        }
-      },
-    },
-    {
-      title: "🪄 Formatting files with prettier",
-      task: () => prettierFormat(targetDirectory),
-      skip: () => {
-        if (!options.install) {
-          return "Skipping because prettier install was skipped";
-        }
-      },
-    },
-    {
-      title: `📡 Initializing Git repository ${
-        options.extensions.includes("foundry") ? "and submodules" : ""
-      }`,
-      task: () => createFirstGitCommit(targetDirectory, options),
-    },
+    // {
+    //   title: `📦 Installing dependencies with yarn, this could take a while`,
+    //   task: () => installPackages(targetDirectory),
+    //   skip: () => {
+    //     if (!options.install) {
+    //       return "Manually skipped";
+    //     }
+    //   },
+    // },
+    // {
+    //   title: "🪄 Formatting files with prettier",
+    //   task: () => prettierFormat(targetDirectory),
+    //   skip: () => {
+    //     if (!options.install) {
+    //       return "Skipping because prettier install was skipped";
+    //     }
+    //   },
+    // },
+    // {
+    //   title: `📡 Initializing Git repository ${
+    //     options.extensions.includes("foundry") ? "and submodules" : ""
+    //   }`,
+    //   task: () => createFirstGitCommit(targetDirectory, options),
+    // },
   ]);
 
   try {

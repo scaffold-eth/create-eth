@@ -4,6 +4,6 @@ ToDo:
 
 - [x] Read arguments (github URL, or maybe just org/repo:branch)
 - [] Fetch repo
-  - [] Clone repo
+  - [x] Clone repo
   - [] Check if it's a valid repo
   - [] Do templating stuff.

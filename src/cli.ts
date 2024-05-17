@@ -18,8 +18,5 @@ export async function cli(args: Args) {
 
   const options = await promptForMissingOptions(rawOptions);
 
-  console.log("options: ", options);
-  return;
-
   await createProject(options);
 }

@@ -40,7 +40,7 @@ const validateTemplate = async (
       });
   });
 
-  return { repository: `${owner}/${project}`, branch };
+  return { repository: `https://github.com/${owner}/${project}`, branch };
 };
 
 // TODO update smartContractFramework code with general extensions

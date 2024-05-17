@@ -286,16 +286,33 @@ ${hasCombinedArgs
   );
 };
 
+const copyThirdPartyTemplateFiles = async (
+  options: Options,
+  targetDir: string
+) => {
+  const tmpDir = path.join(targetDir, "tmp");
+  const repository = options.template!.repository;
+  const branch = options.template!.branch;
+
+  if (branch) {
+    await execa("git", ["clone", "--branch", branch, repository, tmpDir], {
+      cwd: targetDir,
+    });
+  } else {
+    await execa("git", ["clone", repository, tmpDir], { cwd: targetDir });
+  }
+};
+
 export async function copyTemplateFiles(
   options: Options,
   templateDir: string,
   targetDir: string
 ) {
-  copyOrLink = options.dev ? link : copy
+  copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, baseDir);
 
   // 1. Copy base template to target directory
-  await copyBaseFiles(options, basePath, targetDir)
+  await copyBaseFiles(options, basePath, targetDir);
 
   // 2. Add "parent" extensions (set via config.json#extend field)
   const expandedExtension = expandExtensions(options);
@@ -307,7 +324,12 @@ export async function copyTemplateFiles(
   // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
-  // 5. Initialize git repo to avoid husky error
+  // 5. Process third party template
+  if (options.template) {
+    await copyThirdPartyTemplateFiles(options, targetDir);
+  }
+
+  // 6. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
   await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }
