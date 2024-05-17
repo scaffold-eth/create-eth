@@ -14,7 +14,9 @@ export type RawOptions = {
 };
 
 type NonNullableRawOptions = {
-  [Prop in keyof RawOptions]: NonNullable<RawOptions[Prop]>;
+  [Prop in keyof Omit<RawOptions, "template">]: NonNullable<RawOptions[Prop]>;
+} & {
+  template: RawOptions["template"];
 };
 
 export type Options = NonNullableRawOptions;
