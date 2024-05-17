@@ -1,34 +1,16 @@
 import type { Args, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "node:https";
+import { getDataFromTemplateArgument } from "./third-party-templates";
 
 const validateTemplate = async (
   template: string
 ): Promise<{ repository: string; branch?: string }> => {
-  // Check format: owner/project:branch (branch is optional)
-  const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
-  if (!regex.test(template)) {
-    throw new Error(
-      `Invalid template format. Use "owner/project" or "owner/project:branch"`
-    );
-  }
-
-  // Extract owner, project and branch
-  const owner = template.split("/")[0];
-  const project = template.split(":")[0].split("/")[1];
-  const branch = template.split(":")[1];
-
-  // Check if the repo exists.
-  let githubUrl = "";
-  if (branch) {
-    githubUrl = `https://github.com/${owner}/${project}/tree/${branch}`;
-  } else {
-    githubUrl = `https://github.com/${owner}/${project}`;
-  }
+  const { githubUrl, githubBranchUrl, branch } = getDataFromTemplateArgument(template);
 
   await new Promise((resolve, reject) => {
     https
-      .get(githubUrl, (res) => {
+      .get(githubBranchUrl, (res) => {
         if (res.statusCode !== 200) {
           reject(new Error(`Template not found: ${githubUrl}`));
         } else {
@@ -40,7 +22,7 @@ const validateTemplate = async (
       });
   });
 
-  return { repository: `https://github.com/${owner}/${project}`, branch };
+  return { repository: githubUrl, branch };
 };
 
 // TODO update smartContractFramework code with general extensions
