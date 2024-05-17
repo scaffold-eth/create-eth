@@ -1,11 +1,11 @@
 import { execa } from "execa";
-import { Extension, Options, TemplateDescriptor, isDefined } from "../types";
+import { Extension, isDefined, Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-tree";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
-import url from 'url'
+import url from "url";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
@@ -94,68 +94,67 @@ const copyBaseFiles = async (
 
 const copyExtensionsFiles = async (
   { extensions, dev: isDev }: Options,
+  extensionPath: string,
   targetDir: string
 ) => {
-  await Promise.all(extensions.map(async (extension) => {
-    const extensionPath = extensionDict[extension].path;
-    // copy (or link if dev) root files
-    await copyOrLink(extensionPath, path.join(targetDir), {
+  // copy (or link if dev) root files
+  await copyOrLink(extensionPath, path.join(targetDir), {
+    clobber: false,
+    filter: (path) => {
+      const isConfig = isConfigRegex.test(path);
+      const isArgs = isArgsRegex.test(path);
+      const isExtensionFolder =
+        isExtensionFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
+      const isPackagesFolder =
+        isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
+      const isTemplate = isTemplateRegex.test(path);
+      // PR NOTE: this wasn't needed before because ncp had the clobber: false
+      const isPackageJson = isPackageJsonRegex.test(path);
+      const shouldSkip =
+        isConfig ||
+        isArgs ||
+        isTemplate ||
+        isPackageJson ||
+        isExtensionFolder ||
+        isPackagesFolder;
+      return !shouldSkip;
+    },
+  });
+
+  // merge root package.json
+  mergePackageJson(
+    path.join(targetDir, "package.json"),
+    path.join(extensionPath, "package.json"),
+    isDev
+  );
+
+  const extensionPackagesPath = path.join(extensionPath, "packages");
+  const hasPackages = fs.existsSync(extensionPackagesPath);
+  if (hasPackages) {
+    // copy extension packages files
+    await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
       clobber: false,
       filter: (path) => {
-        const isConfig = isConfigRegex.test(path);
         const isArgs = isArgsRegex.test(path);
-        const isExtensionFolder =
-          isExtensionFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
-        const isPackagesFolder =
-          isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
         const isTemplate = isTemplateRegex.test(path);
-        // PR NOTE: this wasn't needed before because ncp had the clobber: false
         const isPackageJson = isPackageJsonRegex.test(path);
-        const shouldSkip =
-          isConfig ||
-          isArgs ||
-          isTemplate ||
-          isPackageJson ||
-          isExtensionFolder ||
-          isPackagesFolder;
+        const shouldSkip = isArgs || isTemplate || isPackageJson;
+
         return !shouldSkip;
       },
     });
 
-    // merge root package.json
-    mergePackageJson(
-      path.join(targetDir, "package.json"),
-      path.join(extensionPath, "package.json"),
-      isDev
-    );
+    // copy each package's package.json
+    const extensionPackages = fs.readdirSync(extensionPackagesPath);
+    extensionPackages.forEach((packageName) => {
+      mergePackageJson(
+        path.join(targetDir, "packages", packageName, "package.json"),
+        path.join(extensionPath, "packages", packageName, "package.json"),
+        isDev
+      );
+    });
+  }
 
-    const extensionPackagesPath = path.join(extensionPath, "packages");
-    const hasPackages = fs.existsSync(extensionPackagesPath);
-    if (hasPackages) {
-      // copy extension packages files
-      await copyOrLink(extensionPackagesPath, path.join(targetDir, "packages"), {
-        clobber: false,
-        filter: (path) => {
-          const isArgs = isArgsRegex.test(path);
-          const isTemplate = isTemplateRegex.test(path);
-          const isPackageJson = isPackageJsonRegex.test(path);
-          const shouldSkip = isArgs || isTemplate || isPackageJson;
-
-          return !shouldSkip;
-        },
-      });
-
-      // copy each package's package.json
-      const extensionPackages = fs.readdirSync(extensionPackagesPath);
-      extensionPackages.forEach((packageName) => {
-        mergePackageJson(
-          path.join(targetDir, "packages", packageName, "package.json"),
-          path.join(extensionPath, "packages", packageName, "package.json"),
-          isDev
-        );
-      });
-    }
-  }));
 };
 
 const processTemplatedFiles = async (
@@ -290,17 +289,27 @@ const copyThirdPartyTemplateFiles = async (
   options: Options,
   targetDir: string
 ) => {
+  // Crate tmp directory to clone third party template
   const tmpDir = path.join(targetDir, "tmp");
+  await fs.promises.mkdir(tmpDir);
+
   const repository = options.template!.repository;
   const branch = options.template!.branch;
 
+  // 1. Clone third party template
   if (branch) {
     await execa("git", ["clone", "--branch", branch, repository, tmpDir], {
-      cwd: targetDir,
+      cwd: tmpDir,
     });
   } else {
-    await execa("git", ["clone", repository, tmpDir], { cwd: targetDir });
+    await execa("git", ["clone", repository, tmpDir], { cwd: tmpDir });
   }
+
+  // 2. Copy template files & folders
+  await copyExtensionsFiles(options, path.join(tmpDir, "template"), targetDir);
+
+  // 3. Remove tmp directory (which is not empty) with nodejs fs, and await for it to finish
+  await fs.promises.rmdir(tmpDir, { recursive: true });
 };
 
 export async function copyTemplateFiles(
@@ -315,11 +324,13 @@ export async function copyTemplateFiles(
   await copyBaseFiles(options, basePath, targetDir);
 
   // 2. Add "parent" extensions (set via config.json#extend field)
-  const expandedExtension = expandExtensions(options);
-  options.extensions = expandedExtension;
+  options.extensions = expandExtensions(options);
 
   // 3. Copy extensions folders
-  await copyExtensionsFiles(options, targetDir);
+  await Promise.all(options.extensions.map(async (extension) => {
+    const extensionPath = extensionDict[extension].path;
+    await copyExtensionsFiles(options, extensionPath, targetDir);
+  }));
 
   // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
