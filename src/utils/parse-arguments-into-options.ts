@@ -2,6 +2,7 @@ import type { Args, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "node:https";
 import { getDataFromTemplateArgument } from "./third-party-templates";
+import chalk from "chalk";
 
 const validateTemplate = async (
   template: string
@@ -59,6 +60,10 @@ export async function parseArgumentsIntoOptions(
   const template = args["--template"]
     ? await validateTemplate(args["--template"])
     : null;
+
+  if (template) {
+    console.log(chalk.yellow(` Your are using a third-party template. Make sure you trust the source of ${chalk.yellow.bold(template.repository)}`));
+  }
 
   console.log("");
 
