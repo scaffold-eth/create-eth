@@ -10,6 +10,7 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
+import {getArgumentFromTemplateOption, getDataFromTemplateArgument} from "../utils/third-party-templates";
 
 const copy = promisify(ncp);
 let copyOrLink = copy
@@ -93,7 +94,7 @@ const copyBaseFiles = async (
 }
 
 const copyExtensionsFiles = async (
-  { extensions, dev: isDev }: Options,
+  { dev: isDev }: Options,
   extensionPath: string,
   targetDir: string
 ) => {
@@ -158,7 +159,7 @@ const copyExtensionsFiles = async (
 };
 
 const processTemplatedFiles = async (
-  { extensions, dev: isDev }: Options,
+  { extensions, template, dev: isDev }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -212,23 +213,34 @@ const processTemplatedFiles = async (
         })
         .flat();
 
+      if (template) {
+        const argsFilePath = path.join(targetDir, "tmp", "template", argsPath);
+
+        const fileExists = fs.existsSync(argsFilePath);
+        if (fileExists) {
+          argsFileUrls?.push(url.pathToFileURL(argsFilePath).href);
+        }
+      }
+
+
       const args = await Promise.all(
         argsFileUrls.map(async (argsFileUrl) => await import(argsFileUrl))
       );
 
-      const template = (await import(templateFileDescriptor.fileUrl)).default;
+      const fileTemplate = (await import(templateFileDescriptor.fileUrl)).default;
 
-      if (!template) {
+      if (!fileTemplate) {
         throw new Error(
           `Template ${templateTargetName} from ${templateFileDescriptor.source} doesn't have a default export`
         );
       }
-      if (typeof template !== "function") {
+      if (typeof fileTemplate !== "function") {
         throw new Error(
           `Template ${templateTargetName} from ${templateFileDescriptor.source} is not exporting a function by default`
         );
       }
 
+      // ToDo. Bug, if arg not present in arg[0], but present in arg[1], it will not be added.
       const freshArgs: { [key: string]: string[] } = Object.fromEntries(
         Object.keys(args[0] ?? {}).map((key) => [
           key, // INFO: key for the freshArgs object
@@ -238,7 +250,7 @@ const processTemplatedFiles = async (
       const combinedArgs: { [key: string]: string[] } = args.reduce(
         (accumulated, arg) => {
           Object.entries(arg).map(([key, value]) => {
-            accumulated[key].push(value);
+            accumulated[key]?.push(value);
           });
           return accumulated;
         },
@@ -247,7 +259,7 @@ const processTemplatedFiles = async (
 
       // TODO test: if first arg file found only uses 1 name, I think the rest are not used?
 
-      const output = template(combinedArgs);
+      const output = fileTemplate(combinedArgs);
 
       const targetPath = path.join(
         targetDir,
@@ -285,12 +297,11 @@ ${hasCombinedArgs
   );
 };
 
-const copyThirdPartyTemplateFiles = async (
+const setUpThirdPartyTemplateFiles = async (
   options: Options,
-  targetDir: string
+  tmpDir: string,
 ) => {
   // Crate tmp directory to clone third party template
-  const tmpDir = path.join(targetDir, "tmp");
   await fs.promises.mkdir(tmpDir);
 
   const repository = options.template!.repository;
@@ -304,12 +315,6 @@ const copyThirdPartyTemplateFiles = async (
   } else {
     await execa("git", ["clone", repository, tmpDir], { cwd: tmpDir });
   }
-
-  // 2. Copy template files & folders
-  await copyExtensionsFiles(options, path.join(tmpDir, "template"), targetDir);
-
-  // 3. Remove tmp directory (which is not empty) with nodejs fs, and await for it to finish
-  await fs.promises.rmdir(tmpDir, { recursive: true });
 };
 
 export async function copyTemplateFiles(
@@ -319,6 +324,7 @@ export async function copyTemplateFiles(
 ) {
   copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, baseDir);
+  const tmpDir = path.join(targetDir, "tmp");
 
   // 1. Copy base template to target directory
   await copyBaseFiles(options, basePath, targetDir);
@@ -332,15 +338,21 @@ export async function copyTemplateFiles(
     await copyExtensionsFiles(options, extensionPath, targetDir);
   }));
 
-  // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, targetDir);
-
-  // 5. Process third party template
+  // 4. Set up third party template if needed
   if (options.template) {
-    await copyThirdPartyTemplateFiles(options, targetDir);
+    await setUpThirdPartyTemplateFiles(options, tmpDir);
+    await copyExtensionsFiles(options, path.join(tmpDir, "template"), targetDir);
   }
 
-  // 6. Initialize git repo to avoid husky error
-  await execa("git", ["init"], { cwd: targetDir });
-  await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
+  // 5. Process templated files and generate output
+  await processTemplatedFiles(options, basePath, targetDir);
+
+  // 6. Delete tmp directory
+  if (options.template) {
+    // await fs.promises.rmdir(tmpDir, { recursive: true });
+  }
+
+  // 7. Initialize git repo to avoid husky error
+  // await execa("git", ["init"], { cwd: targetDir });
+  // await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }

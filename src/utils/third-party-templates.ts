@@ -1,5 +1,7 @@
 import { RawOptions } from "../types";
 
+// Gets the data from the argument passed to the `--template` option.
+// e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromTemplateArgument = (template: string) => {
   // Check format: owner/project:branch (branch is optional)
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
@@ -30,6 +32,8 @@ export const getDataFromTemplateArgument = (template: string) => {
   };
 }
 
+// Parse the template object into a argument string.
+// e.g. { repository: "owner/project", branch: "branch" } => "owner/project:branch"
 export const getArgumentFromTemplateOption = (templateOption: RawOptions["template"]) => {
   const { repository, branch } = templateOption || {};
 
