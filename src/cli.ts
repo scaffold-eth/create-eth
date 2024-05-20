@@ -6,17 +6,13 @@ import type { Args } from "./types";
 import chalk from "chalk";
 
 export async function cli(args: Args) {
-  renderIntroMessage();
-
-  let rawOptions;
   try {
-    rawOptions = await parseArgumentsIntoOptions(args);
+    renderIntroMessage();
+    const rawOptions = await parseArgumentsIntoOptions(args);
+    const options = await promptForMissingOptions(rawOptions);
+    await createProject(options);
   } catch (error: any) {
-    console.error(chalk.red.bold(error.message));
+    console.error(chalk.red.bold(error.message || "An unknown error occurred."));
     return;
   }
-
-  const options = await promptForMissingOptions(rawOptions);
-
-  await createProject(options);
 }
