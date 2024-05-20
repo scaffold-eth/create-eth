@@ -31,10 +31,10 @@ export const getDataFromTemplateArgument = (template: string) => {
 }
 
 export const getArgumentFromTemplateOption = (templateOption: RawOptions["template"]) => {
-  const { repository, branch } = templateOption;
+  const { repository, branch } = templateOption || {};
 
-  const owner = repository.split("/")[3];
-  const project = repository.split("/")[4];
+  const owner = repository?.split("/")[3];
+  const project = repository?.split("/")[4];
 
   return `${owner}/${project}${branch ? `:${branch}` : ""}`;
 }
