@@ -10,7 +10,6 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
-import {getArgumentFromTemplateOption, getDataFromTemplateArgument} from "../utils/third-party-templates";
 
 const copy = promisify(ncp);
 let copyOrLink = copy
@@ -349,10 +348,10 @@ export async function copyTemplateFiles(
 
   // 6. Delete tmp directory
   if (options.template) {
-    // await fs.promises.rmdir(tmpDir, { recursive: true });
+    await fs.promises.rmdir(tmpDir, { recursive: true });
   }
 
   // 7. Initialize git repo to avoid husky error
-  // await execa("git", ["init"], { cwd: targetDir });
-  // await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
+  await execa("git", ["init"], { cwd: targetDir });
+  await execa("git", ["checkout", "-b", "main"], { cwd: targetDir });
 }
