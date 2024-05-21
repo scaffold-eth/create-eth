@@ -33,7 +33,7 @@ export async function createProject(options: Options) {
     {
       title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
         options.project
-      )}${options.template ? ` with the ${chalk.green.bold(getArgumentFromTemplateOption(options.template))} template ` : ""}`,
+      )}${options.template ? ` with the ${chalk.green.bold(getArgumentFromTemplateOption(options.template))} template` : ""}`,
       task: () =>
         copyTemplateFiles(options, templateDirectory, targetDirectory),
     },

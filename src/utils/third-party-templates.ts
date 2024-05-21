@@ -16,7 +16,6 @@ export const getDataFromTemplateArgument = (template: string) => {
   const project = template.split(":")[0].split("/")[1];
   const branch = template.split(":")[1];
 
-  // Check if the repo exists.
   const githubUrl = `https://github.com/${owner}/${project}`;
   let githubBranchUrl;
   if (branch) {

@@ -9,6 +9,7 @@ const validateTemplate = async (
 ): Promise<{ repository: string; branch?: string }> => {
   const { githubUrl, githubBranchUrl, branch } = getDataFromTemplateArgument(template);
 
+  // Check if repository exists
   await new Promise((resolve, reject) => {
     https
       .get(githubBranchUrl, (res) => {
@@ -62,10 +63,8 @@ export async function parseArgumentsIntoOptions(
     : null;
 
   if (template) {
-    console.log(chalk.yellow(` Your are using a third-party template. Make sure you trust the source of ${chalk.yellow.bold(template.repository)}`));
+    console.log(chalk.yellow(` You are using a third-party template. Make sure you trust the source of ${chalk.yellow.bold(template.repository)}\n`));
   }
-
-  console.log("");
 
   return {
     project,
