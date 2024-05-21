@@ -11,8 +11,10 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 
+const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
-let copyOrLink = copy
+let copyOrLink = copy;
+
 
 const expandExtensions = (options: Options): Extension[] => {
   const expandedExtensions = options.extensions
@@ -158,7 +160,7 @@ const copyExtensionsFiles = async (
 };
 
 const processTemplatedFiles = async (
-  { extensions, template, dev: isDev }: Options,
+  { extensions, externalExtension, dev: isDev }: Options,
   basePath: string,
   targetDir: string
 ) => {
@@ -212,8 +214,8 @@ const processTemplatedFiles = async (
         })
         .flat();
 
-      if (template) {
-        const argsFilePath = path.join(targetDir, "tmp", "template", argsPath);
+      if (externalExtension) {
+        const argsFilePath = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
@@ -296,17 +298,17 @@ ${hasCombinedArgs
   );
 };
 
-const setUpThirdPartyTemplateFiles = async (
+const setUpExternalExtensionFiles = async (
   options: Options,
   tmpDir: string,
 ) => {
-  // Crate tmp directory to clone third party template
+  // 1. Create tmp directory to clone external extension
   await fs.promises.mkdir(tmpDir);
 
-  const repository = options.template!.repository;
-  const branch = options.template!.branch;
+  const repository = options.externalExtension!.repository;
+  const branch = options.externalExtension!.branch;
 
-  // 1. Clone third party template
+  // 2. Clone external extension
   if (branch) {
     await execa("git", ["clone", "--branch", branch, repository, tmpDir], {
       cwd: tmpDir,
@@ -323,7 +325,7 @@ export async function copyTemplateFiles(
 ) {
   copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, baseDir);
-  const tmpDir = path.join(targetDir, "tmp");
+  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
 
   // 1. Copy base template to target directory
   await copyBaseFiles(options, basePath, targetDir);
@@ -337,17 +339,17 @@ export async function copyTemplateFiles(
     await copyExtensionsFiles(options, extensionPath, targetDir);
   }));
 
-  // 4. Set up third party template if needed
-  if (options.template) {
-    await setUpThirdPartyTemplateFiles(options, tmpDir);
-    await copyExtensionsFiles(options, path.join(tmpDir, "template"), targetDir);
+  // 4. Set up external extension if needed
+  if (options.externalExtension) {
+    await setUpExternalExtensionFiles(options, tmpDir);
+    await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
   }
 
   // 5. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
   // 6. Delete tmp directory
-  if (options.template) {
+  if (options.externalExtension) {
     await fs.promises.rmdir(tmpDir, { recursive: true });
   }
 

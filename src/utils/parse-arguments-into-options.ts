@@ -1,13 +1,13 @@
 import type { Args, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "node:https";
-import { getDataFromTemplateArgument } from "./third-party-templates";
+import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 
 const validateTemplate = async (
   template: string
 ): Promise<{ repository: string; branch?: string }> => {
-  const { githubUrl, githubBranchUrl, branch } = getDataFromTemplateArgument(template);
+  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
 
   // Check if repository exists
   await new Promise((resolve, reject) => {
@@ -42,8 +42,8 @@ export async function parseArgumentsIntoOptions(
 
       "--dev": Boolean,
 
-      "--template": String,
-      "-t": "--template",
+      "--extension": String,
+      "-e": "--extension",
     },
     {
       argv: rawArgs.slice(2).map((a) => a.toLowerCase()),
@@ -58,12 +58,14 @@ export async function parseArgumentsIntoOptions(
 
   const project = args._[0] ?? null;
 
-  const template = args["--template"]
-    ? await validateTemplate(args["--template"])
+  // ToDo. Allow multiple
+  // ToDo. Allow core extensions too
+  const extension = args["--extension"]
+    ? await validateTemplate(args["--extension"])
     : null;
 
-  if (template) {
-    console.log(chalk.yellow(` You are using a third-party template. Make sure you trust the source of ${chalk.yellow.bold(template.repository)}\n`));
+  if (extension) {
+    console.log(chalk.yellow(` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(extension.repository)}\n`));
   }
 
   return {
@@ -71,6 +73,6 @@ export async function parseArgumentsIntoOptions(
     install: hasInstallRelatedFlag ? install || !skipInstall : null,
     dev,
     extensions: null, // TODO add extensions flags
-    template,
+    externalExtension: extension,
   };
 }

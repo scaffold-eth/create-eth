@@ -1,20 +1,20 @@
 import { RawOptions } from "../types";
 
-// Gets the data from the argument passed to the `--template` option.
+// Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
-export const getDataFromTemplateArgument = (template: string) => {
+export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
   // Check format: owner/project:branch (branch is optional)
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
-  if (!regex.test(template)) {
+  if (!regex.test(externalExtension)) {
     throw new Error(
-      `Invalid template format. Use "owner/project" or "owner/project:branch"`
+      `Invalid extension format. Use "owner/project" or "owner/project:branch"`
     );
   }
 
   // Extract owner, project and branch
-  const owner = template.split("/")[0];
-  const project = template.split(":")[0].split("/")[1];
-  const branch = template.split(":")[1];
+  const owner = externalExtension.split("/")[0];
+  const project = externalExtension.split(":")[0].split("/")[1];
+  const branch = externalExtension.split(":")[1];
 
   const githubUrl = `https://github.com/${owner}/${project}`;
   let githubBranchUrl;
@@ -31,10 +31,10 @@ export const getDataFromTemplateArgument = (template: string) => {
   };
 }
 
-// Parse the template object into a argument string.
+// Parse the externalExtensionOption object into a argument string.
 // e.g. { repository: "owner/project", branch: "branch" } => "owner/project:branch"
-export const getArgumentFromTemplateOption = (templateOption: RawOptions["template"]) => {
-  const { repository, branch } = templateOption || {};
+export const getArgumentFromExternalExtensionOption = (externalExtensionOption: RawOptions["externalExtension"]) => {
+  const { repository, branch } = externalExtensionOption || {};
 
   const owner = repository?.split("/")[3];
   const project = repository?.split("/")[4];

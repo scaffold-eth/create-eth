@@ -17,7 +17,7 @@ const defaultOptions: RawOptions = {
   install: true,
   dev: false,
   extensions: [],
-  template: null,
+  externalExtension: null,
 };
 
 const invalidQuestionNames = ["project", "install"];
@@ -112,7 +112,7 @@ export async function promptForMissingOptions(
     install: options.install ?? answers.install,
     dev: options.dev ?? defaultOptions.dev,
     extensions: [],
-    template: options.template,
+    externalExtension: options.externalExtension,
   };
 
   config.questions.forEach((question) => {
