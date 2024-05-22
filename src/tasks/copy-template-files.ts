@@ -10,6 +10,7 @@ import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
+import {getArgumentFromExternalExtensionOption} from "../utils/external-extensions";
 
 const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
@@ -187,10 +188,22 @@ const processTemplatedFiles = async (
     )
     .flat();
 
+  const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
+    ? findFilesRecursiveSync(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"), (filePath) =>
+      isTemplateRegex.test(filePath)
+    ).map((extensionTemplatePath) => ({
+      path: extensionTemplatePath,
+      fileUrl: url.pathToFileURL(extensionTemplatePath).href,
+      relativePath: extensionTemplatePath.split(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"))[1],
+      source: `external extension ${getArgumentFromExternalExtensionOption(externalExtension)}`,
+    }))
+    : [];
+
   await Promise.all(
     [
       ...baseTemplatedFileDescriptors,
       ...extensionsTemplatedFileDescriptors,
+      ...externalExtensionTemplatedFileDescriptors,
     ].map(async (templateFileDescriptor) => {
       const templateTargetName =
         templateFileDescriptor.path.match(isTemplateRegex)?.[1]!;
@@ -222,7 +235,6 @@ const processTemplatedFiles = async (
           argsFileUrls?.push(url.pathToFileURL(argsFilePath).href);
         }
       }
-
 
       const args = await Promise.all(
         argsFileUrls.map(async (argsFileUrl) => await import(argsFileUrl))
