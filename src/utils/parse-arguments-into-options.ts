@@ -3,7 +3,7 @@ import arg from "arg";
 import * as https from "node:https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
-import {CURATED_EXTENSIONS} from "../config";
+import { CURATED_EXTENSIONS } from "../config";
 
 const validateTemplate = async (
   template: string

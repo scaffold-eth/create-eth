@@ -19,5 +19,4 @@ const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
   }
 }
 
-
 export { config, CURATED_EXTENSIONS };
