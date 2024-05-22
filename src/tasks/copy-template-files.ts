@@ -362,7 +362,7 @@ export async function copyTemplateFiles(
 
   // 6. Delete tmp directory
   if (options.externalExtension) {
-    await fs.promises.rmdir(tmpDir, { recursive: true });
+    await fs.promises.rm(tmpDir, { recursive: true });
   }
 
   // 7. Initialize git repo to avoid husky error
