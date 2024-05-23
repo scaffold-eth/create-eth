@@ -61,8 +61,5 @@
     "ncp": "2.0.0",
     "pkg-install": "1.0.0"
   },
-  "lint-staged": {
-    "*.{js,ts,md}": "eslint --fix"
-  },
   "packageManager": "yarn@3.5.0"
 }
