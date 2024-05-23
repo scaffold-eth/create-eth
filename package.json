@@ -13,6 +13,7 @@
     "build": "rollup -c rollup.config.js",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-se2.js",
+    "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "changeset:release": "yarn build && changeset publish"
   },
@@ -33,6 +34,7 @@
     "@types/listr": "0.14.4",
     "@types/ncp": "2.0.5",
     "@types/node": "18.16.0",
+    "prettier": "3.2.5",
     "rollup": "3.21.0",
     "rollup-plugin-auto-external": "2.0.0",
     "tslib": "2.5.0",
