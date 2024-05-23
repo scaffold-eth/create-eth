@@ -1,6 +1,6 @@
 import type { Args, RawOptions } from "../types";
 import arg from "arg";
-import * as https from "node:https";
+import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../config";

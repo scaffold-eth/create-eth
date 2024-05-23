@@ -12,7 +12,7 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
   if (!regex.test(externalExtension)) {
     throw new Error(
-      `Invalid extension format. Use "owner/project", "owner/project:branch" or a valid curated extension.`
+      `Invalid extension format. Use "owner/project" or "owner/project:branch"`
     );
   }
 
