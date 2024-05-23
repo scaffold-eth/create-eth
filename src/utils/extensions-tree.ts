@@ -31,7 +31,7 @@ const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
 
       let config: Record<string, string> = {};
       try {
-        config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+        config = JSON.parse(fs.readFileSync(configPath, "utf8")) as Record<string, string>;
       } catch (error) {
         if (fs.existsSync(configPath)) {
           throw new Error(
@@ -41,8 +41,8 @@ const traverseExtensions = async (basePath: string): Promise<Extension[]> => {
           );
         }
       }
-      let name = config.name ?? ext;
-      let value = ext;
+      const name = config.name ?? ext;
+      const value = ext;
 
       const subExtensions = await traverseExtensions(extPath);
       const hasSubExtensions = subExtensions.length !== 0;

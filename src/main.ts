@@ -59,7 +59,7 @@ export async function createProject(options: Options) {
 
   try {
     await tasks.run();
-    renderOutroMessage(options);
+    await renderOutroMessage(options);
   } catch (error) {
     console.log("%s Error occurred", chalk.red.bold("ERROR"), error);
     console.log("%s Exiting...", chalk.red.bold("Uh oh! 😕 Sorry about that!"));

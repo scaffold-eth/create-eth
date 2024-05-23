@@ -27,12 +27,12 @@ const expandExtensions = (options: Options): Extension[] => {
   return expandedExtensions;
 };
 
-const isTemplateRegex = /([^\/\\]*?)\.template\./;
+const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
 const isNextGeneratedRegex = /packages\/nextjs\/generated/;
-const isConfigRegex = /([^\/\\]*?)\\config\.json/;
-const isArgsRegex = /([^\/\\]*?)\.args\./;
+const isConfigRegex = /([^/\\]*?)\\config\.json/;
+const isArgsRegex = /([^/\\]*?)\.args\./;
 const isExtensionFolderRegex = /extensions$/;
 const isPackagesFolderRegex = /packages$/;
 
@@ -65,13 +65,13 @@ const copyBaseFiles = async ({ dev: isDev }: Options, basePath: string, targetDi
     const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
     baseYarnLockPaths.forEach(yarnLockPath => {
       const partialPath = yarnLockPath.split(basePath)[1];
-      copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
     });
 
     const nextGeneratedPaths = findFilesRecursiveSync(basePath, path => isNextGeneratedRegex.test(path));
     nextGeneratedPaths.forEach(nextGeneratedPath => {
       const partialPath = nextGeneratedPath.split(basePath)[1];
-      copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+      void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
     });
   }
 };
@@ -168,7 +168,7 @@ const processTemplatedFiles = async (
       ...extensionsTemplatedFileDescriptors,
       ...externalExtensionTemplatedFileDescriptors,
     ].map(async templateFileDescriptor => {
-      const templateTargetName = templateFileDescriptor.path.match(isTemplateRegex)?.[1]!;
+      const templateTargetName = templateFileDescriptor.path.match(isTemplateRegex)?.[1] as string;
 
       const argsPath = templateFileDescriptor.relativePath.replace(isTemplateRegex, `${templateTargetName}.args.`);
 
@@ -192,9 +192,13 @@ const processTemplatedFiles = async (
         }
       }
 
-      const args = await Promise.all(argsFileUrls.map(async argsFileUrl => await import(argsFileUrl)));
+      const args = await Promise.all(
+        argsFileUrls.map(async argsFileUrl => (await import(argsFileUrl)) as Record<string, any>),
+      );
 
-      const fileTemplate = (await import(templateFileDescriptor.fileUrl)).default;
+      const fileTemplate = (await import(templateFileDescriptor.fileUrl)).default as (
+        args: Record<string, string[]>,
+      ) => string;
 
       if (!fileTemplate) {
         throw new Error(
@@ -214,7 +218,7 @@ const processTemplatedFiles = async (
           [], // INFO: initial value for the freshArgs object
         ]),
       );
-      const combinedArgs: { [key: string]: string[] } = args.reduce((accumulated, arg) => {
+      const combinedArgs = args.reduce<typeof freshArgs>((accumulated, arg) => {
         Object.entries(arg).map(([key, value]) => {
           accumulated[key]?.push(value);
         });

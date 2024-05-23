@@ -27,7 +27,7 @@ const nullExtensionChoice = {
 };
 
 export async function promptForMissingOptions(options: RawOptions): Promise<Options> {
-  const cliAnswers = Object.fromEntries(Object.entries(options).filter(([key, value]) => value !== null));
+  const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
   const questions = [];
 
   questions.push({

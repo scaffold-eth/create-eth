@@ -1,4 +1,3 @@
-// @ts-expect-error We don't have types for this probably add .d.ts file
 import mergeJsonStr from "merge-packages";
 import fs from "fs";
 
