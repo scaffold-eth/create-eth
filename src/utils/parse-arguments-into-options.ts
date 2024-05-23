@@ -3,6 +3,7 @@ import arg from "arg";
 import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
+import { CURATED_EXTENSIONS } from "../config";
 
 const validateTemplate = async (template: string): Promise<{ repository: string; branch?: string }> => {
   const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
@@ -58,10 +59,12 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   // ToDo. Allow core extensions too
   const extension = args["--extension"] ? await validateTemplate(args["--extension"]) : null;
 
-  if (extension) {
+  if (extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
     console.log(
       chalk.yellow(
-        ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(extension.repository)}\n`,
+        ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(
+          extension.repository,
+        )}\n`,
       ),
     );
   }
