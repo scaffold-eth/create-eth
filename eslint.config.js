@@ -29,4 +29,9 @@ export default tseslint.config(
     ignores: [".changeset", ".yarn", "bin", "dist", "templates"],
   },
   eslintPluginPrettierRecommended,
+  {
+    rules: {
+      "prettier/prettier": ["warn", { endOfLine: "auto" }],
+    },
+  },
 );
