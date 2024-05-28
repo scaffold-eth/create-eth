@@ -9,10 +9,9 @@ export async function cli(args: Args) {
   try {
     renderIntroMessage();
     const rawOptions = await parseArgumentsIntoOptions(args);
-    const options =   await promptForMissingOptions(rawOptions);
+    const options = await promptForMissingOptions(rawOptions);
     await createProject(options);
-  } catch (error: any) 
-{
+  } catch (error: any) {
     console.error(chalk.red.bold(error.message || "An unknown error occurred."));
     return;
   }
