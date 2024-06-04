@@ -29,9 +29,9 @@ contract DeployScript is ScaffoldETHDeploy {
             )
         );
 
-        ${deploymentsLogic.filter(Boolean).join("\n")}
-
         vm.stopBroadcast();
+
+        ${deploymentsLogic.filter(Boolean).join("\n")}
 
         /**
          * This function generates the file containing the contracts Abi definitions.
