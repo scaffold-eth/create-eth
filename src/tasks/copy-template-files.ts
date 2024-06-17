@@ -11,6 +11,10 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
+// @ts-expect-error - no types available
+import solidityPlugin from "prettier-plugin-solidity";
+import pluginSorter from "@trivago/prettier-plugin-sort-imports";
+import { formatWithPrettier, hardhatPrettierConfig, nextJsPrettierConfig } from "../utils/format-with-prettier";
 
 const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
 const copy = promisify(ncp);
@@ -213,7 +217,32 @@ const processTemplatedFiles = async (
         templateFileDescriptor.relativePath.split(templateTargetName)[0],
         templateTargetName,
       );
-      fs.writeFileSync(targetPath, output);
+
+      let finalOutput = output;
+
+      const containsNextjs = targetPath.includes("nextjs");
+      const containsDotfile = /\/\.[^/]+/.test(targetPath);
+      const hardhatOrFoundry = targetPath.split("packages")[1]?.split("/")[1];
+      const isHardhatOrFoundry =
+        hardhatOrFoundry && (hardhatOrFoundry.includes("hardhat") || hardhatOrFoundry.includes("foundry"));
+
+      if (containsNextjs && !containsDotfile) {
+        finalOutput = await formatWithPrettier(output, {
+          ...nextJsPrettierConfig,
+          parser: "typescript",
+          plugins: [pluginSorter],
+          fallbackConfig: { parser: "typescript", plugins: undefined },
+        });
+      } else if (isHardhatOrFoundry && !containsDotfile) {
+        finalOutput = await formatWithPrettier(output, {
+          ...hardhatPrettierConfig,
+          parser: "solidity-parse",
+          plugins: [solidityPlugin],
+          fallbackConfig: { parser: "typescript", plugins: undefined },
+        });
+      }
+
+      fs.writeFileSync(targetPath, finalOutput);
 
       if (isDev) {
         const hasCombinedArgs = Object.keys(combinedArgs).length > 0;
