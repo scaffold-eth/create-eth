@@ -39,6 +39,9 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
       "--dev": Boolean,
 
+      "--solidity-framework": solidityFrameworkHandler,
+      "-f": "--solidity-framework",
+
       "--extension": String,
       "-e": "--extension",
     },
@@ -49,11 +52,18 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   const install = args["--install"] ?? null;
   const skipInstall = args["--skip-install"] ?? null;
+
+  if (install && skipInstall) {
+    throw new Error('Please select only one of the options: "--install" or "--skip-install".');
+  }
+
   const hasInstallRelatedFlag = install || skipInstall;
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
   const project = args._[0] ?? null;
+
+  const solidityFramework = args["--solidity-framework"] ?? null;
 
   // ToDo. Allow multiple
   // ToDo. Allow core extensions too
@@ -73,7 +83,17 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     project,
     install: hasInstallRelatedFlag ? install || !skipInstall : null,
     dev,
-    extensions: null, // TODO add extensions flags
     externalExtension: extension,
+    solidityFramework,
   };
+}
+
+function solidityFrameworkHandler(value: string) {
+  const lowercasedValue = value.toLowerCase();
+  if (lowercasedValue === "hardhat" || lowercasedValue === "foundry" || lowercasedValue === "none") {
+    return lowercasedValue;
+  }
+
+  // choose from cli prompts
+  return null;
 }
