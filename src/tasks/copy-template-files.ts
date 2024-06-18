@@ -222,9 +222,8 @@ const processTemplatedFiles = async (
 
       const containsNextjs = targetPath.includes("nextjs");
       const containsDotfile = /\/\.[^/]+/.test(targetPath);
-      const hardhatOrFoundry = targetPath.split("packages")[1]?.split("/")[1];
-      const isHardhatOrFoundry =
-        hardhatOrFoundry && (hardhatOrFoundry.includes("hardhat") || hardhatOrFoundry.includes("foundry"));
+      const packageName = targetPath.split("packages")[1]?.split("/")[1];
+      const isHardhatOrFoundry = packageName && (packageName === "hardhat" || packageName === "foundry");
 
       if (containsNextjs && !containsDotfile) {
         finalOutput = await formatWithPrettier(output, {
