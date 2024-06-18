@@ -18,7 +18,6 @@ const validateTemplate = async (
       // The directory exists
       const currentFileUrl = import.meta.url;
       const extensionsDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../extensions");
-      console.log("extensionsDirectory", extensionsDirectory);
       await fs.promises.access(`${extensionsDirectory}/${template}`);
     } catch {
       // The directory does not exist
