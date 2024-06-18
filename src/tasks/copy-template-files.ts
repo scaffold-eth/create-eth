@@ -166,7 +166,9 @@ const processTemplatedFiles = async (
         .flat();
 
       if (externalExtension) {
-        const argsFilePath = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
+        const argsFilePath = isDev
+          ? path.join(basePath, "../../extensions", externalExtension as string, "extension", argsPath)
+          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
@@ -228,7 +230,7 @@ templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 --- ARGS FILES
 ${
   hasArgsPaths
-    ? argsFileUrls.map(url => `\t- ${path.join("templates", url.split("templates")[1])}`).join("\n")
+    ? argsFileUrls.map(url => `\t- ${url.split("templates")[1] || url.split("extensions")[1]}`).join("\n")
     : "(no args files writing to the template)"
 }
 
