@@ -1,5 +1,5 @@
 import { execa } from "execa";
-import { Options, TemplateDescriptor } from "../types";
+import { ExternalExtension, Options, TemplateDescriptor } from "../types";
 import { baseDir } from "../utils/consts";
 import { extensionDict } from "../utils/extensions-dictionary";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
@@ -130,15 +130,18 @@ const processTemplatedFiles = async (
     )
     .flat();
 
+  const externalExtensionFolder = isDev
+    ? path.join(basePath, "../../extensions", externalExtension as string, "extension")
+    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension");
   const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
-    ? findFilesRecursiveSync(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"), filePath =>
-        isTemplateRegex.test(filePath),
-      ).map(extensionTemplatePath => ({
-        path: extensionTemplatePath,
-        fileUrl: url.pathToFileURL(extensionTemplatePath).href,
-        relativePath: extensionTemplatePath.split(path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension"))[1],
-        source: `external extension ${getArgumentFromExternalExtensionOption(externalExtension)}`,
-      }))
+    ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
+        extensionTemplatePath => ({
+          path: extensionTemplatePath,
+          fileUrl: url.pathToFileURL(extensionTemplatePath).href,
+          relativePath: extensionTemplatePath.split(externalExtensionFolder)[1],
+          source: `external extension ${isDev ? (externalExtension as string) : getArgumentFromExternalExtensionOption(externalExtension)}`,
+        }),
+      )
     : [];
 
   await Promise.all(
@@ -250,8 +253,10 @@ const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => 
   // 1. Create tmp directory to clone external extension
   await fs.promises.mkdir(tmpDir);
 
-  const repository = options.externalExtension!.repository;
-  const branch = options.externalExtension!.branch;
+  // dev mode, the external extension should be in the "extensions" folder already
+  if (options.dev) return;
+
+  const { repository, branch } = options.externalExtension as ExternalExtension;
 
   // 2. Clone external extension
   if (branch) {
@@ -281,15 +286,21 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
 
   // 3. Set up external extension if needed
   if (options.externalExtension) {
-    await setUpExternalExtensionFiles(options, tmpDir);
-    await copyExtensionsFiles(options, path.join(tmpDir, "extension"), targetDir);
+    let externalExtensionPath = path.join(tmpDir, "extension");
+    if (options.dev) {
+      externalExtensionPath = path.join(templateDir, "../extensions", options.externalExtension as string, "extension");
+    } else {
+      await setUpExternalExtensionFiles(options, tmpDir);
+    }
+
+    await copyExtensionsFiles(options, externalExtensionPath, targetDir);
   }
 
   // 4. Process templated files and generate output
   await processTemplatedFiles(options, basePath, targetDir);
 
   // 5. Delete tmp directory
-  if (options.externalExtension) {
+  if (options.externalExtension && !options.dev) {
     await fs.promises.rm(tmpDir, { recursive: true });
   }
 
