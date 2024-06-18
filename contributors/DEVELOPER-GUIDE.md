@@ -55,19 +55,27 @@ Once you're happy with the file contents, you'd need to reverse-engineer the cha
 
 For example, `generated.txt` would have a sibling `generated.txt.dev` file with information about the "template" and "args" files that contributed to the current result.
 
-## Back-merging main branch / Publishing to NPM (TODO: Update to main branch workflow)
+## Back-merging main branch / Publishing to NPM
 
-1. Make sure you have the latest changes from `main` branch
-2. Checkout to `cli` branch and create a new branch from it eg: `cli-backmerge`
-3. Checkout to `cli-backmerge` branch and `git merge main`
-4. If there are any conflicts, resolve them and commit the changes
-5. Add changeset by doing `yarn changeset add` follow prompt and commit changes, learn more about changeset [here](https://github.com/scaffold-eth/scaffold-eth-2/blob/cli/CONTRIBUTING.md#changeset)
-6. Push the branch and create a PR against `cli` branch
+1. Sync `upstream-main` branch with SE-2 in the GitHub UI, using "Sync fork" (you can also add the remote branch locally and do it locally)
+   <details><summary>Screenshot from GitHub UI</summary>
 
-> NOTE: The `cli-backmerge` branch should be merged with "Create a merge commit" option instead of "Squash and merge" option into `cli` branch to preserve the commit history and not needing to create an extra commit directly into `cli` to merge `main` to resolve conflicts.
+   ![gh-web-ui](https://github.com/scaffold-eth/create-eth/assets/55535804/29cd684d-bdd0-42e7-a3c1-2a6e879e1a75)
+
+   </details>
+
+2. Pull `upstream-main` branch locally
+3. Create `backmerge-upstream` branch from `main` branch
+4. Merge `upstream-main` => `backmerge-upstream` branch
+5. If there are any conflicts, resolve them and commit the changes
+   > **Common conflict:** You may need to "accept yours" in the root `package.json` file and add the `next:serve` manually to the `template\base` `package.json` file.
+6. Run `yarn changeset add` to create the changeset file (select "patch"). Learn more about changeset [here](https://github.com/scaffold-eth/create-eth/blob/main/CONTRIBUTING.md#changeset)
+7. Create a PR from `backmerge-upstream` against `main` branch. Since this is a fork from SE-2, it automatically points to the SE-2 repo, so you have to manually change it.
+
+> NOTE: The `backmerge-upstream` branch should be merged with "Create a merge commit" option instead of "Squash and merge" option into `main` branch to preserve the commit history.
 
 ### Publishing to NPM
 
-Once the previous PR containing `changeset` is merged to `cli` branch, github bot will automatically create a new PR against `cli` branch containing version increment in `package.json` based on `changeset` and will also update `CHANGELOG.md` with respective `changesets` present.
+Once the previous PR containing `changeset` is merged to `main` branch, github bot will automatically create a new PR against `main` branch containing version increment in `package.json` based on `changeset` and will also update `CHANGELOG.md` with respective `changesets` present.
 
-After this GH bot PR is merged to `cli`. It will auto publish a new release to NPM.
+After this GH bot PR is merged to `main`. It will auto publish a new release to NPM.
