@@ -12,15 +12,13 @@ const validateTemplate = async (
   template: string,
   dev: boolean,
 ): Promise<{ repository: string; branch?: string } | string> => {
-  // if dev, check that the template folders exists in extensions/${template}
   if (dev) {
+    // Check that the template folders exists in extensions/${template}
     try {
-      // The directory exists
       const currentFileUrl = import.meta.url;
       const extensionsDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../externalExtensions");
       await fs.promises.access(`${extensionsDirectory}/${template}`);
     } catch {
-      // The directory does not exist
       throw new Error(`Template not found in "externalExtensions/${template}"`);
     }
 
