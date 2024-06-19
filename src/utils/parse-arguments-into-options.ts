@@ -12,7 +12,7 @@ const validateTemplate = async (
   template: string,
   dev: boolean,
 ): Promise<{ repository: string; branch?: string } | string> => {
-  // if dev, chec that the template folders exists in extensions/${template}
+  // if dev, check that the template folders exists in extensions/${template}
   if (dev) {
     try {
       // The directory exists
