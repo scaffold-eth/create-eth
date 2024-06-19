@@ -35,12 +35,11 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
       "--skip-install": Boolean,
       "--skip": "--skip-install",
-      "-s": "--skip-install",
 
       "--dev": Boolean,
 
       "--solidity-framework": solidityFrameworkHandler,
-      "-f": "--solidity-framework",
+      "-s": "--solidity-framework",
 
       "--extension": String,
       "-e": "--extension",
