@@ -17,11 +17,11 @@ const validateTemplate = async (
     try {
       // The directory exists
       const currentFileUrl = import.meta.url;
-      const extensionsDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../extensions");
+      const extensionsDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../externalExtensions");
       await fs.promises.access(`${extensionsDirectory}/${template}`);
     } catch {
       // The directory does not exist
-      throw new Error(`Template not found in "extensions/${template}"`);
+      throw new Error(`Template not found in "externalExtensions/${template}"`);
     }
 
     return template;

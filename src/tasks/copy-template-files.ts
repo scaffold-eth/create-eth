@@ -131,7 +131,7 @@ const processTemplatedFiles = async (
     .flat();
 
   const externalExtensionFolder = isDev
-    ? path.join(basePath, "../../extensions", externalExtension as string, "extension")
+    ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension")
     : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension");
   const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
     ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
@@ -167,7 +167,7 @@ const processTemplatedFiles = async (
 
       if (externalExtension) {
         const argsFilePath = isDev
-          ? path.join(basePath, "../../extensions", externalExtension as string, "extension", argsPath)
+          ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension", argsPath)
           : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
@@ -230,7 +230,7 @@ templates/${templateFileDescriptor.source}${templateFileDescriptor.relativePath}
 --- ARGS FILES
 ${
   hasArgsPaths
-    ? argsFileUrls.map(url => `\t- ${url.split("templates")[1] || url.split("extensions")[1]}`).join("\n")
+    ? argsFileUrls.map(url => `\t- ${url.split("templates")[1] || url.split("externalExtensions")[1]}`).join("\n")
     : "(no args files writing to the template)"
 }
 
@@ -254,9 +254,6 @@ ${
 const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => {
   // 1. Create tmp directory to clone external extension
   await fs.promises.mkdir(tmpDir);
-
-  // dev mode, the external extension should be in the "extensions" folder already
-  if (options.dev) return;
 
   const { repository, branch } = options.externalExtension as ExternalExtension;
 
@@ -290,7 +287,12 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   if (options.externalExtension) {
     let externalExtensionPath = path.join(tmpDir, "extension");
     if (options.dev) {
-      externalExtensionPath = path.join(templateDir, "../extensions", options.externalExtension as string, "extension");
+      externalExtensionPath = path.join(
+        templateDir,
+        "../externalExtensions",
+        options.externalExtension as string,
+        "extension",
+      );
     } else {
       await setUpExternalExtensionFiles(options, tmpDir);
     }
