@@ -65,7 +65,7 @@ For example, `generated.txt` would have a sibling `generated.txt.dev` file with 
    </details>
 
 2. Pull latest changes from `main` branch locally, and create `backmerge-upstream` branch from it
-3. Pull `upstream-main` branch locally
+3. Pull latest changes from `upstream-main` branch locally
 4. Merge `upstream-main` branch into `backmerge-upstream` branch
 5. If there are any conflicts, resolve them and commit the changes. **Common conflicts:**
    - Sometimes there will be conflicts in the root `yarn.lock` file and we should "accept yours", or reset the changes made to `yarn.lock`.
