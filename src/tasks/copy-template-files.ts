@@ -33,18 +33,25 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
 
       const isYarnLock = isYarnLockRegex.test(fileName);
       const isDeployedContracts = isDeployedContractsRegex.test(fileName);
-      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts);
+      const isPackageJson = isPackageJsonRegex.test(fileName);
+      const skipDevOnly = isDev && (isYarnLock || isDeployedContracts || isPackageJson);
 
       return !isTemplate && !skipDevOnly;
     },
   });
 
   if (isDev) {
-    // we don't want to symlink yarn.lock & deployedContracts.ts file
+    // We don't want symlink below files in dev mode
     const baseYarnLockPaths = findFilesRecursiveSync(basePath, path => isYarnLockRegex.test(path));
     baseYarnLockPaths.forEach(yarnLockPath => {
       const partialPath = yarnLockPath.split(basePath)[1];
       void copy(path.join(basePath, partialPath), path.join(targetDir, partialPath));
+    });
+
+    const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
+    basePackageJsonPaths.forEach(packageJsonPath => {
+      const partialPath = packageJsonPath.split(basePath)[1];
+      mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
     });
 
     const baseDeployedContractsPaths = findFilesRecursiveSync(basePath, path => isDeployedContractsRegex.test(path));
