@@ -66,7 +66,6 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   const solidityFramework = args["--solidity-framework"] ?? null;
 
   // ToDo. Allow multiple
-  // ToDo. Allow core extensions too
   const extension = args["--extension"] ? await validateTemplate(args["--extension"]) : null;
 
   if (extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
