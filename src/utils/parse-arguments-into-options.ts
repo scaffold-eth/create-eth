@@ -1,4 +1,4 @@
-import type { Args, RawOptions } from "../types";
+import type { Args, RawOptions, SolidityFramework } from "../types";
 import arg from "arg";
 import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
@@ -88,10 +88,12 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   };
 }
 
+const SOLIDITY_FRAMEWORK_OPTIONS = ["hardhat", "foundry", "none"];
+
 function solidityFrameworkHandler(value: string) {
   const lowercasedValue = value.toLowerCase();
-  if (lowercasedValue === "hardhat" || lowercasedValue === "foundry" || lowercasedValue === "none") {
-    return lowercasedValue;
+  if (SOLIDITY_FRAMEWORK_OPTIONS.includes(lowercasedValue)) {
+    return lowercasedValue as SolidityFramework | "none";
   }
 
   // choose from cli prompts
