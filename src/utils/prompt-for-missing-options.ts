@@ -10,6 +10,7 @@ const defaultOptions: RawOptions = {
   dev: false,
   extensions: [],
   externalExtension: null,
+  help: false,
 };
 
 const invalidQuestionNames = ["project", "install"];
@@ -69,6 +70,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
     dev: options.dev ?? defaultOptions.dev,
     extensions: [],
     externalExtension: options.externalExtension,
+    help: options.help,
   };
 
   config.questions.forEach(question => {

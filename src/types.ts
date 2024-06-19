@@ -8,6 +8,7 @@ export type RawOptions = {
   dev: boolean;
   extensions: Extension[] | null;
   externalExtension: ExternalExtension | null;
+  help: boolean;
 };
 
 export type ExternalExtension = {
