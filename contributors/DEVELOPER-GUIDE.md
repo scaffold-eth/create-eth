@@ -29,7 +29,7 @@ You can send any option or flag to the CLI command. For example, a handy command
 
 The source files for the instance projects can be found under `templates/`. You'll see there are two folders there: `base/` and `extensions/`. The `base/` folder has the source files that will be present in all instances, whereas `extensions/` hold the source files that will be added or not to the instances based on the user choices within the CLI tool.
 
-It's highly recommended that you go through [RFC-extensions.md](RFC-extensions.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
+It's highly recommended that you go through [core-extensions.md](core-extensions.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
 
 While you might be tempted to change files straight in the source, we've created a better way to do it with the dev mode. We feel this is worth a separate section in this document.
 
@@ -57,20 +57,21 @@ For example, `generated.txt` would have a sibling `generated.txt.dev` file with 
 
 ## Back-merging main branch / Publishing to NPM
 
-1. Sync `upstream-main` branch with SE-2 in the GitHub UI, using "Sync fork" (you can also add the remote branch locally and do it locally)
+1. Switch to `upstream-main` branch and sync it with SE-2 repo in the GitHub UI, using "Sync fork" (you can also add the remote branch locally and do it locally)
    <details><summary>Screenshot from GitHub UI</summary>
 
    ![gh-web-ui](https://github.com/scaffold-eth/create-eth/assets/55535804/29cd684d-bdd0-42e7-a3c1-2a6e879e1a75)
 
    </details>
 
-2. Pull `upstream-main` branch locally
-3. Create `backmerge-upstream` branch from `main` branch
-4. Merge `upstream-main` => `backmerge-upstream` branch
-5. If there are any conflicts, resolve them and commit the changes
-   > **Common conflict:** You may need to "accept yours" in the root `package.json` file and add the `next:serve` manually to the `template\base` `package.json` file.
+2. Pull latest changes from `main` branch locally, and create `backmerge-upstream` branch from it
+3. Pull `upstream-main` branch locally
+4. Merge `upstream-main` branch into `backmerge-upstream` branch
+5. If there are any conflicts, resolve them and commit the changes. **Common conflicts:**
+   - Sometimes there will be conflicts in the root `yarn.lock` file and we should "accept yours", or reset the changes made to `yarn.lock`.
+   - You may also need to "accept yours" in the root `package.json` file and manually add `next:serve` to the `template\base` `package.json` file.
 6. Run `yarn changeset add` to create the changeset file (select "patch"). Learn more about changeset [here](https://github.com/scaffold-eth/create-eth/blob/main/CONTRIBUTING.md#changeset)
-7. Create a PR from `backmerge-upstream` against `main` branch. Since this is a fork from SE-2, it automatically points to the SE-2 repo, so you have to manually change it.
+7. Create a PR from `backmerge-upstream` against `main` branch. Since this is a fork from SE-2, it automatically points to the SE-2 repo, so you have to manually change the reference in GitHub UI.
 
 > NOTE: The `backmerge-upstream` branch should be merged with "Create a merge commit" option instead of "Squash and merge" option into `main` branch to preserve the commit history.
 
@@ -79,3 +80,5 @@ For example, `generated.txt` would have a sibling `generated.txt.dev` file with 
 Once the previous PR containing `changeset` is merged to `main` branch, github bot will automatically create a new PR against `main` branch containing version increment in `package.json` based on `changeset` and will also update `CHANGELOG.md` with respective `changesets` present.
 
 After this GH bot PR is merged to `main`. It will auto publish a new release to NPM.
+
+> TIP: If the published CLI doesn't work and exits unexpectedly, use `npm create eth@latest`. This command provides more verbose output, making it easier to identify the error and reason for failure.
