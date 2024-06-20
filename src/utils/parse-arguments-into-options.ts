@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const validateTemplate = async (
+const validateExternalExtension = async (
   template: string,
   dev: boolean,
 ): Promise<{ repository: string; branch?: string } | string> => {
@@ -76,7 +76,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   // ToDo. Allow multiple
   // ToDo. Allow core extensions too
-  const extension = args["--extension"] ? await validateTemplate(args["--extension"], dev) : null;
+  const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
   if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
     console.log(
