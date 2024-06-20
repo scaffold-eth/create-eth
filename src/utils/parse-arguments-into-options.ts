@@ -1,4 +1,4 @@
-import type { Args, ExternalExtension, RawOptions } from "../types";
+import type { Args, ExternalExtension, SolidityFramework, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
@@ -57,9 +57,11 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
       "--skip-install": Boolean,
       "--skip": "--skip-install",
-      "-s": "--skip-install",
 
       "--dev": Boolean,
+
+      "--solidity-framework": solidityFrameworkHandler,
+      "-s": "--solidity-framework",
 
       "--extension": String,
       "-e": "--extension",
@@ -71,14 +73,20 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   const install = args["--install"] ?? null;
   const skipInstall = args["--skip-install"] ?? null;
+
+  if (install && skipInstall) {
+    throw new Error('Please select only one of the options: "--install" or "--skip-install".');
+  }
+
   const hasInstallRelatedFlag = install || skipInstall;
 
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
   const project = args._[0] ?? null;
 
+  const solidityFramework = args["--solidity-framework"] ?? null;
+
   // ToDo. Allow multiple
-  // ToDo. Allow core extensions too
   const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
   if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
@@ -95,7 +103,19 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     project,
     install: hasInstallRelatedFlag ? install || !skipInstall : null,
     dev,
-    extensions: null, // TODO add extensions flags
     externalExtension: extension,
+    solidityFramework,
   };
+}
+
+const SOLIDITY_FRAMEWORK_OPTIONS = ["hardhat", "foundry", "none"];
+
+function solidityFrameworkHandler(value: string) {
+  const lowercasedValue = value.toLowerCase();
+  if (SOLIDITY_FRAMEWORK_OPTIONS.includes(lowercasedValue)) {
+    return lowercasedValue as SolidityFramework | "none";
+  }
+
+  // choose from cli prompts
+  return null;
 }
