@@ -70,7 +70,6 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
     dev: options.dev ?? defaultOptions.dev,
     extensions: [options.solidityFramework ?? answers.solidityFramework].filter(ext => Boolean(ext) && ext !== "none"),
     externalExtension: options.externalExtension,
-    help: options.help,
   };
 
   return mergedOptions;
