@@ -4,6 +4,7 @@ import * as https from "https";
 import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../config";
+import { SOLIDITY_FRAMEWORKS } from "./consts";
 
 const validateTemplate = async (template: string): Promise<{ repository: string; branch?: string }> => {
   const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
@@ -86,8 +87,7 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   };
 }
 
-const SOLIDITY_FRAMEWORK_OPTIONS = ["hardhat", "foundry", "none"];
-
+const SOLIDITY_FRAMEWORK_OPTIONS = [...Object.values(SOLIDITY_FRAMEWORKS), "none"];
 function solidityFrameworkHandler(value: string) {
   const lowercasedValue = value.toLowerCase();
   if (SOLIDITY_FRAMEWORK_OPTIONS.includes(lowercasedValue)) {

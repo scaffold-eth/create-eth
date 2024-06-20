@@ -12,6 +12,7 @@ import { Listr } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
+import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -55,7 +56,7 @@ export async function createProject(options: Options) {
         },
       },
       {
-        title: `📡 Initializing Git repository${options.extensions.includes("foundry") ? " and submodules" : ""}`,
+        title: `📡 Initializing Git repository${options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY) ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
