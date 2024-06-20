@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { execa } from "execa";
 
-export const validateFoundryYup = async () => {
+export const validateFoundryUp = async () => {
   try {
     await execa("foundryup", ["-h"]);
   } catch (error) {

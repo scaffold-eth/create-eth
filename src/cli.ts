@@ -5,7 +5,7 @@ import { renderIntroMessage } from "./utils/render-intro-message";
 import type { Args } from "./types";
 import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
-import { validateFoundryYup } from "./utils/system-validation";
+import { validateFoundryUp } from "./utils/system-validation";
 
 export async function cli(args: Args) {
   try {
@@ -13,7 +13,7 @@ export async function cli(args: Args) {
     const rawOptions = await parseArgumentsIntoOptions(args);
     const options = await promptForMissingOptions(rawOptions);
     if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
-      await validateFoundryYup();
+      await validateFoundryUp();
     }
     await createProject(options);
   } catch (error: any) {
