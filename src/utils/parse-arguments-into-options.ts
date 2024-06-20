@@ -9,33 +9,33 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const validateExternalExtension = async (
-  template: string,
+  extensionName: string,
   dev: boolean,
 ): Promise<{ repository: string; branch?: string } | string> => {
   if (dev) {
-    // Check that the template folders exists in extensions/${template}
+    // Check externalExtensions/${extensionName} exists
     try {
       const currentFileUrl = import.meta.url;
       const externalExtensionsDirectory = path.resolve(
         decodeURI(fileURLToPath(currentFileUrl)),
         "../../externalExtensions",
       );
-      await fs.promises.access(`${externalExtensionsDirectory}/${template}`);
+      await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
     } catch {
-      throw new Error(`Template not found in "externalExtensions/${template}"`);
+      throw new Error(`Extesnion not found in "externalExtensions/${extensionName}"`);
     }
 
-    return template;
+    return extensionName;
   }
 
-  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
+  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(extensionName);
 
   // Check if repository exists
   await new Promise((resolve, reject) => {
     https
       .get(githubBranchUrl, res => {
         if (res.statusCode !== 200) {
-          reject(new Error(`Template not found: ${githubUrl}`));
+          reject(new Error(`Extension not found: ${githubUrl}`));
         } else {
           resolve(null);
         }
