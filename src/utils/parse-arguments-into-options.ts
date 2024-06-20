@@ -16,8 +16,11 @@ const validateExternalExtension = async (
     // Check that the template folders exists in extensions/${template}
     try {
       const currentFileUrl = import.meta.url;
-      const extensionsDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../externalExtensions");
-      await fs.promises.access(`${extensionsDirectory}/${template}`);
+      const externalExtensionsDirectory = path.resolve(
+        decodeURI(fileURLToPath(currentFileUrl)),
+        "../../externalExtensions",
+      );
+      await fs.promises.access(`${externalExtensionsDirectory}/${template}`);
     } catch {
       throw new Error(`Template not found in "externalExtensions/${template}"`);
     }
