@@ -5,6 +5,7 @@ import { getDataFromExternalExtensionArgument } from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../config";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
+import { validateFoundryYup } from "./system-validation";
 
 const validateTemplate = async (template: string): Promise<{ repository: string; branch?: string }> => {
   const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(template);
@@ -64,6 +65,10 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
   const project = args._[0] ?? null;
 
   const solidityFramework = args["--solidity-framework"] ?? null;
+
+  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
+    await validateFoundryYup();
+  }
 
   // ToDo. Allow multiple
   const extension = args["--extension"] ? await validateTemplate(args["--extension"]) : null;
