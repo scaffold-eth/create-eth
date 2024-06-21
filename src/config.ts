@@ -8,7 +8,7 @@ const config: Config = {
       name: "solidityFramework",
       message: "What solidity framework do you want to use?",
       extensions: [SOLIDITY_FRAMEWORKS.HARDHAT, SOLIDITY_FRAMEWORKS.FOUNDRY, null],
-      default: "hardhat",
+      default: SOLIDITY_FRAMEWORKS.HARDHAT,
     }),
   ],
 };
