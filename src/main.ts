@@ -31,7 +31,7 @@ export async function createProject(options: Options) {
       {
         title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
           options.project,
-        )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
+        )}${options.externalExtension ? ` with the ${chalk.green.bold(options.dev ? options.externalExtension : getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
       {
@@ -55,7 +55,7 @@ export async function createProject(options: Options) {
         },
       },
       {
-        title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
+        title: `📡 Initializing Git repository${options.extensions.includes("foundry") ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
