@@ -6,7 +6,7 @@ type BaseOptions = {
   project: string | null;
   install: boolean | null;
   dev: boolean;
-  externalExtension: ExternalExtension | null;
+  externalExtension: ExternalExtension | ExternalExtensionNameDev | null;
 };
 
 export type ExternalExtension = {
@@ -14,8 +14,11 @@ export type ExternalExtension = {
   branch?: string | null;
 };
 
+export type ExternalExtensionNameDev = string;
+
 export type RawOptions = BaseOptions & {
   solidityFramework: SolidityFramework | "none" | null;
+  help: boolean;
 };
 
 type MergedOptions = BaseOptions & {
