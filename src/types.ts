@@ -47,8 +47,6 @@ interface SolidityFrameworkQuestion<T extends SolidityFrameworkOrNull[] = Solidi
   default?: T[number];
 }
 
-export const isSolidityFramework = (item: SolidityFrameworkOrNull): item is SolidityFramework => item !== null;
-
 /**
  * This function makes sure that the `T` generic type is narrowed down to
  * whatever `extensions` are passed in the question prop. That way we can type
@@ -64,16 +62,6 @@ export type Config = {
 };
 
 export const isDefined = <T>(item: T | undefined | null): item is T => item !== undefined && item !== null;
-
-export type SolidityFrameworkDescriptor = {
-  name: string;
-  value: SolidityFramework;
-  path: string;
-};
-
-export type SolidityFrameworkDict = {
-  [extension in SolidityFramework]: SolidityFrameworkDescriptor;
-};
 
 export type TemplateDescriptor = {
   path: string;

@@ -1,4 +1,4 @@
-export const baseDir = "base";
+export const BASE_DIR = "base";
 
 export const SOLIDITY_FRAMEWORKS = {
   HARDHAT: "hardhat",

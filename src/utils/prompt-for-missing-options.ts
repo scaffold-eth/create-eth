@@ -1,7 +1,6 @@
 import { config } from "../config";
-import { Options, RawOptions, isDefined, isSolidityFramework } from "../types";
+import { Options, RawOptions, isDefined } from "../types";
 import inquirer from "inquirer";
-import { extensionDict } from "./extensions-dictionary";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {
@@ -40,10 +39,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
       );
     }
 
-    const extensions = question.extensions
-      .filter(isSolidityFramework)
-      .map(ext => extensionDict[ext])
-      .filter(isDefined);
+    const extensions = question.extensions.filter(isDefined);
 
     const hasNoneOption = question.extensions.includes(null);
 
