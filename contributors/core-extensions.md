@@ -194,8 +194,7 @@ Templated files are both [Template files](#template-files), and [Args files](#ar
 The special files and folders are:
 
 - [`package.json` file](#merging-packagejson-files)
-- [`config.json` file](#extensionconfigjson)
-- `extensions/` folder
+- `solidity-frameworks/` folder
 
 # Things worth mentioning
 

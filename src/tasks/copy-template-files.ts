@@ -20,14 +20,14 @@ const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
 const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
-const isSolidityFrameworkFolderRegex = /extensions$/;
+const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
 const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
 
 const getSolidityFrameworkPath = (solidityFramework: SolidityFramework | null, templatesDirectory: string) => {
   if (!solidityFramework) return;
 
-  return path.resolve(templatesDirectory, "extensions", solidityFramework);
+  return path.resolve(templatesDirectory, "solidity-frameworks", solidityFramework);
 };
 
 const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
