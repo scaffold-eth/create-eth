@@ -9,7 +9,7 @@ export async function prettierFormat(targetDir: string) {
       throw new Error("There was a problem running the format command");
     }
   } catch (error) {
-    throw new Error("Failed to create directory", { cause: error });
+    throw new Error("Failed to format directory", { cause: error });
   }
 
   return true;

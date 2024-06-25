@@ -1,5 +1,5 @@
 import { config } from "../config";
-import { Options, RawOptions, isDefined, isExtension } from "../types";
+import { Options, RawOptions, isDefined, isSolidityFramework } from "../types";
 import inquirer from "inquirer";
 import { extensionDict } from "./extensions-dictionary";
 
@@ -41,7 +41,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
     }
 
     const extensions = question.extensions
-      .filter(isExtension)
+      .filter(isSolidityFramework)
       .map(ext => extensionDict[ext])
       .filter(isDefined);
 
@@ -68,7 +68,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
     project: options.project ?? answers.project,
     install: options.install ?? answers.install,
     dev: options.dev ?? defaultOptions.dev,
-    extensions: [options.solidityFramework ?? answers.solidityFramework].filter(ext => Boolean(ext) && ext !== "none"),
+    solidityFramework: options.solidityFramework ?? answers.solidityFramework,
     externalExtension: options.externalExtension,
   };
 

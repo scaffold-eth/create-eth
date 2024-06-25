@@ -2,11 +2,14 @@ import type { Question } from "inquirer";
 
 export type Args = string[];
 
+export type SolidityFramework = "hardhat" | "foundry";
+
 type BaseOptions = {
   project: string | null;
   install: boolean | null;
   dev: boolean;
   externalExtension: ExternalExtension | ExternalExtensionNameDev | null;
+  solidityFramework: SolidityFramework | "none" | null;
 };
 
 export type ExternalExtension = {
@@ -17,33 +20,26 @@ export type ExternalExtension = {
 export type ExternalExtensionNameDev = string;
 
 export type RawOptions = BaseOptions & {
-  solidityFramework: SolidityFramework | "none" | null;
   help: boolean;
 };
 
-type MergedOptions = BaseOptions & {
-  extensions: Extension[];
-};
-
-type NonNullableMergedOptions = {
-  [Prop in keyof Omit<MergedOptions, "externalExtension">]: NonNullable<MergedOptions[Prop]>;
+type MergedOptions = {
+  [Prop in keyof Omit<BaseOptions, "externalExtension" | "solidityFramework">]: NonNullable<BaseOptions[Prop]>;
 } & {
   externalExtension: RawOptions["externalExtension"];
+  solidityFramework: SolidityFramework | null;
 };
 
-export type Options = NonNullableMergedOptions;
-
-export type SolidityFramework = "hardhat" | "foundry";
-
-export type Extension = SolidityFramework;
+export type Options = MergedOptions;
 
 type NullExtension = null;
-export type ExtensionOrNull = Extension | NullExtension;
+
+export type SolidityFrameworkOrNull = SolidityFramework | NullExtension;
 // corresponds to inquirer question types:
 //  - multi-select -> checkbox
 //  - single-select -> list
 type QuestionType = "multi-select" | "single-select";
-interface ExtensionQuestion<T extends ExtensionOrNull[] = ExtensionOrNull[]> {
+interface SolidityFrameworkQuestion<T extends SolidityFrameworkOrNull[] = SolidityFrameworkOrNull[]> {
   type: QuestionType;
   extensions: T;
   name: string;
@@ -51,7 +47,7 @@ interface ExtensionQuestion<T extends ExtensionOrNull[] = ExtensionOrNull[]> {
   default?: T[number];
 }
 
-export const isExtension = (item: ExtensionOrNull): item is Extension => item !== null;
+export const isSolidityFramework = (item: SolidityFrameworkOrNull): item is SolidityFramework => item !== null;
 
 /**
  * This function makes sure that the `T` generic type is narrowed down to
@@ -62,21 +58,21 @@ export const isExtension = (item: ExtensionOrNull): item is Extension => item !=
  * Questions can be created without this function, just using a normal object,
  * but `default` type will be any valid Extension.
  */
-export const typedQuestion = <T extends ExtensionOrNull[]>(question: ExtensionQuestion<T>) => question;
+export const typedQuestion = <T extends SolidityFrameworkOrNull[]>(question: SolidityFrameworkQuestion<T>) => question;
 export type Config = {
-  questions: ExtensionQuestion[];
+  questions: SolidityFrameworkQuestion[];
 };
 
 export const isDefined = <T>(item: T | undefined | null): item is T => item !== undefined && item !== null;
 
-export type ExtensionDescriptor = {
+export type SolidityFrameworkDescriptor = {
   name: string;
-  value: Extension;
+  value: SolidityFramework;
   path: string;
 };
 
-export type ExtensionDict = {
-  [extension in Extension]: ExtensionDescriptor;
+export type SolidityFrameworkDict = {
+  [extension in SolidityFramework]: SolidityFrameworkDescriptor;
 };
 
 export type TemplateDescriptor = {

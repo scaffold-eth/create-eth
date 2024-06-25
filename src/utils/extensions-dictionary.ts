@@ -1,10 +1,10 @@
 import { fileURLToPath } from "url";
 import path from "path";
 import fs from "fs";
-import { Extension, ExtensionDescriptor, ExtensionDict } from "../types";
+import { SolidityFramework, SolidityFrameworkDescriptor, SolidityFrameworkDict } from "../types";
 
 // global object to store mapping of extension name and its descriptor
-export const extensionDict: ExtensionDict = {} as ExtensionDict;
+export const extensionDict: SolidityFrameworkDict = {} as SolidityFrameworkDict;
 
 const currentFileUrl = import.meta.url;
 
@@ -15,9 +15,9 @@ const templatesDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl))
  */
 const initializeExtensionsDict = (basePath: string) => {
   const extensionsPath = path.resolve(basePath, "extensions");
-  let extensions: Extension[];
+  let extensions: SolidityFramework[];
   try {
-    extensions = fs.readdirSync(extensionsPath) as Extension[];
+    extensions = fs.readdirSync(extensionsPath) as SolidityFramework[];
   } catch (error) {
     console.error(`Couldn't read the extensions directory: ${extensionsPath}`);
     return;
@@ -42,7 +42,7 @@ Config file path: ${configPath}`,
     const name = config.name ?? ext;
     const value = ext;
 
-    const extDescriptor: ExtensionDescriptor = {
+    const extDescriptor: SolidityFrameworkDescriptor = {
       name,
       value,
       path: extPath,
