@@ -172,10 +172,9 @@ const processTemplatedFiles = async (
       if (solidityFrameworkPath) {
         const argsFilePath = path.join(solidityFrameworkPath, argsPath);
         const fileExists = fs.existsSync(argsFilePath);
-        if (!fileExists) {
-          return;
+        if (fileExists) {
+          argsFileUrls.push(pathToFileURL(argsFilePath).href);
         }
-        argsFileUrls.push(pathToFileURL(argsFilePath).href);
       }
 
       if (externalExtension) {
