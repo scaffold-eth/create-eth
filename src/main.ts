@@ -7,6 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
 import { prettierFormat } from "./tasks/prettier-format";
+import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -26,7 +27,7 @@ export async function createProject(options: Options) {
       {
         title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
           options.project,
-        )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
+        )}${options.externalExtension ? ` with the ${chalk.green.bold(options.dev ? options.externalExtension : getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
       {
@@ -42,9 +43,9 @@ export async function createProject(options: Options) {
           }
           return false;
         },
-      },
+      }, 
       {
-        title: `📡 Initializing Git repository ${options.extensions.includes("foundry") ? "and submodules" : ""}`,
+        title: `📡 Initializing Git repository${options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY) ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
@@ -53,7 +54,7 @@ export async function createProject(options: Options) {
 
   try {
     await tasks.run();
-    await renderOutroMessage(options);
+    renderOutroMessage(options);
   } catch (error) {
     console.log("%s Error occurred", chalk.red.bold("ERROR"), error);
     console.log("%s Exiting...", chalk.red.bold("Uh oh! 😕 Sorry about that!"));

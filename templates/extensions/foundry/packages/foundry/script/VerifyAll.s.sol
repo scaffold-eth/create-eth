@@ -49,28 +49,32 @@ contract VerifyAll is Script {
     }
   }
 
-  function _verifyContract(string memory content) internal {
-    string memory contractName = abi.decode(
-      vm.parseJson(content, searchStr(currTransactionIdx, "contractName")),
-      (string)
-    );
-    address contractAddr = abi.decode(
-      vm.parseJson(content, searchStr(currTransactionIdx, "contractAddress")),
-      (address)
-    );
-    bytes memory deployedBytecode = abi.decode(
-      vm.parseJson(content, searchStr(currTransactionIdx, "transaction.data")),
-      (bytes)
-    );
-    bytes memory compiledBytecode = abi.decode(
-      vm.parseJson(_getCompiledBytecode(contractName), ".bytecode.object"),
-      (bytes)
-    );
-    bytes memory constructorArgs = BytesLib.slice(
-      deployedBytecode,
-      compiledBytecode.length,
-      deployedBytecode.length - compiledBytecode.length
-    );
+    function _verifyContract(string memory content) internal {
+        string memory contractName = abi.decode(
+            vm.parseJson(content, searchStr(currTransactionIdx, "contractName")),
+            (string)
+        );
+        address contractAddr = abi.decode(
+            vm.parseJson(
+                content, searchStr(currTransactionIdx, "contractAddress")
+            ),
+            (address)
+        );
+        bytes memory deployedBytecode = abi.decode(
+            vm.parseJson(
+                content, searchStr(currTransactionIdx, "transaction.input")
+            ),
+            (bytes)
+        );
+        bytes memory compiledBytecode = abi.decode(
+            vm.parseJson(_getCompiledBytecode(contractName), ".bytecode.object"),
+            (bytes)
+        );
+        bytes memory constructorArgs = BytesLib.slice(
+            deployedBytecode,
+            compiledBytecode.length,
+            deployedBytecode.length - compiledBytecode.length
+        );
 
     string[] memory inputs = new string[](9);
     inputs[0] = "forge";

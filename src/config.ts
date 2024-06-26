@@ -1,13 +1,14 @@
 import { Config, ExternalExtension, typedQuestion } from "./types";
+import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
 
 const config: Config = {
   questions: [
     typedQuestion({
       type: "single-select",
-      name: "solidity-framework",
+      name: "solidityFramework",
       message: "What solidity framework do you want to use?",
-      extensions: ["hardhat", "foundry", null],
-      default: "hardhat",
+      extensions: [SOLIDITY_FRAMEWORKS.HARDHAT, SOLIDITY_FRAMEWORKS.FOUNDRY, null],
+      default: SOLIDITY_FRAMEWORKS.HARDHAT,
     }),
   ],
 };
