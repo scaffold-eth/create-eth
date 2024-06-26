@@ -6,6 +6,7 @@ import { Listr } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
+import { prettierFormat } from "./tasks/prettier-format";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -27,6 +28,10 @@ export async function createProject(options: Options) {
           options.project,
         )}${options.externalExtension ? ` with the ${chalk.green.bold(getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
+      },
+      {
+        title: "🪄 Formatting files",
+        task: () => prettierFormat(targetDirectory, options),
       },
       {
         title: `📦 Installing dependencies with yarn, this could take a while`,
