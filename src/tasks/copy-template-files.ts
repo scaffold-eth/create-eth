@@ -225,7 +225,6 @@ const processTemplatedFiles = async (
         templateFileDescriptor.relativePath.split(templateTargetName)[0],
         templateTargetName,
       );
-
       fs.writeFileSync(targetPath, output);
 
       if (isDev) {
