@@ -43,7 +43,7 @@ export async function createProject(options: Options) {
           }
           return false;
         },
-      }, 
+      },
       {
         title: `📡 Initializing Git repository${options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY) ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
