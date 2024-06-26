@@ -1,4 +1,10 @@
-import { copyTemplateFiles, createProjectDirectory, installPackages, createFirstGitCommit } from "./tasks";
+import {
+  copyTemplateFiles,
+  createProjectDirectory,
+  installPackages,
+  createFirstGitCommit,
+  prettierFormat,
+} from "./tasks";
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
 import chalk from "chalk";
@@ -6,7 +12,6 @@ import { Listr } from "listr2";
 import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
-import { prettierFormat } from "./tasks/prettier-format";
 import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
 
 export async function createProject(options: Options) {
