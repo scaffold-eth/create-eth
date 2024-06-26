@@ -1,10 +1,11 @@
 import { execa } from "execa";
 import path from "path";
 import { Options } from "../types";
+import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
 
 export async function prettierFormat(targetDir: string, options: Options) {
   try {
-    const nextJsPath = path.join(targetDir, "/packages/nextjs");
+    const nextJsPath = path.join(targetDir, "packages", "nextjs");
     const nextPrettierConfig = path.join(nextJsPath, ".prettierrc.json");
     const result = await execa("yarn", [
       "prettier",
@@ -18,8 +19,8 @@ export async function prettierFormat(targetDir: string, options: Options) {
       throw new Error("There was a problem running the prettier in nextjs package");
     }
 
-    if (options.extensions.includes("hardhat")) {
-      const hardhatPackagePath = path.join(targetDir, "/packages/hardhat");
+    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.HARDHAT)) {
+      const hardhatPackagePath = path.join(targetDir, "packages", SOLIDITY_FRAMEWORKS.HARDHAT);
       const hardhatPrettierConfig = path.join(hardhatPackagePath, ".prettierrc.json");
       const hardhatResult = await execa("yarn", [
         "prettier",
@@ -38,8 +39,8 @@ export async function prettierFormat(targetDir: string, options: Options) {
       }
     }
 
-    if (options.extensions.includes("foundry")) {
-      const foundryPackagePath = path.resolve(targetDir, "packages", "foundry");
+    if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
+      const foundryPackagePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
       const foundryResult = await execa("forge", ["fmt"], { cwd: foundryPackagePath });
       if (foundryResult.failed) {
         throw new Error("There was a problem running the forge fmt in the foundry package");
