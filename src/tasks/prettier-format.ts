@@ -3,17 +3,19 @@ import path from "path";
 import { Options } from "../types";
 import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
 
-async function runPrettier(targetPath: string, prettierConfigPath: string, prettierPlugins: string[]) {
+async function runPrettier(targetPath: string[], prettierConfigPath: string, prettierPlugins: string[]) {
+  console.log("the prettier config path is", prettierConfigPath);
   const result = await execa("yarn", [
     "prettier",
     "--write",
-    targetPath,
+    ...targetPath,
     "--config",
     prettierConfigPath,
     ...prettierPlugins,
+    "--no-editorconfig",
   ]);
   if (result.failed) {
-    throw new Error(`There was a problem running prettier in ${targetPath}`);
+    throw new Error(`There was a problem running prettier in ${targetPath.join(" ")}`);
   }
 }
 
@@ -22,7 +24,7 @@ export async function prettierFormat(targetDir: string, options: Options) {
     const nextJsPath = path.join(targetDir, "packages", "nextjs");
     const nextPrettierConfig = path.join(nextJsPath, ".prettierrc.json");
 
-    await runPrettier(nextJsPath, nextPrettierConfig, ["--plugin=@trivago/prettier-plugin-sort-imports"]);
+    await runPrettier([nextJsPath], nextPrettierConfig, ["--plugin=@trivago/prettier-plugin-sort-imports"]);
 
     if (options.extensions.includes(SOLIDITY_FRAMEWORKS.HARDHAT)) {
       const hardhatPackagePath = path.join(targetDir, "packages", SOLIDITY_FRAMEWORKS.HARDHAT);
@@ -35,7 +37,7 @@ export async function prettierFormat(targetDir: string, options: Options) {
         `${hardhatPackagePath}/contracts/**/*.sol`,
       ];
 
-      await runPrettier(hardhatPaths.join(" "), hardhatPrettierConfig, ["--plugin=prettier-plugin-solidity"]);
+      await runPrettier(hardhatPaths, hardhatPrettierConfig, ["--plugin=prettier-plugin-solidity"]);
     }
 
     if (options.extensions.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) {
