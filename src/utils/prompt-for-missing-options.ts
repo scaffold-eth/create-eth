@@ -1,7 +1,6 @@
 import { config } from "../config";
-import { Options, RawOptions, isDefined, isExtension } from "../types";
+import { Options, RawOptions, isDefined } from "../types";
 import inquirer from "inquirer";
-import { extensionDict } from "./extensions-dictionary";
 
 // default values for unspecified args
 const defaultOptions: RawOptions = {
@@ -40,10 +39,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
       );
     }
 
-    const extensions = question.extensions
-      .filter(isExtension)
-      .map(ext => extensionDict[ext])
-      .filter(isDefined);
+    const extensions = question.extensions.filter(isDefined);
 
     const hasNoneOption = question.extensions.includes(null);
 
@@ -68,7 +64,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
     project: options.project ?? answers.project,
     install: options.install ?? answers.install,
     dev: options.dev ?? defaultOptions.dev,
-    extensions: [options.solidityFramework ?? answers.solidityFramework].filter(ext => Boolean(ext) && ext !== "none"),
+    solidityFramework: options.solidityFramework ?? answers.solidityFramework,
     externalExtension: options.externalExtension,
   };
 
