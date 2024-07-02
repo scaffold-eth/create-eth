@@ -1,6 +1,12 @@
+
+import { withDefaults } from '../../../utils.js'
+
+const contents = ({ tailwindImports, additionalContent, themeExtend }) =>
+`${tailwindImports.filter(Boolean).join("\n")}
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
+  content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}", ${additionalContent}],
   plugins: [require("daisyui")],
   darkTheme: "dark",
   darkMode: ["selector", "[data-theme='dark']"],
@@ -82,6 +88,14 @@ module.exports = {
       animation: {
         "pulse-fast": "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
+      ${themeExtend}
     },
   },
 };
+`
+
+export default withDefaults(contents, {
+  additionalContent: "",
+  tailwindImports: "",
+  themeExtend: ""
+})

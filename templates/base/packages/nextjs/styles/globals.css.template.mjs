@@ -1,6 +1,12 @@
-@import "tailwindcss/base";
+import { withDefaults } from "../../../../utils.js";
+
+
+const contents = ({ globalStyles }) => {
+  return `@import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+${globalStyles}
 
 :root,
 [data-theme] {
@@ -30,3 +36,10 @@ p {
 .btn.btn-ghost {
   @apply shadow-none;
 }
+
+`
+};
+
+export default withDefaults(contents, {
+  globalStyles: ""
+});
