@@ -24,11 +24,8 @@ const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
 const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
 
-const getSolidityFrameworkPath = (solidityFramework: SolidityFramework | null, templatesDirectory: string) => {
-  if (!solidityFramework) return;
-
-  return path.resolve(templatesDirectory, "solidity-frameworks", solidityFramework);
-};
+const getSolidityFrameworkPath = (solidityFramework: SolidityFramework, templatesDirectory: string) =>
+  path.resolve(templatesDirectory, "solidity-frameworks", solidityFramework);
 
 const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
@@ -122,7 +119,7 @@ const processTemplatedFiles = async (
   templateDir: string,
   targetDir: string,
 ) => {
-  const solidityFrameworkPath = getSolidityFrameworkPath(solidityFramework, templateDir);
+  const solidityFrameworkPath = solidityFramework && getSolidityFrameworkPath(solidityFramework, templateDir);
   const baseTemplatedFileDescriptors: TemplateDescriptor[] = findFilesRecursiveSync(basePath, path =>
     isTemplateRegex.test(path),
   ).map(baseTemplatePath => ({
@@ -287,11 +284,11 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   // 1. Copy base template to target directory
   await copyBaseFiles(basePath, targetDir, options);
 
-  let solidityFrameworkPath;
-
   // 2. Copy solidity framework folder
-  if (options.solidityFramework) {
-    solidityFrameworkPath = getSolidityFrameworkPath(options.solidityFramework, templateDir) as string;
+  const solidityFrameworkPath =
+    options.solidityFramework && getSolidityFrameworkPath(options.solidityFramework, templateDir);
+
+  if (solidityFrameworkPath) {
     await copyExtensionsFiles(options, solidityFrameworkPath, targetDir);
   }
 
