@@ -134,10 +134,10 @@ const processTemplatedFiles = async (
 
   const solidityFrameworkTemplatedFileDescriptors: TemplateDescriptor[] = solidityFrameworkPath
     ? findFilesRecursiveSync(solidityFrameworkPath, filePath => isTemplateRegex.test(filePath))
-        .map(extensionTemplatePath => ({
-          path: extensionTemplatePath,
-          fileUrl: pathToFileURL(extensionTemplatePath).href,
-          relativePath: extensionTemplatePath.split(solidityFrameworkPath)[1],
+        .map(solidityFrameworkTemplatePath => ({
+          path: solidityFrameworkTemplatePath,
+          fileUrl: pathToFileURL(solidityFrameworkTemplatePath).href,
+          relativePath: solidityFrameworkTemplatePath.split(solidityFrameworkPath)[1],
           source: `extension ${solidityFramework}`,
         }))
         .flat()
