@@ -118,10 +118,9 @@ const copyExtensionsFiles = async ({ dev: isDev }: Options, extensionPath: strin
 const processTemplatedFiles = async (
   { solidityFramework, externalExtension, dev: isDev }: Options,
   basePath: string,
-  templateDir: string,
+  solidityFrameworkPath: string | null,
   targetDir: string,
 ) => {
-  const solidityFrameworkPath = solidityFramework && getSolidityFrameworkPath(solidityFramework, templateDir);
   const baseTemplatedFileDescriptors: TemplateDescriptor[] = findFilesRecursiveSync(basePath, path =>
     isTemplateRegex.test(path),
   ).map(baseTemplatePath => ({
@@ -312,7 +311,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   }
 
   // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, templateDir, targetDir);
+  await processTemplatedFiles(options, basePath, solidityFrameworkPath, targetDir);
 
   // 5. Delete tmp directory
   if (options.externalExtension && !options.dev) {
