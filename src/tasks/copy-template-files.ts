@@ -1,6 +1,5 @@
 import { execa } from "execa";
 import { ExternalExtension, Options, SolidityFramework, TemplateDescriptor } from "../types";
-import { BASE_DIR } from "../utils/consts";
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
@@ -11,7 +10,10 @@ import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 
-const EXTERNAL_EXTENSION_TMP_FOLDER = "tmp-external-extension";
+const BASE_DIR = "base";
+const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
+const SOLIDITY_FRAMEWORKS_DIR = "solidity-frameworks";
+
 const copy = promisify(ncp);
 let copyOrLink = copy;
 
@@ -25,7 +27,7 @@ const isPackagesFolderRegex = /packages$/;
 const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
 
 const getSolidityFrameworkPath = (solidityFramework: SolidityFramework, templatesDirectory: string) =>
-  path.resolve(templatesDirectory, "solidity-frameworks", solidityFramework);
+  path.resolve(templatesDirectory, SOLIDITY_FRAMEWORKS_DIR, solidityFramework);
 
 const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }: Options) => {
   await copyOrLink(basePath, targetDir, {
@@ -142,7 +144,7 @@ const processTemplatedFiles = async (
 
   const externalExtensionFolder = isDev
     ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension")
-    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension");
+    : path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR, "extension");
   const externalExtensionTemplatedFileDescriptors: TemplateDescriptor[] = externalExtension
     ? findFilesRecursiveSync(externalExtensionFolder, filePath => isTemplateRegex.test(filePath)).map(
         extensionTemplatePath => ({
@@ -177,7 +179,7 @@ const processTemplatedFiles = async (
       if (externalExtension) {
         const argsFilePath = isDev
           ? path.join(basePath, "../../externalExtensions", externalExtension as string, "extension", argsPath)
-          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER, "extension", argsPath);
+          : path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR, "extension", argsPath);
 
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
@@ -279,7 +281,7 @@ const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => 
 export async function copyTemplateFiles(options: Options, templateDir: string, targetDir: string) {
   copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, BASE_DIR);
-  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_FOLDER);
+  const tmpDir = path.join(targetDir, EXTERNAL_EXTENSION_TMP_DIR);
 
   // 1. Copy base template to target directory
   await copyBaseFiles(basePath, targetDir, options);
