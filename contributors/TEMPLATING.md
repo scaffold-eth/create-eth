@@ -1,25 +1,3 @@
-# Main concepts
-
-I propose we treat anything other than "base" as an extension. That way we don't need to make distinctions between solidity frameworks or any other kind of extension.
-
-This change should make it easier to grow the options we provide our users without having to classify extensions by category.
-
-This change requires a new file, `src/config.ts`, where a few things about the extensions are defined, e.g. the sequence of questions about extensions.
-
-# Config files
-
-There's one main `src/config.ts` file to configure the questions shown to the user.
-
-| ⚠️ Note how the extension config file is a JSON file
-
-## Config files API
-
-### `src/config.ts`
-
-Have a look at `src/types.ts#Config` or the file itself.
-
-Just a quick note to mention that adding `null` as an item in the `extensions` property will show the "None" option to the user. That option doesn't add any extension for the given question.
-
 # Template files
 
 A Template file is a file to which extensions can add content. Removing content is out of scope for this experiment.
@@ -173,8 +151,6 @@ For each Template file, we search on the extensions the user selected for the ex
 I've thought about how the strings should be joined, but an option is to use [tagged templates](4). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
-
-When creating a new extension, simply create a new folder under `templates/extensions` with the name you want the extension to have.
 
 Inside the folder you will have a mix of normal, templated, and special files and folders.
 
