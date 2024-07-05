@@ -18,4 +18,4 @@ node_modules/
 externalExtensions/
 
 # Ignore create-extension helper cli
-dev-cli
+create-extension-cli

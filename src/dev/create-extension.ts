@@ -1,6 +1,6 @@
 import arg from "arg";
 import path from "path";
-import fs from "fs/promises";
+import fs from "fs";
 import { promisify } from "util";
 import { execa } from "execa";
 import ncp from "ncp";
@@ -52,11 +52,11 @@ const getChangedFiles = async (projectPath: string): Promise<string[]> => {
 
 const createDirectories = async (filePath: string, projectName: string) => {
   const dirPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, path.dirname(filePath));
-  await fs.mkdir(dirPath, { recursive: true });
+  await fs.promises.mkdir(dirPath, { recursive: true });
 };
 
 const findTemplateFiles = async (dir: string, templates: Set<string>) => {
-  const files = await fs.readdir(dir, { withFileTypes: true });
+  const files = await fs.promises.readdir(dir, { withFileTypes: true });
   for (const file of files) {
     const fullPath = path.join(dir, file.name);
     if (file.isDirectory()) {
