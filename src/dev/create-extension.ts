@@ -6,6 +6,14 @@ import { execa } from "execa";
 import ncp from "ncp";
 import { fileURLToPath } from "url";
 import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
+import chalk from "chalk";
+
+const prettyLog = {
+  info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
+  success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔ ${message}`)),
+  warning: (message: string, indent = 0) => console.log(chalk.yellow(`${"  ".repeat(indent)}⚠ ${message}`)),
+  error: (message: string, indent = 0) => console.log(chalk.red(`${"  ".repeat(indent)}✖ ${message}`)),
+};
 
 const ncpPromise = promisify(ncp.ncp);
 const mkdirPromise = promisify(fs.mkdir);
@@ -83,13 +91,22 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
 
     if (templates.has(file)) {
-      console.log(`Skipping template file: ${sourcePath}`);
-      console.log(`Please instead use ${destPath}.args.mjs`);
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
+      continue;
+    }
+
+    const sourceFileName = path.basename(sourcePath);
+    const isDeployedContractFile = sourceFileName === "deployedContracts.ts";
+    if (isDeployedContractFile) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`${sourceFileName} can we generated using \`yarn deploy\` `, 3);
       continue;
     }
 
     await createDirectories(file, projectName);
     await ncpPromise(sourcePath, destPath);
+    prettyLog.success(`Copied: ${file}`, 2);
   }
 };
 
@@ -97,33 +114,29 @@ const main = async (rawArgs: string[]) => {
   try {
     const { projectPath } = parseArguments(rawArgs);
     const projectName = path.basename(projectPath);
-
-    console.log(`Project name is: ${projectName}`);
-    console.log("Getting list of changed files...");
-
-    const changedFiles = await getChangedFiles(projectPath);
-
-    console.log("Changed files:", changedFiles);
-
-    if (changedFiles.length === 0) {
-      console.log("No changed files to copy.");
-      return;
-    }
-
-    console.log("Finding template files...");
     const templates = new Set<string>();
     await findTemplateFiles(templateDirectory, templates);
 
-    console.log("Copying changed files...");
-    await copyFiles(changedFiles, projectName, projectPath, templates);
+    console.log("\n");
+    prettyLog.info(`Extension name: ${projectName}\n`);
 
-    console.log("Files copied successfully.");
+    prettyLog.info("Getting list of changed files...", 1);
+    const changedFiles = await getChangedFiles(projectPath);
+
+    if (changedFiles.length === 0) {
+      prettyLog.warning("No changed files to copy.", 1);
+    } else {
+      prettyLog.info(`Found ${changedFiles.length} changed files, copying them...`, 1);
+      await copyFiles(changedFiles, projectName, projectPath, templates);
+    }
+
+    console.log("\n");
+    prettyLog.info(`Files processed successfully, updated ${EXTERNAL_EXTENSIONS_DIR}/${projectName} directory.`);
   } catch (err: any) {
-    console.log(err);
-    console.error("Error:", err.message);
+    prettyLog.error(`Error: ${err.message}`);
   }
 };
 
 main(process.argv)
-  .then(() => console.log("Done"))
+  .then()
   .catch(() => process.exit(1));
