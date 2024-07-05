@@ -16,6 +16,3 @@ node_modules/
 
 # External extensions development folder
 externalExtensions/
-
-# Ignore create-extension helper cli
-create-extension-cli
