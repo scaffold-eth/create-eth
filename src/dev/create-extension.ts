@@ -33,16 +33,11 @@ const parseArguments = (rawArgs: string[]) => {
   return { projectPath };
 };
 
-const getFirstCommit = async (projectPath: string): Promise<string> => {
-  const { stdout } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
+const getChangedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
+  const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
     cwd: projectPath,
   });
-  return stdout.trim();
-};
-
-const getChangedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
-  const firstCommit = await getFirstCommit(projectPath);
-  const { stdout } = await execa("git", ["diff", "--name-only", `${firstCommit}..HEAD`], {
+  const { stdout } = await execa("git", ["diff", "--name-only", `${firstCommit.trim()}..HEAD`], {
     cwd: projectPath,
   });
   return stdout.split("\n").filter(Boolean);
