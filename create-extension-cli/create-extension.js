@@ -18,6 +18,7 @@ const TEMPLATE_FILE_SUFFIX = ".template.mjs";
 const BASE_PATH = "base";
 const SOLIDITY_FRAMEWORKS_PATH = "solidity-frameworks";
 const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
+const YARN_LOCK_FILE = "yarn.lock";
 const prettyLog = {
     info: (message, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
     success: (message, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔ ${message}`)),
@@ -88,6 +89,11 @@ const copyFiles = async (files, projectName, projectPath, templates) => {
         if (sourceFileName === DEPLOYED_CONTRACTS_FILE) {
             prettyLog.warning(`Skipping file: ${file}`, 2);
             prettyLog.info(`${sourceFileName} can be generated using \`yarn deploy\``, 3);
+            continue;
+        }
+        if (sourceFileName === YARN_LOCK_FILE) {
+            prettyLog.warning(`Skipping file: ${file}`, 2);
+            prettyLog.info(`${file} will be generated when doing \`yarn install\` `, 3);
             continue;
         }
         await createDirectories(file, projectName);
