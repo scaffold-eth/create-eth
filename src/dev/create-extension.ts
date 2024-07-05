@@ -8,6 +8,13 @@ import { fileURLToPath } from "url";
 import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
 import chalk from "chalk";
 
+const EXTERNAL_EXTENSIONS_DIR = "externalExtensions";
+const TARGET_EXTENSION_DIR = "extension";
+const TEMPLATE_FILE_SUFFIX = ".template.mjs";
+const BASE_PATH = "base";
+const SOLIDITY_FRAMEWORKS_PATH = "solidity-frameworks";
+const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
+
 const prettyLog = {
   info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
   success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔ ${message}`)),
@@ -16,9 +23,6 @@ const prettyLog = {
 };
 
 const ncpPromise = promisify(ncp);
-
-const EXTERNAL_EXTENSIONS_DIR = "externalExtensions";
-const TARGET_EXTENSION_DIR = "extension";
 
 const currentFileUrl = import.meta.url;
 const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
@@ -57,17 +61,14 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
     const fullPath = path.join(dir, file.name);
     if (file.isDirectory()) {
       await findTemplateFiles(fullPath, templates);
-    } else if (file.name.endsWith(".template.mjs")) {
-      let relativePath = path.relative(templateDirectory, fullPath).replace(/\.template\.mjs$/, "");
+    } else if (file.name.endsWith(TEMPLATE_FILE_SUFFIX)) {
+      let relativePath = path.relative(templateDirectory, fullPath).replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
       const pathSegments = relativePath.split(path.sep);
-
-      const BASE_PATH = "base";
-      const SOLIDIY_FRAMEWORKS_PATH = "solidity-frameworks";
 
       // Normalize the relative path by stripping the initial parts
       if (pathSegments[0] === BASE_PATH) {
         relativePath = pathSegments.slice(1).join(path.sep);
-      } else if (pathSegments[0] === SOLIDIY_FRAMEWORKS_PATH) {
+      } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_PATH) {
         const framework = pathSegments[1];
         if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
           relativePath = pathSegments.slice(2).join(path.sep);
@@ -91,10 +92,9 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     }
 
     const sourceFileName = path.basename(sourcePath);
-    const isDeployedContractFile = sourceFileName === "deployedContracts.ts";
-    if (isDeployedContractFile) {
+    if (sourceFileName === DEPLOYED_CONTRACTS_FILE) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
-      prettyLog.info(`${sourceFileName} can we generated using \`yarn deploy\` `, 3);
+      prettyLog.info(`${sourceFileName} can be generated using \`yarn deploy\``, 3);
       continue;
     }
 
