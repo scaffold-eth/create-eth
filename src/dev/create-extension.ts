@@ -5,6 +5,7 @@ import { promisify } from "util";
 import { execa } from "execa";
 import ncp from "ncp";
 import { fileURLToPath } from "url";
+import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
 
 const ncpPromise = promisify(ncp.ncp);
 const mkdirPromise = promisify(fs.mkdir);
@@ -56,14 +57,19 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
       await findTemplateFiles(fullPath, templates);
     } else if (file.name.endsWith(".template.mjs")) {
       let relativePath = path.relative(templateDirectory, fullPath).replace(/\.template\.mjs$/, "");
+      const pathSegments = relativePath.split(path.sep);
+
+      const BASE_PATH = "base";
+      const SOLIDIY_FRAMEWORKS_PATH = "solidity-frameworks";
 
       // Normalize the relative path by stripping the initial parts
-      if (relativePath.startsWith("base/")) {
-        relativePath = relativePath.replace("base/", "");
-      } else if (relativePath.startsWith("extensions/foundry/")) {
-        relativePath = relativePath.replace("extensions/foundry/", "");
-      } else if (relativePath.startsWith("extensions/hardhat/")) {
-        relativePath = relativePath.replace("extensions/hardhat/", "");
+      if (pathSegments[0] === BASE_PATH) {
+        relativePath = pathSegments.slice(1).join(path.sep);
+      } else if (pathSegments[0] === SOLIDIY_FRAMEWORKS_PATH) {
+        const framework = pathSegments[1];
+        if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
+          relativePath = pathSegments.slice(2).join(path.sep);
+        }
       }
 
       templates.add(relativePath);
