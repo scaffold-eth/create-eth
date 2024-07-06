@@ -12,7 +12,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build:create-extension": "rollup -c rollup.dev.config.js",
-    "create-extension": "node create-extension-cli/create-extension.js",
+    "create-extension": "node genrated/create-extension-cli/create-extension.js",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-se2.js",
     "lint": "eslint .",

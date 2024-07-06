@@ -12,5 +12,5 @@ templates
 # External extensions development folder
 externalExtensions
 
-# Ignore create-extension cli
-create-extension-cli
+# Ignore generated dir
+generated
