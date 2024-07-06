@@ -45,10 +45,6 @@ const getChangedFilesFromFirstCommit = async (projectPath: string): Promise<stri
   return stdout.split("\n").filter(Boolean);
 };
 
-const getChangedFiles = async (projectPath: string): Promise<string[]> => {
-  return getChangedFilesFromFirstCommit(projectPath);
-};
-
 const createDirectories = async (filePath: string, projectName: string) => {
   const dirPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, path.dirname(filePath));
   await fs.promises.mkdir(dirPath, { recursive: true });
@@ -120,7 +116,7 @@ const main = async (rawArgs: string[]) => {
     prettyLog.info(`Extension name: ${projectName}\n`);
 
     prettyLog.info("Getting list of changed files...", 1);
-    const changedFiles = await getChangedFiles(projectPath);
+    const changedFiles = await getChangedFilesFromFirstCommit(projectPath);
 
     if (changedFiles.length === 0) {
       prettyLog.warning("No changed files to copy.", 1);
