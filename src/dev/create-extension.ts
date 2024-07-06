@@ -13,6 +13,8 @@ const TARGET_EXTENSION_DIR = "extension";
 const TEMPLATE_FILE_SUFFIX = ".template.mjs";
 const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
 const YARN_LOCK_FILE = "yarn.lock";
+const PACKAGE_JSON_FILE = "package.json";
+const NEXTJS_DIR = "nextjs";
 
 const prettyLog = {
   info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
@@ -77,6 +79,8 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
 
 const copyFiles = async (files: string[], projectName: string, projectPath: string, templates: Set<string>) => {
   for (const file of files) {
+    const pathSegmentsOfFile = file.split(path.sep);
+
     const sourcePath = path.resolve(projectPath, file);
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
 
@@ -96,6 +100,19 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     if (sourceFileName === YARN_LOCK_FILE) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`${file} will be generated when doing \`yarn install\` `, 3);
+      continue;
+    }
+
+    const isRootPackageJson = pathSegmentsOfFile.length === 1 && pathSegmentsOfFile[0] === PACKAGE_JSON_FILE;
+    const isNextJsPackageJson =
+      pathSegmentsOfFile.includes(NEXTJS_DIR) && pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
+    const isSolidityFrameworkPackageJson =
+      (pathSegmentsOfFile.includes(SOLIDITY_FRAMEWORKS.HARDHAT) ||
+        pathSegmentsOfFile.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) &&
+      pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
+    if (isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`Please manyally just add new scripts or dependencies in: ${destPath}`, 3);
       continue;
     }
 

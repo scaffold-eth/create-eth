@@ -7,6 +7,8 @@ import ncp from 'ncp';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 
+const BASE_DIR = "base";
+const SOLIDITY_FRAMEWORKS_DIR = "solidity-frameworks";
 const SOLIDITY_FRAMEWORKS = {
     HARDHAT: "hardhat",
     FOUNDRY: "foundry",
@@ -15,10 +17,10 @@ const SOLIDITY_FRAMEWORKS = {
 const EXTERNAL_EXTENSIONS_DIR = "externalExtensions";
 const TARGET_EXTENSION_DIR = "extension";
 const TEMPLATE_FILE_SUFFIX = ".template.mjs";
-const BASE_PATH = "base";
-const SOLIDITY_FRAMEWORKS_PATH = "solidity-frameworks";
 const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
 const YARN_LOCK_FILE = "yarn.lock";
+const PACKAGE_JSON_FILE = "package.json";
+const NEXTJS_DIR = "nextjs";
 const prettyLog = {
     info: (message, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
     success: (message, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔ ${message}`)),
@@ -28,7 +30,7 @@ const prettyLog = {
 const ncpPromise = promisify(ncp);
 const currentFileUrl = import.meta.url;
 const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
-const parseArguments = (rawArgs) => {
+const getProjectPath = (rawArgs) => {
     const args = arg({}, { argv: rawArgs.slice(2) });
     const projectPath = args._[0];
     if (!projectPath) {
@@ -45,9 +47,6 @@ const getChangedFilesFromFirstCommit = async (projectPath) => {
     });
     return stdout.split("\n").filter(Boolean);
 };
-const getChangedFiles = async (projectPath) => {
-    return getChangedFilesFromFirstCommit(projectPath);
-};
 const createDirectories = async (filePath, projectName) => {
     const dirPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, path.dirname(filePath));
     await fs.promises.mkdir(dirPath, { recursive: true });
@@ -63,10 +62,10 @@ const findTemplateFiles = async (dir, templates) => {
             let relativePath = path.relative(templateDirectory, fullPath).replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
             const pathSegments = relativePath.split(path.sep);
             // Normalize the relative path by stripping the initial parts
-            if (pathSegments[0] === BASE_PATH) {
+            if (pathSegments[0] === BASE_DIR) {
                 relativePath = pathSegments.slice(1).join(path.sep);
             }
-            else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_PATH) {
+            else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
                 const framework = pathSegments[1];
                 if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework)) {
                     relativePath = pathSegments.slice(2).join(path.sep);
@@ -78,6 +77,7 @@ const findTemplateFiles = async (dir, templates) => {
 };
 const copyFiles = async (files, projectName, projectPath, templates) => {
     for (const file of files) {
+        const pathSegmentsOfFile = file.split(path.sep);
         const sourcePath = path.resolve(projectPath, file);
         const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
         if (templates.has(file)) {
@@ -96,6 +96,16 @@ const copyFiles = async (files, projectName, projectPath, templates) => {
             prettyLog.info(`${file} will be generated when doing \`yarn install\` `, 3);
             continue;
         }
+        const isRootPackageJson = pathSegmentsOfFile.length === 1 && pathSegmentsOfFile[0] === PACKAGE_JSON_FILE;
+        const isNextJsPackageJson = pathSegmentsOfFile.includes(NEXTJS_DIR) && pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
+        const isSolidityFrameworkPackageJson = (pathSegmentsOfFile.includes(SOLIDITY_FRAMEWORKS.HARDHAT) ||
+            pathSegmentsOfFile.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) &&
+            pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
+        if (isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson) {
+            prettyLog.warning(`Skipping file: ${file}`, 2);
+            prettyLog.info(`Please manyally just add new scripts or dependencies in: ${destPath}`, 3);
+            continue;
+        }
         await createDirectories(file, projectName);
         await ncpPromise(sourcePath, destPath);
         prettyLog.success(`Copied: ${file}`, 2);
@@ -103,14 +113,14 @@ const copyFiles = async (files, projectName, projectPath, templates) => {
 };
 const main = async (rawArgs) => {
     try {
-        const { projectPath } = parseArguments(rawArgs);
+        const { projectPath } = getProjectPath(rawArgs);
         const projectName = path.basename(projectPath);
         const templates = new Set();
         await findTemplateFiles(templateDirectory, templates);
         console.log("\n");
         prettyLog.info(`Extension name: ${projectName}\n`);
         prettyLog.info("Getting list of changed files...", 1);
-        const changedFiles = await getChangedFiles(projectPath);
+        const changedFiles = await getChangedFilesFromFirstCommit(projectPath);
         if (changedFiles.length === 0) {
             prettyLog.warning("No changed files to copy.", 1);
         }
