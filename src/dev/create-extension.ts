@@ -26,7 +26,7 @@ const ncpPromise = promisify(ncp);
 const currentFileUrl = import.meta.url;
 const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
 
-const parseArguments = (rawArgs: string[]) => {
+const getProjectPath = (rawArgs: string[]) => {
   const args = arg({}, { argv: rawArgs.slice(2) });
   const projectPath = args._[0];
   if (!projectPath) {
@@ -111,7 +111,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
 
 const main = async (rawArgs: string[]) => {
   try {
-    const { projectPath } = parseArguments(rawArgs);
+    const { projectPath } = getProjectPath(rawArgs);
     const projectName = path.basename(projectPath);
     const templates = new Set<string>();
     await findTemplateFiles(templateDirectory, templates);
