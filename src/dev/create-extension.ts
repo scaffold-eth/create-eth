@@ -5,14 +5,12 @@ import { promisify } from "util";
 import { execa } from "execa";
 import ncp from "ncp";
 import { fileURLToPath } from "url";
-import { SOLIDITY_FRAMEWORKS } from "../utils/consts";
+import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
 import chalk from "chalk";
 
 const EXTERNAL_EXTENSIONS_DIR = "externalExtensions";
 const TARGET_EXTENSION_DIR = "extension";
 const TEMPLATE_FILE_SUFFIX = ".template.mjs";
-const BASE_PATH = "base";
-const SOLIDITY_FRAMEWORKS_PATH = "solidity-frameworks";
 const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
 const YARN_LOCK_FILE = "yarn.lock";
 
@@ -67,9 +65,9 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
       const pathSegments = relativePath.split(path.sep);
 
       // Normalize the relative path by stripping the initial parts
-      if (pathSegments[0] === BASE_PATH) {
+      if (pathSegments[0] === BASE_DIR) {
         relativePath = pathSegments.slice(1).join(path.sep);
-      } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_PATH) {
+      } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
         const framework = pathSegments[1];
         if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
           relativePath = pathSegments.slice(2).join(path.sep);
