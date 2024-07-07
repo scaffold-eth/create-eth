@@ -26,7 +26,7 @@ const prettyLog = {
 const ncpPromise = promisify(ncp);
 
 const currentFileUrl = import.meta.url;
-const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../templates");
+const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../../templates");
 
 const getProjectPath = (rawArgs: string[]) => {
   const args = arg({}, { argv: rawArgs.slice(2) });
