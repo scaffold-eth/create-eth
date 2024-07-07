@@ -11,6 +11,3 @@ templates
 
 # External extensions development folder
 externalExtensions
-
-# Ignore generated dir
-generated
