@@ -4,7 +4,7 @@ import autoExternal from "rollup-plugin-auto-external";
 export default {
   input: "src/dev/create-extension.ts",
   output: {
-    dir: "dist/create-extension-cli",
+    dir: "dist/create-extension",
     format: "es",
     sourcemap: true,
   },
