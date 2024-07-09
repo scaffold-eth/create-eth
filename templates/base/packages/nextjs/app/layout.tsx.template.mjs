@@ -1,8 +1,8 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ globalCssImports }) => {
+const contents = ({ imports }) => {
   return `
-${globalCssImports.filter(Boolean).join("\n")}
+${imports.filter(Boolean).join("\n")}
 import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
@@ -30,5 +30,5 @@ export default ScaffoldEthApp;`;
 };
 
 export default withDefaults(contents, {
-  globalCssImports: ""
+  imports: ""
 });
