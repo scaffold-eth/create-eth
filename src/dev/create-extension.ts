@@ -112,7 +112,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
       pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
     if (isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
-      prettyLog.info(`Please manyally just add new scripts or dependencies in: ${destPath}`, 3);
+      prettyLog.info(`Please manually just add new scripts or dependencies in: ${destPath}`, 3);
       continue;
     }
 
