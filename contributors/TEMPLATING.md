@@ -176,7 +176,7 @@ The special files and folders are:
 
 ## Merging package.json files
 
-The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies or use the latest version of a dependency in case of a conflict.
+The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
 
 For example:
 
