@@ -103,6 +103,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
       )
     )
       continue;
+
     if (
       shouldSkipFile(
         sourceFileName === DEPLOYED_CONTRACTS_FILE,
@@ -111,6 +112,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
       )
     )
       continue;
+
     if (
       shouldSkipFile(
         sourceFileName === YARN_LOCK_FILE,
