@@ -87,6 +87,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     if (templates.has(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
+      console.log("\n");
       continue;
     }
 
@@ -94,12 +95,14 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     if (sourceFileName === DEPLOYED_CONTRACTS_FILE) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`${sourceFileName} can be generated using \`yarn deploy\``, 3);
+      console.log("\n");
       continue;
     }
 
     if (sourceFileName === YARN_LOCK_FILE) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`${file} will be generated when doing \`yarn install\` `, 3);
+      console.log("\n");
       continue;
     }
 
@@ -113,12 +116,25 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     if (isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`Please manually just add new scripts or dependencies in: ${destPath}`, 3);
+      console.log("\n");
+      continue;
+    }
+
+    const baseFilePath = path.join(templateDirectory, BASE_DIR, file);
+    const hardhatFilePath = path.join(templateDirectory, SOLIDITY_FRAMEWORKS_DIR, SOLIDITY_FRAMEWORKS.HARDHAT, file);
+    const foundryFilePath = path.join(templateDirectory, SOLIDITY_FRAMEWORKS_DIR, SOLIDITY_FRAMEWORKS.FOUNDRY, file);
+
+    if (fs.existsSync(baseFilePath) || fs.existsSync(hardhatFilePath) || fs.existsSync(foundryFilePath)) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info("Only new files can be added", 3);
+      console.log("\n");
       continue;
     }
 
     await createDirectories(file, projectName);
     await ncpPromise(sourcePath, destPath);
     prettyLog.success(`Copied: ${file}`, 2);
+    console.log("\n");
   }
 };
 
@@ -137,12 +153,13 @@ const main = async (rawArgs: string[]) => {
 
     if (changedFiles.length === 0) {
       prettyLog.warning("No changed files to copy.", 1);
+      console.log("\n");
     } else {
-      prettyLog.info(`Found ${changedFiles.length} changed files, copying them...`, 1);
+      prettyLog.info(`Found ${changedFiles.length} changed files, processing them...`, 1);
+      console.log("\n");
       await copyFiles(changedFiles, projectName, projectPath, templates);
     }
 
-    console.log("\n");
     prettyLog.info(`Files processed successfully, updated ${EXTERNAL_EXTENSIONS_DIR}/${projectName} directory.`);
   } catch (err: any) {
     prettyLog.error(`Error: ${err.message}`);
