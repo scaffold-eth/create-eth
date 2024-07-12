@@ -18,7 +18,7 @@ const NEXTJS_DIR = "nextjs";
 
 const prettyLog = {
   info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
-  success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔ ${message}`)),
+  success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔︎ ${message}`)),
   warning: (message: string, indent = 0) => console.log(chalk.yellow(`${"  ".repeat(indent)}⚠ ${message}`)),
   error: (message: string, indent = 0) => console.log(chalk.red(`${"  ".repeat(indent)}✖ ${message}`)),
 };
