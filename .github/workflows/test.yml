@@ -21,11 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Setup node env
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           cache: yarn
+
+      - name: setup latest yarn version
+        run: yarn set version latest
 
       - name: Set up Git
         run: |
