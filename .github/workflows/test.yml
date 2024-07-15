@@ -32,6 +32,14 @@ jobs:
 
   build:
     needs: setup
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [lts/*]
+
     steps:
       - name: Build
         run: yarn build
