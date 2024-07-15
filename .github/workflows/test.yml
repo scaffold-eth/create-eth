@@ -42,7 +42,7 @@ jobs:
         run: yarn cli test-hardhat --skip-install -s hardhat
 
       - name: setup latest yarn version
-        run: yarn set version 3.2.3 && yarn config set -H enableImmutableInstalls
+        run: yarn set version 3.2.3 && yarn config set -H enableImmutableInstalls false
 
       - name: cd into dir and yarn install
         run: cd test-hardhat && yarn install
