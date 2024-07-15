@@ -9,28 +9,7 @@ on:
       - main
 
 jobs:
-  setup:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [lts/*]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setup node env
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-  build:
+  test-hardhat:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -53,27 +32,6 @@ jobs:
 
       - name: Build
         run: yarn build
-
-  test-hardhat:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [lts/*]
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-
-      - name: Setup node env
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-
-      - name: Install dependencies
-        run: yarn install --immutable
 
       - name: Create instance
         run: yarn cli test-hardhat --install -s hardhat
