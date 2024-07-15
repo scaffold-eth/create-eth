@@ -1,0 +1,58 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  setup:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: [lts/*]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup node env
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+  build:
+    needs: setup
+    steps:
+      - name: Build
+        run: yarn build
+
+  test-hardhat:
+    needs: build
+    steps:
+      - name: Create instance
+        run: yarn cli test-hardhat --install -s hardhat
+
+      - name: cd into dir
+        run: cd test-hardhat
+
+      - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
+        run: yarn chain & yarn deploy
+
+      - name: Run nextjs lint
+        run: yarn next:lint --max-warnings=0
+
+      - name: Check typings on nextjs
+        run: yarn next:check-types
+
+      - name: Run hardhat lint
+        run: yarn hardhat:lint --max-warnings=0
