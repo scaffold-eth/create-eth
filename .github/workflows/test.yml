@@ -38,7 +38,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [lts/*]
 
     steps:
       - name: Build
@@ -46,6 +45,13 @@ jobs:
 
   test-hardhat:
     needs: build
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
     steps:
       - name: Create instance
         run: yarn cli test-hardhat --install -s hardhat
