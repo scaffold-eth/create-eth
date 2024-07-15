@@ -48,7 +48,7 @@ jobs:
         run: cd test-hardhat && yarn install
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
-        run: cd test-hardhat && yarn chain & yarn deploy
+        run: cd test-hardhat && yarn chain & cd test-hardhat && yarn deploy
 
       - name: Run nextjs lint
         run: cd test-hardhat && yarn next:lint --max-warnings=0
