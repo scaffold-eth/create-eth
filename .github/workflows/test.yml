@@ -34,10 +34,10 @@ jobs:
         run: yarn build
 
       - name: Create instance
-        run: yarn cli test-hardhat --install -s hardhat
+        run: yarn cli test-hardhat -s hardhat
 
-      - name: cd into dir
-        run: cd test-hardhat
+      - name: cd into dir and yarn install
+        run: cd test-hardhat && yarn install --ignore-peer-dependencies --force
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
         run: yarn chain & yarn deploy
