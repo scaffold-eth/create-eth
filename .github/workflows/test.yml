@@ -48,7 +48,7 @@ jobs:
         run: yarn cli test-hardhat --skip-install -s hardhat
 
       - name: cd into dir and yarn install
-        run: cd test-hardhat && yarn install --ignore-peer-dependencies --force
+        run: cd test-hardhat && yarn install
 
       - name: Run hardhat node, deploy contracts (& generate contracts typescript output)
         run: yarn chain & yarn deploy
