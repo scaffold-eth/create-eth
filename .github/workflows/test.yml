@@ -21,9 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Enable Corepack
-        run: corepack enable
-
       - name: Setup node env
         uses: actions/setup-node@v3
         with:
@@ -31,7 +28,7 @@ jobs:
           cache: yarn
 
       - name: setup latest yarn version
-        run: yarn set version latest
+        run: yarn set version 3.2.3
 
       - name: Set up Git
         run: |
