@@ -126,7 +126,7 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
       path.join(templateDirectory, SOLIDITY_FRAMEWORKS_DIR, SOLIDITY_FRAMEWORKS.FOUNDRY, file),
     ];
     if (coreFilesPath.some(fs.existsSync)) {
-      prettyLog.error(`Skipping file: ${file}`, 2);
+      prettyLog.error(`Ignored file: ${file}`, 2);
       prettyLog.info("Only new files can be added", 3);
       console.log("\n");
       continue;
