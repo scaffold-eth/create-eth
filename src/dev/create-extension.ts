@@ -77,50 +77,33 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
   }
 };
 
-const shouldSkipFile = (condition: boolean, warningMessage: string, infoMessage: string) => {
-  if (condition) {
-    prettyLog.warning(warningMessage, 2);
-    prettyLog.info(infoMessage, 3);
-    console.log("\n");
-    return true;
-  }
-  return false;
-};
-
 const copyFiles = async (files: string[], projectName: string, projectPath: string, templates: Set<string>) => {
   for (const file of files) {
     const pathSegmentsOfFile = file.split(path.sep);
     const sourcePath = path.resolve(projectPath, file);
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
-
     const sourceFileName = path.basename(sourcePath);
 
-    if (
-      shouldSkipFile(
-        templates.has(file),
-        `Skipping file: ${file}`,
-        `Please instead create/update: ${destPath}.args.mjs`,
-      )
-    )
+    if (templates.has(file)) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
+      console.log("\n");
       continue;
+    }
 
-    if (
-      shouldSkipFile(
-        sourceFileName === DEPLOYED_CONTRACTS_FILE,
-        `Skipping file: ${file}`,
-        `${sourceFileName} can be generated using \`yarn deploy\``,
-      )
-    )
+    if (sourceFileName === DEPLOYED_CONTRACTS_FILE) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`${sourceFileName} can be generated using \`yarn deploy\``, 3);
+      console.log("\n");
       continue;
+    }
 
-    if (
-      shouldSkipFile(
-        sourceFileName === YARN_LOCK_FILE,
-        `Skipping file: ${file}`,
-        `${file} will be generated when doing \`yarn install\``,
-      )
-    )
+    if (sourceFileName === YARN_LOCK_FILE) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`${file} will be generated when doing \`yarn install\``, 3);
+      console.log("\n");
       continue;
+    }
 
     const isRootPackageJson = pathSegmentsOfFile.length === 1 && pathSegmentsOfFile[0] === PACKAGE_JSON_FILE;
     const isNextJsPackageJson =
@@ -130,22 +113,24 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
         pathSegmentsOfFile.includes(SOLIDITY_FRAMEWORKS.FOUNDRY)) &&
       pathSegmentsOfFile.includes(PACKAGE_JSON_FILE);
 
-    if (
-      shouldSkipFile(
-        isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson,
-        `Skipping file: ${file}`,
-        `Please manually just add new scripts or dependencies in: ${destPath}`,
-      )
-    )
+    if (isRootPackageJson || isNextJsPackageJson || isSolidityFrameworkPackageJson) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info(`Please manually just add new scripts or dependencies in: ${destPath}`, 3);
+      console.log("\n");
       continue;
+    }
 
     const coreFilesPath = [
       path.join(templateDirectory, BASE_DIR, file),
       path.join(templateDirectory, SOLIDITY_FRAMEWORKS_DIR, SOLIDITY_FRAMEWORKS.HARDHAT, file),
       path.join(templateDirectory, SOLIDITY_FRAMEWORKS_DIR, SOLIDITY_FRAMEWORKS.FOUNDRY, file),
     ];
-    if (shouldSkipFile(coreFilesPath.some(fs.existsSync), `Skipping file: ${file}`, "Only new files can be added"))
+    if (coreFilesPath.some(fs.existsSync)) {
+      prettyLog.warning(`Skipping file: ${file}`, 2);
+      prettyLog.info("Only new files can be added", 3);
+      console.log("\n");
       continue;
+    }
 
     await createDirectories(file, projectName);
     await ncpPromise(sourcePath, destPath);
