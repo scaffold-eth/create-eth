@@ -4,10 +4,10 @@
 
 ### Patch Changes
 
-- a9bf2b1: - fix: BigInt parsing losing precision in IntegerInput (https://github.com/scaffold-eth/scaffold-eth-2/pull/893)
-  - feat: bundler module resolution (https://github.com/scaffold-eth/scaffold-eth-2/pull/885)
-  - fix: ignore strings starting with 0 (https://github.com/scaffold-eth/scaffold-eth-2/pull/894)
-- 094221c: cli: don't prompt for install + remove prettier plugins (#80)
+- fix: BigInt parsing losing precision in IntegerInput (https://github.com/scaffold-eth/scaffold-eth-2/pull/893)
+- feat: bundler module resolution (https://github.com/scaffold-eth/scaffold-eth-2/pull/885)
+- fix: ignore strings starting with 0 (https://github.com/scaffold-eth/scaffold-eth-2/pull/894)
+- cli: don't prompt for install + remove prettier plugins (#80)
 
 ## 0.0.50
 
