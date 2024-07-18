@@ -1,6 +1,21 @@
 ## Introduction
 
-Welcome to the guide for developing external extensions in the `create-eth` repository. This document outlines the workflow for creating and testing your extensions.
+Welcome to the guide for developing third party extensions in the `create-eth` repository.
+
+Third party extension allows developers to **extend** instance created by `npx create-eth@latest`(base instance) and publish the extension to github that can be used by other developers via:
+
+```bash
+npx create eth -e {your-github-userName}/{extension-repo-name}:{extension-branch-name} # extension-branch-name is optional
+```
+
+It is important to understand distinction between instance and extension.
+
+- Instance is created by `npx create-eth@latest` and contains full project files.
+- Extension does not contain full project files, instead it only contains extra files, extra directories, [`*.args.mjs`](TEMPLATING.md#args-files) that will added to the base instance created via `npx create-eth@latest` with `-e` flag.
+
+> TIP: Checkout directory structure of `eip-712` extension maintained Scaffold-ETH team at https://github.com/scaffold-eth/create-eth-extensions/tree/eip-712
+
+This document outlines the workflow for creating and testing your extensions.
 
 ## Workflow Overview
 
@@ -19,13 +34,15 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    yarn build:dev
    ```
 
+   This creates `cli.js` and `create-extension.js` in the `dist` directory.
+
 3. **Run the CLI to Create a New Instance:**
 
    ```bash
    yarn cli
    ```
 
-   This command will create a **new instance** which is similar to running `npx create-eth@latest`
+   This command will create a **new base instance** which is similar to running `npx create-eth@latest`
 
    The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip`, the final extension name will be `eip`.
 
