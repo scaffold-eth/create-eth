@@ -1,6 +1,6 @@
 ## Introduction
 
-Welcome to the guide for developing external extensions in the `create-eth` repository. This document outlines the confirmed workflow for creating and testing your extensions.
+Welcome to the guide for developing external extensions in the `create-eth` repository. This document outlines the workflow for creating and testing your extensions.
 
 ## Workflow Overview
 
@@ -25,17 +25,19 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    yarn cli
    ```
 
-   The name mentioned for "Your project name" question will be used as the **extension name**. For example, if the provide `my-dapp-example`, the extension name will be `my-dapp-example`.
+   This command will create a **new instance** with similar to running `npx create-eth@latest`
+
+   The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip`, the final extension name will be `eip`.
 
 4. **Develop the Extension:**
    Add new files within the instance directory. For example:
 
    ```bash
    # In new terminal window
-   cd my-dapp-example
-   mkdir -p packages/nextjs/app/my-page
-   touch packages/nextjs/app/my-page/page.tsx
-   # add content to my-page/page.tsx
+   cd eip
+   mkdir -p packages/nextjs/app/my-eip
+   touch packages/nextjs/app/my-eip/page.tsx
+   # add content to my-eip/page.tsx
    ```
 
    > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected. The `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
@@ -53,9 +55,9 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    yarn create-extension {projectName}
    ```
 
-   Example: `yarn create-extension my-dapp-example`
+   Example: `yarn create-extension eip`
 
-   This command gathers all changes and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory which can published to github and used by others.
+   This command gathers all changes and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory, which can be published to github and used by others.
 
 7. **Special Files**
 
@@ -64,7 +66,7 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
 
 ### Phase 2: Local Testing and Publishing:
 
-In the previous phase we generated the extension base the project instance created. In this phase we will actually invoking/using the extension to see how it works and looks when used by other developers.
+In the previous phase we generated the extension from the base project instance created. In this phase we will actually be invoking/using the extension to see how it works and looks when used by other developers.
 
 1. **Run the CLI in dev mode:**
 
@@ -72,7 +74,7 @@ In the previous phase we generated the extension base the project instance creat
    yarn cli -e {extensionName} --dev
    ```
 
-   Example: `yarn cli -e my-dapp-example --dev`
+   Example: `yarn cli -e eip --dev`
 
    The `extensionName` should be present in `create-eth/externalExtensions/${extensionName}`
 
