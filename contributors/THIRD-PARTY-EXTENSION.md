@@ -25,12 +25,12 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    yarn cli
    ```
 
-   This command will create a **new instance** with similar to running `npx create-eth@latest`
+   This command will create a **new instance** which is similar to running `npx create-eth@latest`
 
    The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip`, the final extension name will be `eip`.
 
 4. **Develop the Extension:**
-   Add new files within the instance directory. For example:
+   Add new files within the new instance directory. For example:
 
    ```bash
    # In new terminal window
@@ -40,7 +40,7 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    # add content to my-eip/page.tsx
    ```
 
-   > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected. The `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
+   > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected instead `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
 
 5. **Commit Changes to the Instance Repository:**
 
@@ -62,7 +62,7 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
 7. **Special Files**
 
    - Changes to `package.json` won't be copied directly, instead you should manually create/update package.json with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
-   - You might want to add content to certain files based on your extension. For example adding new page link in Header. `create-eth` allows injecting content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files, again `create-extension` cli should log an info/warning with path.(TODO: Maybe link to list of args files)
+   - You might want to add content to certain files based on your extension. For example adding new page link in Header. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files. `yarn create-extension` cli should log an info/warning with path.(TODO: Maybe link to list of args files)
 
 ### Phase 2: Local Testing and Publishing:
 
