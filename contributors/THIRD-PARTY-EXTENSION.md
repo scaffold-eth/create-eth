@@ -5,13 +5,13 @@ Welcome to the guide for developing third party extensions in the `create-eth` r
 Third party extension allows developers to **extend** base instance created by `npx create-eth@latest` and publish the extension to github that can be used by other developers via:
 
 ```bash
-npx create eth -e {your-github-userName}/{extension-repo-name}:{extension-branch-name} # extension-branch-name is optional
+npx create-eth@latest -e {your-github-userName}/{extension-repo-name}:{extension-branch-name} # extension-branch-name is optional
 ```
 
 It is important to understand distinction between instance and extension.
 
 - Instance is created by `npx create-eth@latest` and contains full project files.
-- Extension does not contain full project files, instead it only contains extra files, extra directories, [`*.args.mjs`](TEMPLATING.md#args-files) that will added to the base instance created via `npx create-eth@latest` with `-e` flag.
+- Extension does not contain full project files, instead it only contains extra files, extra directories and [`*.args.mjs`](TEMPLATING.md#args-files) files that will added to the base instance created via `npx create-eth@latest` with `-e` flag.
 
 > TIP: Checkout directory structure of `eip-712` extension maintained Scaffold-ETH team at https://github.com/scaffold-eth/create-eth-extensions/tree/eip-712
 
@@ -22,9 +22,9 @@ This document outlines the workflow for creating and testing your extensions.
 An developer goes through 2 phases while developing extension:
 
 - **Phase 1**: Initial Setup and Development
-  - This phase helps you create your own extension based on the instance created and update by `npx create-eth@latest`
+  - This phase helps you create your own extension based on the changes you make to instance created by `npx create-eth@latest`
 - **Phase 2**: Local Testing and Publishing
-  - This phase helps you try out your extension locally and see how it works when used by other developers before publishing to github
+  - This phase helps you to try out your extension locally and see how it works when used by other developers before publishing to github
 
 ### Phase 1: Initial Setup and Development
 
@@ -51,7 +51,7 @@ An developer goes through 2 phases while developing extension:
 
    This command will create a **new base instance** which is similar to running `npx create-eth@latest`
 
-   The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip`, the final extension name will be `eip`.
+   The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip` as value to the question then the final extension name will be `eip`.
 
 4. **Develop the Extension:**
 
@@ -61,10 +61,11 @@ An developer goes through 2 phases while developing extension:
 
    **Some Caveats:**
 
-   - Only adding of new files, new directories and [`*.args.mjs`](TEMPLATING.md#args-files) files is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected.
+   - Only adding of new files, new directories is allowed while creating extension. If you try to overwrite existing files, it wont be reflected.
+   - `*.args.mjs` files: You might want to add content existing files(base instance files), for example adding new page link in Header component. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files.
    - Changes to `package.json` won't be copied directly, instead you should manually create/update `package.json` with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
 
-   > TIP: Next section command should guide you with info when changes to unsupported files are detected.
+> TIP: Next section command should guide you with info when changes to unsupported files are detected or you could inject some content using `*.args.mjs` for the respective file.
 
 5. **Create the Extension:**
 
