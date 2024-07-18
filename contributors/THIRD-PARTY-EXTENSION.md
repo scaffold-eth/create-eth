@@ -30,26 +30,16 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
    The name mentioned for "Your project name" question will be used as the **extension name**. For example, if you provide `eip`, the final extension name will be `eip`.
 
 4. **Develop the Extension:**
-   Add new files within the new instance directory. For example:
 
-   ```bash
-   # In new terminal window
-   cd eip
-   mkdir -p packages/nextjs/app/my-eip
-   touch packages/nextjs/app/my-eip/page.tsx
-   # add content to my-eip/page.tsx
-   ```
+   - CD into the instance directory.
+   - Make necessary changes to the instance project.
+   - commit the changes in the instance repository.
 
-   > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected instead `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
+   > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected.
+   >
+   > Instead `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
 
-5. **Commit Changes to the Instance Repository:**
-
-   ```bash
-   git add .
-   git commit -m "Add my-page extension"
-   ```
-
-6. **Create the Extension:**
+5. **Create the Extension:**
 
    ```bash
    yarn create-extension {projectName}
@@ -57,12 +47,12 @@ Welcome to the guide for developing external extensions in the `create-eth` repo
 
    Example: `yarn create-extension eip`
 
-   This command gathers all changes and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory, which can be published to github and used by others.
+   This command gathers all changes from instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory, which can be published to github and used by others.
 
-7. **Special Files**
+6. **Special Files**
 
-   - Changes to `package.json` won't be copied directly, instead you should manually create/update package.json with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
-   - You might want to add content to certain files based on your extension. For example adding new page link in Header. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files. `yarn create-extension` cli should log an info/warning with path.(TODO: Maybe link to list of args files)
+   - Changes to `package.json` won't be copied directly, instead you should manually create/update `package.json` with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
+   - You might want to add content to certain files based on your extension. For example adding new page link in Header. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files. `yarn create-extension` cli should log an info/warning with path.
 
 ### Phase 2: Local Testing and Publishing:
 
@@ -81,7 +71,7 @@ In the previous phase we generated the extension from the base project instance 
    Lets suppose you named you project as "my-dev-instance". Then this `my-dev-instance` should contain all your extension changes. `--dev` will symlink the extension to the instance project.
 
 2. **Test and Tweak the Extension:**
-   Since the instance is symlinked with extension, Make necessary changes directly in the symlinked files within `my-dev-instance` and changes should be automatically reflected in `create-eth/extensions/${extensionName}` directory.
+   Since the instance is symlinked with extension, make necessary changes directly in the symlinked files within `my-dev-instance` and changes should be automatically reflected in `create-eth/externalExtensions/${extensionName}` directory.
 
 3. **Prepare the Extension for publishing:**
 
@@ -94,7 +84,7 @@ In the previous phase we generated the extension from the base project instance 
    git add .
    git commit -m "Initial commit of my extension"
    git remote add origin <remote-repo-url>
-   git push -u origin master
+   git push -u origin main
    ```
 
    Now other developer can use your published extension by using:
