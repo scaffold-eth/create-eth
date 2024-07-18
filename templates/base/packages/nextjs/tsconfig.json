@@ -1,7 +1,4 @@
-import { withDefaults } from "../../../utils.js";
-
-const contents = ({ moduleResolution }) =>
-  `{
+{
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -12,7 +9,7 @@ const contents = ({ moduleResolution }) =>
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "${moduleResolution}",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -29,8 +26,3 @@ const contents = ({ moduleResolution }) =>
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
-`;
-
-export default withDefaults(contents, {
-  moduleResolution: "node",
-});
