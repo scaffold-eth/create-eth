@@ -19,6 +19,13 @@ This document outlines the workflow for creating and testing your extensions.
 
 ## Workflow Overview
 
+An developer goes through 2 phases while developing extension:
+
+- **Phase 1**: Initial Setup and Development
+  - This phase helps you create your own extension based on the instance created and update by `npx create-eth@latest`
+- **Phase 2**: Local Testing and Publishing
+  - This phase helps you try out your extension locally and see how it works when used by other developers before publishing to github
+
 ### Phase 1: Initial Setup and Development
 
 1. **Clone the `create-eth` Repository:**
@@ -52,9 +59,12 @@ This document outlines the workflow for creating and testing your extensions.
    - Make necessary changes to the instance project.
    - commit the changes in the instance repository.
 
-   > **NOTE**: Only adding of new files / directories is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected.
-   >
-   > Instead `yarn create-extension {projectName}` should guide you with info for the respective file. Checkout **Special Files** point for more info.
+   **Some Caveats:**
+
+   - Only adding of new files, new directories and [`*.args.mjs`](TEMPLATING.md#args-files) files is allowed while creating extension. If you try to overwrite existing files\*, it wont be reflected.
+   - Changes to `package.json` won't be copied directly, instead you should manually create/update `package.json` with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
+
+   > TIP: Next section command should guide you with info when changes to unsupported files are detected.
 
 5. **Create the Extension:**
 
@@ -64,12 +74,7 @@ This document outlines the workflow for creating and testing your extensions.
 
    Example: `yarn create-extension eip`
 
-   This command gathers all changes from instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory, which can be published to github and used by others.
-
-6. **Special Files**
-
-   - Changes to `package.json` won't be copied directly, instead you should manually create/update `package.json` with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
-   - You might want to add content to certain files based on your extension. For example adding new page link in Header. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files. `yarn create-extension` cli should log an info/warning with path.
+   This command gathers all changes from instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory(notice it contains only extra files related to your extension changes), which can be published to github and used by others.
 
 ### Phase 2: Local Testing and Publishing:
 
