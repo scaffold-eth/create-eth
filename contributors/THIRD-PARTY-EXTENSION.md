@@ -2,7 +2,7 @@
 
 Welcome to the guide for developing third party extensions in the `create-eth` repository.
 
-Third party extension allows developers to **extend** instance created by `npx create-eth@latest`(base instance) and publish the extension to github that can be used by other developers via:
+Third party extension allows developers to **extend** base instance created by `npx create-eth@latest` and publish the extension to github that can be used by other developers via:
 
 ```bash
 npx create eth -e {your-github-userName}/{extension-repo-name}:{extension-branch-name} # extension-branch-name is optional
