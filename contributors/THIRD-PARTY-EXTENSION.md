@@ -113,5 +113,5 @@ In the previous phase we generated the extension from the base project instance 
    Now other developer can use your published extension by using:
 
    ```bash
-   npx create eth -e {your-github-userName}/{extension-repo-name}
+   npx create-eth@latest -e {your-github-userName}/{extension-repo-name}:{extension-branch-name} # extension-branch-name is optional
    ```
