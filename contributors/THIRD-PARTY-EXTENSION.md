@@ -57,7 +57,7 @@ An developer goes through 2 phases while developing extension:
 
    - CD into the instance directory.
    - Make necessary changes to the instance project.
-   - commit the changes in the instance repository.
+   - Commit the changes in the instance repository.
 
    **Some Caveats:**
 
@@ -69,13 +69,15 @@ An developer goes through 2 phases while developing extension:
 
 5. **Create the Extension:**
 
+   Return to `create-eth` folder.
+
    ```bash
    yarn create-extension {projectName}
    ```
 
    Example: `yarn create-extension eip`
 
-   This command gathers all changes from instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory(notice it contains only extra files related to your extension changes), which can be published to github and used by others.
+   This command gathers all changes from instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory (notice it contains only extra files related to your extension changes), which can be published to github and used by others.
 
 ### Phase 2: Local Testing and Publishing:
 
