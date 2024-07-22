@@ -63,7 +63,7 @@ An developer goes through 2 phases while developing extension:
    **Some Caveats:**
 
    - Only adding of new files, new directories is allowed while creating extension. If you try to overwrite existing files, it wont be reflected.
-   - `*.args.mjs` files: You might want to add content existing files(base instance files), for example adding new page link in Header component. `create-eth` allows injecting additional content to **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files.
+   - `*.args.mjs` files: You might want to add content to existing base instance files. For example, adding a new page link in the Header component. `create-eth` allows injecting additional content into **certain files** with [`*.args.mjs`](TEMPLATING.md#args-files) files.
    - Changes to `package.json` won't be copied directly, instead you should manually create/update `package.json` with only things necessary for the extension inside `create-eth/externalExtensions/${extensionName}` directory (the full path hint can be seen while running `yarn create-extension`)
 
 > TIP: Next section command should guide you with info when changes to unsupported files are detected or you could inject some content using `*.args.mjs` for the respective file.
