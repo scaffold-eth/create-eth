@@ -33,6 +33,7 @@ An developer goes through 2 phases while developing extension:
    ```bash
    git clone https://github.com/scaffold-eth/create-eth.git
    cd create-eth
+   yarn install
    ```
 
 2. **Run the Build Script:**
