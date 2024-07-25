@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-feat: teplate files update
+feat: template files update
