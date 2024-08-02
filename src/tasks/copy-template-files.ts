@@ -104,8 +104,8 @@ const copyExtensionFiles = async (
         const unselectedSolidityFrameworks = [SOLIDITY_FRAMEWORKS.FOUNDRY, SOLIDITY_FRAMEWORKS.HARDHAT].filter(
           sf => sf !== solidityFramework,
         );
-        const isUselectedSolidityFrameworksRegexes = unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}$`));
-        const isUnselectedSolidityFramework = isUselectedSolidityFrameworksRegexes.some(sfregex => sfregex.test(path));
+        const isUnselectedSolidityFrameworksRegexes = unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}$`));
+        const isUnselectedSolidityFramework = isUnselectedSolidityFrameworksRegexes.some(sfregex => sfregex.test(path));
 
         const shouldSkip = isArgs || isTemplate || isPackageJson || isUnselectedSolidityFramework;
 
