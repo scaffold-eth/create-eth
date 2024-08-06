@@ -51,7 +51,10 @@ const validateExternalExtension = async (
 };
 
 // TODO update smartContractFramework code with general extensions
-export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptions> {
+// TODO: remove any[] from solidityframeworkchoices
+export async function parseArgumentsIntoOptions(
+  rawArgs: Args,
+): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: any[] }> {
   const args = arg(
     {
       "--skip-install": Boolean,
@@ -81,12 +84,6 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
 
   const project = args._[0] ?? null;
 
-  const solidityFramework = args["--solidity-framework"] ?? null;
-
-  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
-    await validateFoundryUp();
-  }
-
   // ToDo. Allow multiple
   const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
 
@@ -100,13 +97,53 @@ export async function parseArgumentsIntoOptions(rawArgs: Args): Promise<RawOptio
     );
   }
 
+  let solidityFrameworkChoices = [
+    SOLIDITY_FRAMEWORKS.HARDHAT,
+    SOLIDITY_FRAMEWORKS.FOUNDRY,
+    { value: null, name: "none" },
+  ] as any[];
+
+  if (extension && typeof extension !== "string") {
+    const splitUrl = extension.repository.split("/");
+    const ownerName = splitUrl[splitUrl.length - 2];
+    const repoName = splitUrl[splitUrl.length - 1];
+    const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${extension.branch ? `?ref=${extension.branch}` : ""}`;
+    const res = await fetch(githubApiUrl);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch the githubApiUrl ${githubApiUrl}`);
+    }
+    const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
+    const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
+    // filter out the directories which are not solidity frameworks
+    const soliidtyFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
+    const filteredSolidityFrameworkdDirs = directories.filter(dir =>
+      soliidtyFrameworks.includes(dir as SolidityFramework),
+    );
+
+    // only change the choices if there are solidity frameworks present otherwise we show all three options.
+    if (filteredSolidityFrameworkdDirs.length !== 0) {
+      solidityFrameworkChoices = filteredSolidityFrameworkdDirs;
+    }
+  }
+
+  // if lengh is 1, we can directly set the solidityFramework to that value.
+  const solidityFramework =
+    solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : args["--solidity-framework"] ?? null;
+
+  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
+    await validateFoundryUp();
+  }
+
   return {
-    project,
-    install: !skipInstall,
-    dev,
-    externalExtension: extension,
-    help,
-    solidityFramework,
+    rawOptions: {
+      project,
+      install: !skipInstall,
+      dev,
+      externalExtension: extension,
+      help,
+      solidityFramework,
+    },
+    solidityFrameworkChoices,
   };
 }
 

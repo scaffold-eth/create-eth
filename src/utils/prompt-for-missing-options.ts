@@ -12,12 +12,7 @@ const defaultOptions: RawOptions = {
   help: false,
 };
 
-const nullExtensionChoice = {
-  name: "none",
-  value: null,
-};
-
-export async function promptForMissingOptions(options: RawOptions): Promise<Options> {
+export async function promptForMissingOptions(options: RawOptions, solidityFrameworkChoices: any[]): Promise<Options> {
   const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
   const questions = [
     {
@@ -31,7 +26,7 @@ export async function promptForMissingOptions(options: RawOptions): Promise<Opti
       type: "list",
       name: "solidityFramework",
       message: "What solidity framework do you want to use?",
-      choices: [SOLIDITY_FRAMEWORKS.HARDHAT, SOLIDITY_FRAMEWORKS.FOUNDRY, nullExtensionChoice],
+      choices: solidityFrameworkChoices,
       default: SOLIDITY_FRAMEWORKS.HARDHAT,
     },
   ];
