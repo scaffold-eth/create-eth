@@ -64,11 +64,11 @@ export const getSolidityFrameworkDirsFromExternalExtension = async ({
   }
   const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
   const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
-  // filter out the directories which are not solidity frameworks
+
   const soliidtyFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
   const filteredSolidityFrameworkdDirs = directories.filter(dir =>
     soliidtyFrameworks.includes(dir as SolidityFramework),
   );
 
-  return filteredSolidityFrameworkdDirs;
+  return filteredSolidityFrameworkdDirs as SolidityFramework[];
 };

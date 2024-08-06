@@ -1,4 +1,4 @@
-import type { Args, ExternalExtension, SolidityFramework, RawOptions } from "../types";
+import type { Args, ExternalExtension, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
 import arg from "arg";
 import * as https from "https";
 import {
@@ -54,10 +54,9 @@ const validateExternalExtension = async (
 };
 
 // TODO update smartContractFramework code with general extensions
-// TODO: remove any[] from solidityframeworkchoices
 export async function parseArgumentsIntoOptions(
   rawArgs: Args,
-): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: any[] }> {
+): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: SolidityFrameworkChoices }> {
   const args = arg(
     {
       "--skip-install": Boolean,
@@ -104,7 +103,7 @@ export async function parseArgumentsIntoOptions(
     SOLIDITY_FRAMEWORKS.HARDHAT,
     SOLIDITY_FRAMEWORKS.FOUNDRY,
     { value: null, name: "none" },
-  ] as any[];
+  ];
 
   if (extension && typeof extension !== "string") {
     const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension({
@@ -132,7 +131,7 @@ export async function parseArgumentsIntoOptions(
       dev,
       externalExtension: extension,
       help,
-      solidityFramework,
+      solidityFramework: solidityFramework as RawOptions["solidityFramework"],
     },
     solidityFrameworkChoices,
   };

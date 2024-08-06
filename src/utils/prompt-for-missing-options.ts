@@ -1,4 +1,4 @@
-import { Options, RawOptions } from "../types";
+import { Options, RawOptions, SolidityFrameworkChoices } from "../types";
 import inquirer from "inquirer";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 
@@ -12,7 +12,10 @@ const defaultOptions: RawOptions = {
   help: false,
 };
 
-export async function promptForMissingOptions(options: RawOptions, solidityFrameworkChoices: any[]): Promise<Options> {
+export async function promptForMissingOptions(
+  options: RawOptions,
+  solidityFrameworkChoices: SolidityFrameworkChoices,
+): Promise<Options> {
   const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
   const questions = [
     {
