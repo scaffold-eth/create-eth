@@ -54,7 +54,7 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
 ) => {
   const solidityFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
   const filterSolidityFrameworkDirs = (dirs: string[]) => {
-    return dirs.filter(dir => solidityFrameworks.includes(dir as SolidityFramework)) as SolidityFramework[];
+    return dirs.filter(dir => solidityFrameworks.includes(dir as SolidityFramework)).reverse() as SolidityFramework[];
   };
 
   if (typeof externalExtension === "string") {
