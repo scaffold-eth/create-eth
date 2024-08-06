@@ -1,7 +1,10 @@
 import type { Args, ExternalExtension, SolidityFramework, RawOptions } from "../types";
 import arg from "arg";
 import * as https from "https";
-import { getDataFromExternalExtensionArgument } from "./external-extensions";
+import {
+  getDataFromExternalExtensionArgument,
+  getSolidityFrameworkDirsFromExternalExtension,
+} from "./external-extensions";
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
@@ -104,29 +107,17 @@ export async function parseArgumentsIntoOptions(
   ] as any[];
 
   if (extension && typeof extension !== "string") {
-    const splitUrl = extension.repository.split("/");
-    const ownerName = splitUrl[splitUrl.length - 2];
-    const repoName = splitUrl[splitUrl.length - 1];
-    const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${extension.branch ? `?ref=${extension.branch}` : ""}`;
-    const res = await fetch(githubApiUrl);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch the githubApiUrl ${githubApiUrl}`);
-    }
-    const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
-    const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
-    // filter out the directories which are not solidity frameworks
-    const soliidtyFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
-    const filteredSolidityFrameworkdDirs = directories.filter(dir =>
-      soliidtyFrameworks.includes(dir as SolidityFramework),
-    );
+    const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension({
+      repositoryURL: extension.repository,
+      branch: extension.branch,
+    });
 
-    // only change the choices if there are solidity frameworks present otherwise we show all three options.
-    if (filteredSolidityFrameworkdDirs.length !== 0) {
-      solidityFrameworkChoices = filteredSolidityFrameworkdDirs;
+    if (externalExtensionSolidityFrameworkDirs.length !== 0) {
+      solidityFrameworkChoices = externalExtensionSolidityFrameworkDirs;
     }
   }
 
-  // if lengh is 1, we can directly set the solidityFramework to that value.
+  // if lengh is 1, we don't give user a choice and set it ourselves.
   const solidityFramework =
     solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : args["--solidity-framework"] ?? null;
 
