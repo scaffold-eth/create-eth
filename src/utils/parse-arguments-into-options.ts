@@ -105,11 +105,8 @@ export async function parseArgumentsIntoOptions(
     { value: null, name: "none" },
   ];
 
-  if (extension && typeof extension !== "string") {
-    const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension({
-      repositoryURL: extension.repository,
-      branch: extension.branch,
-    });
+  if (extension) {
+    const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension(extension);
 
     if (externalExtensionSolidityFrameworkDirs.length !== 0) {
       solidityFrameworkChoices = externalExtensionSolidityFrameworkDirs;

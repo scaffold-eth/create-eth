@@ -1,7 +1,9 @@
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
 import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
-
 // Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
@@ -47,14 +49,30 @@ export const getArgumentFromExternalExtensionOption = (externalExtensionOption: 
 };
 
 // Gets the solidity framework directories from the external extension repository
-export const getSolidityFrameworkDirsFromExternalExtension = async ({
-  repositoryURL,
-  branch,
-}: {
-  repositoryURL: string;
-  branch?: string;
-}) => {
-  const splitUrl = repositoryURL.split("/");
+export const getSolidityFrameworkDirsFromExternalExtension = async (
+  externalExtension: NonNullable<RawOptions["externalExtension"]>,
+) => {
+  const solidityFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
+  const filterSolidityFrameworkDirs = (dirs: string[]) => {
+    return dirs.filter(dir => solidityFrameworks.includes(dir as SolidityFramework)) as SolidityFramework[];
+  };
+
+  if (typeof externalExtension === "string") {
+    const currentFileUrl = import.meta.url;
+    const externalExtensionsDirectory = path.resolve(
+      decodeURI(fileURLToPath(currentFileUrl)),
+      "../../externalExtensions",
+    );
+
+    const externalExtensionSolidityFrameworkDirs = await fs.promises.readdir(
+      `${externalExtensionsDirectory}/${externalExtension}/extension/packages`,
+    );
+
+    return filterSolidityFrameworkDirs(externalExtensionSolidityFrameworkDirs);
+  }
+
+  const { branch, repository } = externalExtension;
+  const splitUrl = repository.split("/");
   const ownerName = splitUrl[splitUrl.length - 2];
   const repoName = splitUrl[splitUrl.length - 1];
   const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${branch ? `?ref=${branch}` : ""}`;
@@ -65,10 +83,5 @@ export const getSolidityFrameworkDirsFromExternalExtension = async ({
   const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
   const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
 
-  const soliidtyFrameworks = Object.values(SOLIDITY_FRAMEWORKS);
-  const filteredSolidityFrameworkdDirs = directories.filter(dir =>
-    soliidtyFrameworks.includes(dir as SolidityFramework),
-  );
-
-  return filteredSolidityFrameworkdDirs as SolidityFramework[];
+  return filterSolidityFrameworkDirs(directories);
 };
