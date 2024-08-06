@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-dispaly correct solidity framework options base on extension
+display correct solidity framework options based on extension
