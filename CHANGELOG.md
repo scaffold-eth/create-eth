@@ -1,5 +1,13 @@
 # create-eth
 
+## 0.0.53
+
+### Patch Changes
+
+- e173f8b: display correct solidity framework options based on extension
+- c408a9a: Add curated ERC-20 extension
+- 579f01e: fix: copy only chosen solidity framework folder
+
 ## 0.0.52
 
 ### Patch Changes
