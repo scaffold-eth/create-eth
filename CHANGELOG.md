@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.53
+
+### Patch Changes
+
+- e173f8b: display correct solidity framework options based on extension
+- 2b5937f: revert https://github.com/scaffold-eth/scaffold-eth-2/pull/875 (https://github.com/scaffold-eth/scaffold-eth-2/pull/905)
+- c408a9a: Add curated ERC-20 extension
+- 579f01e: fix: copy only chosen solidity framework folder
+
 ## 0.0.52
 
 ### Patch Changes
