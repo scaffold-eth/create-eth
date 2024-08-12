@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ providerNames, providerSetups, providerImports, providerProps }) => {
+const contents = ({ providerNames, providerSetups, providerImports, providerProps, walletProviderOpeningTags , walletProviderClosingTags, preSetup, wagmiConfig}) => {
   // filter out empty strings
   const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
 
@@ -21,6 +21,8 @@ import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 ${providerImports.filter(Boolean).join("\n")}
+
+${preSetup}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -57,17 +59,14 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
   }, []);
 
   return (
-    <WagmiProvider config={wagmiConfig}>
+    <WagmiProvider config={${wagmiConfig}}>
       <QueryClientProvider client={queryClient}>
         <ProgressBar />
-        <RainbowKitProvider
-          avatar={BlockieAvatar}
-          theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
-        >
+        ${walletProviderOpeningTags}
           ${providerOpeningTags.join("\n")}
           <ScaffoldEthApp>{children}</ScaffoldEthApp>
           ${providerClosingTags.join("\n")}
-        </RainbowKitProvider>
+        ${walletProviderClosingTags}
       </QueryClientProvider>
     </WagmiProvider>
   );
@@ -79,4 +78,8 @@ export default withDefaults(contents, {
   providerSetups: "",
   providerImports: "",
   providerProps: "",
+  walletProviderOpeningTags: "<RainbowKitProvider avatar={BlockieAvatar} theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}>",
+  walletProviderClosingTags: "</RainbowKitProvider>",
+  preSetup: "",
+  wagmiConfig: "wagmiConfig"
 });

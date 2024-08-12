@@ -1,1 +1,1 @@
-export const chainName = 'hardhat'
+//export const chainName = 'hardhat'
