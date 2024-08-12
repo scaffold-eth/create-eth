@@ -4,10 +4,10 @@
 
 ### Patch Changes
 
-- e173f8b: display correct solidity framework options based on extension
-- 2b5937f: revert https://github.com/scaffold-eth/scaffold-eth-2/pull/875 (https://github.com/scaffold-eth/scaffold-eth-2/pull/905)
-- c408a9a: Add curated ERC-20 extension
-- 579f01e: fix: copy only chosen solidity framework folder
+- fix: vscode eslint not working (https://github.com/scaffold-eth/scaffold-eth-2/pull/905)
+- cli: display correct solidity framework options based on extension
+- cli: Add curated ERC-20 extension
+- cli: fix: copy only chosen solidity framework folder
 
 ## 0.0.52
 
