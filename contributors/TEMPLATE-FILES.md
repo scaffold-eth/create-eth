@@ -1,6 +1,10 @@
 # Template and Args File List
 
-This document lists the `.template.mjs` files and their corresponding `.args.mjs` example files.
+This document provides a comprehensive list of `.template.mjs` files and their corresponding `.args.mjs` example files used in the `create-eth` project.
+
+Template files are the base files that can be extended by third-party extensions. Args files are used to inject additional content into these template files. Understanding the relationship between these files is crucial for developing extensions and customizing the base instance created by `create-eth`.
+
+For more information on how templating works in this project, please refer to the [TEMPLATING.md](./TEMPLATING.md) document. If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTENSION.md](./THIRD-PARTY-EXTENSION.md) guide provides detailed instructions on the process. Additionally, we have a [YouTube tutorial](https://www.youtube.com/watch?v=XQCv533XGZk) that walks you through the process of creating an extension step-by-step.
 
 | Template                                                                                                                                                                                                         | Example args file                                                                                                                                                                                                               |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
