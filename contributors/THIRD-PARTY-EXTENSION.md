@@ -1,5 +1,3 @@
-# Third-Party Extensions for create-eth
-
 ## Introduction
 
 Welcome to the guide for developing third-party extensions in the `create-eth` repository. Third-party extensions allow developers to extend the base instance created by `npx create-eth@latest`.
