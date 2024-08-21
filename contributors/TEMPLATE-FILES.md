@@ -4,7 +4,7 @@ This document provides a comprehensive list of `.template.mjs` files and their c
 
 Template files are the base files that can be extended by third-party extensions. Args files are used to inject additional content into these template files. Understanding the relationship between these files is crucial for developing extensions and customizing the base instance created by `create-eth`.
 
-For more information on how templating works in this project, please refer to the [TEMPLATING.md](./TEMPLATING.md) document. If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTENSION.md](./THIRD-PARTY-EXTENSION.md) guide provides detailed instructions on the process. Additionally, we have a [YouTube tutorial](https://www.youtube.com/watch?v=XQCv533XGZk) that walks you through the process of creating an extension step-by-step.
+If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTENSION.md](./THIRD-PARTY-EXTENSION.md) guide provides detailed instructions on the process. Additionally, we have a [YouTube tutorial](https://www.youtube.com/watch?v=XQCv533XGZk) that walks you through the process of creating an extension step-by-step.
 
 #### Useful for third-party extensions
 
@@ -28,3 +28,5 @@ For more information on how templating works in this project, please refer to th
 | [(Foundry) `deployments/.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/deployments/.gitignore.template.mjs)      | this makes sure we have empty `deployments` out of box                                                                                                                                                          |
 
 We also have `.gitignore.template.mjs` files in [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.gitignore.template.mjs), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/.gitignore.template.mjs), [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/packages/hardhat/.gitignore.template.mjs), [foundry](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/.env.template.mjs) that are used to prevent npm from ignoring the `.gitignore` files in the generated project.
+
+For more information on how templating works in this project, please refer to the [TEMPLATING.md](./TEMPLATING.md) document.
