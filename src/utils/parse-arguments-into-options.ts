@@ -86,8 +86,14 @@ export async function parseArgumentsIntoOptions(
 
   const project = args._[0] ?? null;
 
+  let extensionName = args["--extension"];
+  if (args["--dev"] && extensionName) {
+    // use the original extension path if in dev mode
+    extensionName = rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
+  }
+
   // ToDo. Allow multiple
-  const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
+  const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
   if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
     console.log(
