@@ -86,8 +86,10 @@ export async function parseArgumentsIntoOptions(
 
   const project = args._[0] ?? null;
 
+  // use the original extension arg
+  const extensionName = args["--extension"] && rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
   // ToDo. Allow multiple
-  const extension = args["--extension"] ? await validateExternalExtension(args["--extension"], dev) : null;
+  const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
   if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
     console.log(
@@ -113,7 +115,7 @@ export async function parseArgumentsIntoOptions(
     }
   }
 
-  // if lengh is 1, we don't give user a choice and set it ourselves.
+  // if length is 1, we don't give user a choice and set it ourselves.
   const solidityFramework =
     solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : args["--solidity-framework"] ?? null;
 
