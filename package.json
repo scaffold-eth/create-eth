@@ -19,7 +19,7 @@
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "changeset:release": "yarn build && changeset publish",
-    "precommit": "lint-staged",
+    "precommit": "lint-staged --cwd src",
     "prepare": "husky"
   },
   "keywords": [
