@@ -32,7 +32,7 @@ jobs:
 
       - name: Install application (Hardhat configuration)
         if: matrix.config == 'hardhat'
-        run: yarn cli new_project --install -s hardhat
+        run: yarn cli new_project -s hardhat
 
       - name: Install Foundry
         if: matrix.config == 'foundry'
@@ -40,11 +40,11 @@ jobs:
 
       - name: Install application (Foundry configuration)
         if: matrix.config == 'foundry'
-        run: yarn cli new_project --install -s foundry
+        run: yarn cli new_project -s foundry
 
       - name: Install application (No solidity framework configuration)
         if: matrix.config == 'no_solidity_framework'
-        run: yarn cli new_project --install -s none
+        run: yarn cli new_project -s none
 
       - name: Run chain and deploy
         working-directory: new_project
