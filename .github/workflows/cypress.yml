@@ -32,7 +32,7 @@ jobs:
 
       - name: Install application (Hardhat configuration)
         if: matrix.config == 'hardhat'
-        run: yarn cli new_project -s hardhat
+        run: yarn cli new_project_hardhat -s hardhat
 
       - name: Install Foundry
         if: matrix.config == 'foundry'
@@ -40,32 +40,22 @@ jobs:
 
       - name: Install application (Foundry configuration)
         if: matrix.config == 'foundry'
-        run: yarn cli new_project -s foundry
+        run: yarn cli new_project_foundry -s foundry
 
       - name: Install application (No solidity framework configuration)
         if: matrix.config == 'no_solidity_framework'
-        run: yarn cli new_project -s none
+        run: yarn cli new_project_no_solidity_framework -s none
 
       - name: Run chain and deploy
-        working-directory: new_project
+        working-directory: new_project_${{ matrix.config }}
         if: matrix.config == 'hardhat' || matrix.config == 'foundry'
         run: yarn install && yarn chain && yarn deploy
 
-      - name: Run Cypress tests for apps with solidity frameworks
+      - name: Run Cypress tests
         uses: cypress-io/github-action@v6
-        if: matrix.config == 'hardhat' || matrix.config == 'foundry'
         with:
           start: yarn start
           wait-on: "http://localhost:3000"
-          working-directory: new_project/packages/nextjs
+          working-directory: new_project_${{ matrix.config }}/packages/nextjs
           browser: chrome
-
-      - name: Run Cypress tests for apps without solidity frameworks
-        uses: cypress-io/github-action@v6
-        if: matrix.config == 'no_solidity_framework'
-        with:
-          start: yarn start
-          wait-on: "http://localhost:3000"
-          working-directory: new_project/packages/nextjs
-          spec: cypress/e2e/base/base.cy.ts
-          browser: chrome
+          spec: ${{ matrix.config == 'no_solidity_framework' && 'cypress/e2e/base/base.cy.ts' || '' }}
