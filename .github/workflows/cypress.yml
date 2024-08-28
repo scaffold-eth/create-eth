@@ -38,6 +38,10 @@ jobs:
         if: matrix.config == 'foundry'
         uses: foundry-rs/foundry-toolchain@v1
 
+     - name: Add Foundry to PATH
+        if: matrix.config == 'foundry'
+        run: echo "$HOME/.foundry/bin" >> $GITHUB_PATH
+
       - name: Install application (Foundry configuration)
         if: matrix.config == 'foundry'
         run: yarn cli new_project_foundry -s foundry
