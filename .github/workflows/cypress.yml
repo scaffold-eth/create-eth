@@ -18,7 +18,7 @@ jobs:
         config: [foundry]
     steps:
       - uses: actions/checkout@v4
-      - with:
+        with:
           submodules: recursive
 
       - name: Setup Node.js 18.x
