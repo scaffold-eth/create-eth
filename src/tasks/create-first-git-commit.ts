@@ -9,6 +9,12 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
   try {
     await execa("git", ["add", "-A"], { cwd: targetDir });
     await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
+    try {
+      await execa("git", ["add", "-A"], { cwd: targetDir });
+      await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
+    } catch (error: any) {
+      console.warn("Git operations failed, possibly running in CI environment:", error?.message);
+    }
 
     if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
       const foundryWorkSpacePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
@@ -16,6 +22,12 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
       await execa("forge", ["install", ...foundryLibraries, "--no-commit"], { cwd: foundryWorkSpacePath });
       await execa("git", ["add", "-A"], { cwd: targetDir });
       await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
+      try {
+        await execa("git", ["add", "-A"], { cwd: targetDir });
+        await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
+      } catch (error: any) {
+        console.warn("Inner git operations failed, possibly running in CI environment:", error?.message);
+      }
     }
   } catch (e: any) {
     // cast error as ExecaError to get stderr
