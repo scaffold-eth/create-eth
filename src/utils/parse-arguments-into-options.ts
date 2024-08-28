@@ -8,7 +8,7 @@ import {
 import chalk from "chalk";
 import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
-// import { validateFoundryUp } from "./system-validation";
+import { validateFoundryUp } from "./system-validation";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -120,7 +120,7 @@ export async function parseArgumentsIntoOptions(
     solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : args["--solidity-framework"] ?? null;
 
   if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
-    // await validateFoundryUp();
+    await validateFoundryUp();
   }
 
   return {
