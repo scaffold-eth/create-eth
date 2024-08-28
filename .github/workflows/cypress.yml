@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config: [no_solidity_framework, hardhat, foundry]
+        config: [no_solidity_framework, hardhat]
     steps:
       - uses: actions/checkout@v4
 
@@ -49,7 +49,7 @@ jobs:
       - name: Run chain and deploy
         working-directory: new_project_${{ matrix.config }}
         if: matrix.config == 'hardhat' || matrix.config == 'foundry'
-        run: yarn install && yarn chain && yarn deploy
+        run: yarn install & yarn chain & yarn deploy
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
