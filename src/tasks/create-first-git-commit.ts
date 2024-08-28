@@ -11,8 +11,7 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
       await execa("git", ["add", "-A"], { cwd: targetDir });
       await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
     } catch (error: any) {
-      const { stdout, stderr, message } = error;
-      console.warn("Git operations failed, possibly running in CI environment:", { stdout, stderr, message });
+      console.warn("Git operations failed, possibly running in CI environment:", error?.message);
     }
 
     if (options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
@@ -23,8 +22,7 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
         await execa("git", ["add", "-A"], { cwd: targetDir });
         await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
       } catch (error: any) {
-        const { stdout, stderr, message } = error;
-        console.warn("Inner git operations failed, possibly running in CI environment:", { stdout, stderr, message });
+        console.warn("Inner git operations failed, possibly running in CI environment:", error?.message);
       }
     }
   } catch (e: any) {
