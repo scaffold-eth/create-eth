@@ -7,8 +7,6 @@ const foundryLibraries = ["foundry-rs/forge-std", "OpenZeppelin/openzeppelin-con
 
 export async function createFirstGitCommit(targetDir: string, options: Options) {
   try {
-    await execa("git", ["add", "-A"], { cwd: targetDir });
-    await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
     try {
       await execa("git", ["add", "-A"], { cwd: targetDir });
       await execa("git", ["commit", "-m", "Initial commit with 🏗️ Scaffold-ETH 2", "--no-verify"], { cwd: targetDir });
@@ -20,8 +18,6 @@ export async function createFirstGitCommit(targetDir: string, options: Options) 
       const foundryWorkSpacePath = path.resolve(targetDir, "packages", SOLIDITY_FRAMEWORKS.FOUNDRY);
       // forge install foundry libraries
       await execa("forge", ["install", ...foundryLibraries, "--no-commit"], { cwd: foundryWorkSpacePath });
-      await execa("git", ["add", "-A"], { cwd: targetDir });
-      await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
       try {
         await execa("git", ["add", "-A"], { cwd: targetDir });
         await execa("git", ["commit", "--amend", "--no-edit"], { cwd: targetDir });
