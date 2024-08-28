@@ -49,7 +49,7 @@ jobs:
       - name: Run chain and deploy
         working-directory: new_project
         if: matrix.config == 'hardhat' || matrix.config == 'foundry'
-        run: YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install && yarn chain && yarn deploy
+        run: yarn install && yarn chain && yarn deploy
 
       - name: Run Cypress tests for apps with solidity frameworks
         uses: cypress-io/github-action@v6
