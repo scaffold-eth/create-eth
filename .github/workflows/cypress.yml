@@ -30,6 +30,8 @@ jobs:
       - name: Install Foundry
         if: matrix.config == 'foundry'
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          cache: false
 
       - name: Start dev
         run: yarn dev &
