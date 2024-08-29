@@ -53,6 +53,14 @@ jobs:
         if: matrix.config == 'hardhat' || matrix.config == 'foundry'
         run: yarn install & yarn chain & yarn deploy
 
+      - name: Run linting nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:lint
+
+      - name: Check types nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:check-types
+
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
