@@ -140,5 +140,5 @@ const config: HardhatUserConfig = {
 export default config;`;
 
 export default withDefaults(contents, {
-  otherImports: "",
+  imports: "",
 });
