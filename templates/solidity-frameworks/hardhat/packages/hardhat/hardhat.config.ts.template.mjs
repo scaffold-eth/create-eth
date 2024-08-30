@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ otherImports }) => `import * as dotenv from "dotenv";
+const contents = ({ imports }) => `import * as dotenv from "dotenv";
 dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
@@ -11,7 +11,7 @@ import "solidity-coverage";
 import "@nomicfoundation/hardhat-verify";
 import "hardhat-deploy";
 import "hardhat-deploy-ethers";
-${otherImports.filter(Boolean).join("\n")}
+${imports.filter(Boolean).join("\n")}
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
