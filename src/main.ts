@@ -36,8 +36,8 @@ export async function createProject(options: Options) {
         task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
       },
       {
-        title: `📦 Installing dependencies with yarn, this could take a while`,
-        task: () => installPackages(targetDirectory),
+        title: `📦 Installing dependencies with yarn`,
+        task: (ctx, task) => installPackages(targetDirectory, task),
         skip: () => {
           if (!options.install) {
             return "Manually skipped, since `--skip-install` flag was passed";
@@ -60,7 +60,7 @@ export async function createProject(options: Options) {
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
-    { rendererOptions: { collapseSkips: false, suffixSkips: true } },
+    { rendererOptions: { collapseSkips: false, suffixSkips: true, clearOutput: false } },
   );
 
   try {
