@@ -41,7 +41,7 @@ const config: HardhatUserConfig = {
     },
   },
   networks: {
-    ${networks[0] && `${networks},`}
+    ${networks[0] && `${networks[0]},`}
     // View the networks that are pre-configured.
     // If the network you are looking for is not here you can add new network settings
     hardhat: {

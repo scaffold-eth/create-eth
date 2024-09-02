@@ -19,7 +19,7 @@ module.exports = {
   },
   theme: {
     extend: {
-      ${extendTheme[0] && `${extendTheme},`}
+      ${extendTheme[0] && `${extendTheme[0]},`}
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
       },
