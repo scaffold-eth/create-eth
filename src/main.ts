@@ -60,7 +60,7 @@ export async function createProject(options: Options) {
         task: () => createFirstGitCommit(targetDirectory, options),
       },
     ],
-    { rendererOptions: { collapseSkips: false, suffixSkips: true, clearOutput: false } },
+    { rendererOptions: { collapseSkips: false, suffixSkips: true } },
   );
 
   try {
