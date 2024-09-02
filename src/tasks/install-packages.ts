@@ -4,7 +4,7 @@ const INITIAL_PHASE_MAX = 70;
 const LINK_PHASE_MAX = 95;
 const UPDATE_INTERVAL = 250;
 
-export async function installPackages(targetDir: string, task: { output: string }): Promise<void> {
+export async function installPackages(targetDir: string, task: { output: string }) {
   let progress = 0;
   let linkPhaseStarted = false;
 
