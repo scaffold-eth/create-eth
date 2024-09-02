@@ -2,7 +2,7 @@ import { execa } from "execa";
 
 const UPDATE_INTERVAL = 250; // Update every 250ms
 const TOTAL_DURATION = 60000; // Estimate 60 seconds for installation
-const FINAL_UPDATE_INTERVAL = 50; // Update every 50ms for the final stretch
+const FINAL_UPDATE_INTERVAL = 10; // Update every 10ms for the final stretch
 
 export async function installPackages(targetDir: string, task: { output: string }) {
   let progress = 0;
