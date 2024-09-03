@@ -1,8 +1,9 @@
 import { execa } from "execa";
 
-const UPDATE_INTERVAL = 250; // Update every 250ms
-const TOTAL_DURATION = 60000; // Estimate 60 seconds for installation
-const FINAL_UPDATE_INTERVAL = 10; // Update every 10ms for the final stretch
+const FAST_INTERVAL = 1500; 
+const SLOW_INTERVAL = 2500; 
+const VERY_SLOW_INTERVAL = 3500; 
+const FINAL_UPDATE_INTERVAL = 10;
 
 export async function installPackages(targetDir: string, task: { output: string }) {
   let progress = 0;
@@ -17,15 +18,28 @@ export async function installPackages(targetDir: string, task: { output: string 
   };
 
   const startProgressBar = () => {
-    const totalSteps = TOTAL_DURATION / UPDATE_INTERVAL;
-    const incrementPerStep = 100 / totalSteps;
-    
+    let currentInterval = FAST_INTERVAL;
+    let incrementPerStep = 0.5;
+
     intervalId = setInterval(() => {
       updateProgress(incrementPerStep);
+      
+      if (progress >= 50 && currentInterval === FAST_INTERVAL) {
+        clearInterval(intervalId!);
+        currentInterval = SLOW_INTERVAL;
+        incrementPerStep = 0.2;
+        intervalId = setInterval(() => updateProgress(incrementPerStep), currentInterval);
+      } else if (progress >= 70 && currentInterval === SLOW_INTERVAL) {
+        clearInterval(intervalId!);
+        currentInterval = VERY_SLOW_INTERVAL;
+        incrementPerStep = 0.1;
+        intervalId = setInterval(() => updateProgress(incrementPerStep), currentInterval);
+      }
+
       if (progress >= 100) {
         clearInterval(intervalId!);
       }
-    }, UPDATE_INTERVAL);
+    }, currentInterval);
   };
 
   try {
