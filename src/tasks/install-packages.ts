@@ -1,8 +1,8 @@
 import { execa } from "execa";
 
-const FAST_INTERVAL = 1500; 
-const SLOW_INTERVAL = 2500; 
-const VERY_SLOW_INTERVAL = 3500; 
+const FAST_INTERVAL = 1000;
+const SLOW_INTERVAL = 2000;
+const VERY_SLOW_INTERVAL = 3500;
 const FINAL_UPDATE_INTERVAL = 10;
 
 export async function installPackages(targetDir: string, task: { output: string }) {
@@ -23,7 +23,7 @@ export async function installPackages(targetDir: string, task: { output: string 
 
     intervalId = setInterval(() => {
       updateProgress(incrementPerStep);
-      
+
       if (progress >= 50 && currentInterval === FAST_INTERVAL) {
         clearInterval(intervalId!);
         currentInterval = SLOW_INTERVAL;
@@ -47,7 +47,7 @@ export async function installPackages(targetDir: string, task: { output: string 
     startProgressBar();
 
     await yarnProcess;
-    
+
     if (intervalId) clearInterval(intervalId);
     while (progress < 100) {
       await new Promise(resolve => setTimeout(resolve, FINAL_UPDATE_INTERVAL));
