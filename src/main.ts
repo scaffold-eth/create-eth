@@ -1,5 +1,10 @@
-import { copyTemplateFiles, createProjectDirectory, createFirstGitCommit, prettierFormat } from "./tasks";
-import { execaCommand as command } from "execa";
+import {
+  copyTemplateFiles,
+  createProjectDirectory,
+  createFirstGitCommit,
+  prettierFormat,
+  installPackages,
+} from "./tasks";
 import type { Options } from "./types";
 import { renderOutroMessage } from "./utils/render-outro-message";
 import chalk from "chalk";
@@ -32,76 +37,18 @@ export async function createProject(options: Options) {
       },
       {
         title: "📦 Installing dependencies with yarn, this could take a while",
-        task: async (_, task): Promise<void> => {
-          const execute = command("yarn install", { cwd: targetDirectory });
-
-          let outputBuffer: string = ""; // Buffer to store output characters
-
-          const maxChunks = 1; // Define the number of chunks to display
-          const chunkSize = 1024; // Define the size of each chunk (1KB here)
-
-          // Handle stdout
-          execute?.stdout?.on("data", (data: Buffer) => {
-            outputBuffer += data.toString(); // Append data to the buffer
-
-            // Ensure the buffer doesn't exceed the size of maxChunks * chunkSize
-            if (outputBuffer.length > maxChunks * chunkSize) {
-              outputBuffer = outputBuffer.slice(-maxChunks * chunkSize); // Keep only the last N chunks
-            }
-
-            // Add a forced newline if needed (this makes it friendly to Listr2)
-            const visibleOutput =
-              outputBuffer
-                .match(new RegExp(`.{1,${chunkSize}}`, "g")) // Split into chunks
-                ?.slice(-maxChunks) // Keep only the last N chunks
-                .map(chunk => chunk.trimEnd() + "\n") // Ensure each chunk ends with a newline
-                .join("") ?? outputBuffer;
-
-            task.output = visibleOutput; // Set the trimmed and formatted output
-          });
-
-          // Handle stderr similarly
-          execute?.stderr?.on("data", (data: Buffer) => {
-            outputBuffer += data.toString();
-
-            if (outputBuffer.length > maxChunks * chunkSize) {
-              outputBuffer = outputBuffer.slice(-maxChunks * chunkSize);
-            }
-
-            const visibleOutput =
-              outputBuffer
-                .match(new RegExp(`.{1,${chunkSize}}`, "g")) // Split into chunks
-                ?.slice(-maxChunks)
-                .map(chunk => chunk.trimEnd() + "\n") // Force a newline at the end of each chunk
-                .join("") ?? outputBuffer;
-
-            task.output = visibleOutput;
-          });
-
-          await execute;
-        },
+        task: (_, task) => installPackages(targetDirectory, task),
         skip: () => {
           if (!options.install) {
             return "Manually skipped, since `--skip-install` flag was passed";
           }
           return false;
         },
-
         rendererOptions: {
-          outputBar: 8, // Optional, adjust for your needs
+          outputBar: 8,
           persistentOutput: false,
         },
       },
-      /* {
-        title: `📦 Installing dependencies with yarn, this could take a while`,
-        task: () => installPackages(targetDirectory),
-        skip: () => {
-          if (!options.install) {
-            return "Manually skipped, since `--skip-install` flag was passed";
-          }
-          return false;
-        },
-      }, */
       {
         title: "🪄 Formatting files",
         task: () => prettierFormat(targetDirectory),
