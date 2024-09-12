@@ -27,7 +27,23 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  ${menuObjects.filter(Boolean).join(",\n")}
+  ${menuObjects.filter(Boolean).map(menuObjectString => {
+    try {
+      const menuObject = JSON.parse(menuObjectString);
+
+      return `{ ${Object.entries(menuObject)
+        .map(([key, value]) => {
+          if (key === "icon") {
+            // remove quotes near JSX
+            return `${key}: ${value}`;
+          }
+          return `${key}: ${typeof value === "string" ? `"${value}"` : value}`;
+        })
+    .join(", ")} }`;
+  } catch (e) {
+    // passed by user as string
+    return menuObjectString;
+  }}).join(",\n")}
 ];
 
 export const HeaderMenuLinks = () => {
