@@ -1,12 +1,27 @@
-"use client";
+import { withDefaults } from "../../../../utils.js";
+
+const contents = ({ importsAndOptionalUseClient, pageContent }) => {
+  return `
+${importsAndOptionalUseClient}
+import type { NextPage } from "next";
+
+const Home: NextPage = () => {
+  ${pageContent}
+};
+
+export default Home;
+`
+}
+
+export default withDefaults(contents, {
+  importsAndOptionalUseClient: `"use client";
 
 import Link from "next/link";
-import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
-
-const Home: NextPage = () => {
+`,
+pageContent: `
   const { address: connectedAddress } = useAccount();
 
   return (
@@ -66,6 +81,5 @@ const Home: NextPage = () => {
       </div>
     </>
   );
-};
-
-export default Home;
+`
+})
