@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ imports, solidityVersion, networks }) => `import * as dotenv from "dotenv";
+const contents = ({ imports, solidity, networks }) => `import * as dotenv from "dotenv";
 dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
@@ -23,16 +23,7 @@ const deployerPrivateKey =
 const etherscanApiKey = process.env.ETHERSCAN_API_KEY || "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW";
 
 const config: HardhatUserConfig = {
-  solidity: {
-    version: "${solidityVersion[0]}",
-    settings: {
-      optimizer: {
-        enabled: true,
-        // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
-        runs: 200,
-      },
-    },
-  },
+  ${solidity[0]}
   defaultNetwork: "localhost",
   namedAccounts: {
     deployer: {
@@ -142,6 +133,15 @@ export default config;`;
 
 export default withDefaults(contents, {
   imports: "",
-  solidityVersion: "0.8.17",
+  solidity: `solidity: {
+    version: "0.8.17",
+    settings: {
+      optimizer: {
+        enabled: true,
+        // https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options
+        runs: 200,
+      },
+    },
+  },`,
   networks: "",
 });
