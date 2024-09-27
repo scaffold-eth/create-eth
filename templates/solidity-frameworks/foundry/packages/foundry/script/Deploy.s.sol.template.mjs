@@ -4,7 +4,7 @@ const content = ({ deploymentsScriptsImports, deploymentsLogic }) => `//SPDX-Lic
 pragma solidity ^0.8.19;
 
 import "./DeployHelpers.s.sol";
-import { DeployYourContract } from "./00_deploy_your_contract.s.sol";
+import { DeployYourContract } from "./DeployYourContract.s.sol";
 ${deploymentsScriptsImports.filter(Boolean).join("\n")}
 
 contract DeployScript is ScaffoldETHDeploy {
@@ -13,6 +13,10 @@ contract DeployScript is ScaffoldETHDeploy {
     deployYourContract.run();
 
     ${deploymentsLogic.filter(Boolean).join("\n")}
+
+    // deploy more contracts here
+    // DeployMyContract deployMyContract = new DeployMyContract();
+    // deployMyContract.run();
   }
 }`;
 
