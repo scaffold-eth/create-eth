@@ -1,5 +1,5 @@
 import { withDefaults } from "../../../../utils.js";
-const contents = ({ menuIconImports, menuObjects }) => {
+const contents = ({ menuIconImports, menuObjects, connectButton}) => {
   return `"use client";
 
 import React, { useCallback, useRef, useState } from "react";
@@ -106,7 +106,7 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end flex-grow mr-4">
-        <RainbowKitCustomConnectButton />
+        ${connectButton}
         <FaucetButton />
       </div>
     </div>
@@ -117,4 +117,5 @@ export const Header = () => {
 export default withDefaults(contents, {
   menuIconImports: "",
   menuObjects: "",
+  connectButton: "<RainbowKitCustomConnectButton />"
 });

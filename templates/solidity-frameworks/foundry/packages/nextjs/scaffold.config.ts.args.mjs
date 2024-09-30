@@ -1,1 +1,1 @@
-export const chainName = 'foundry'
+//export const chainName = 'foundry'
