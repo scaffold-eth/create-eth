@@ -1,5 +1,7 @@
 import { withDefaults } from "../../../../utils.js";
 const contents = ({ menuIconImports, menuObjects, logoText, logoDescription }) => {
+  const stringifiedAdditionalMenuLinks = menuObjects.filter(Boolean).join(",\n");
+
   return `"use client";
 
 import React, { useCallback, useRef, useState } from "react";
@@ -22,12 +24,12 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Home",
     href: "/",
   },
+  ${stringifiedAdditionalMenuLinks && `${stringifiedAdditionalMenuLinks},`}
   {
     label: "Debug Contracts",
     href: "/debug",
     icon: <BugAntIcon className="h-4 w-4" />,
   },
-  ${menuObjects.filter(Boolean).join(",\n")}
 ];
 
 export const HeaderMenuLinks = () => {
