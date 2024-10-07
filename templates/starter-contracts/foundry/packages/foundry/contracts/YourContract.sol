@@ -21,12 +21,7 @@ contract YourContract {
   mapping(address => uint256) public userGreetingCounter;
 
   // Events: a way to emit log statements from smart contract that can be listened to by external parties
-  event GreetingChange(
-    address indexed greetingSetter,
-    string newGreeting,
-    bool premium,
-    uint256 value
-  );
+  event GreetingChange(address indexed greetingSetter, string newGreeting, bool premium, uint256 value);
 
   // Constructor: Called once on contract deployment
   // Check packages/foundry/deploy/Deploy.s.sol
@@ -73,12 +68,12 @@ contract YourContract {
    * The function can only be called by the owner of the contract as defined by the isOwner modifier
    */
   function withdraw() public isOwner {
-    (bool success,) = owner.call{ value: address(this).balance }("");
+    (bool success, ) = owner.call{value: address(this).balance}("");
     require(success, "Failed to send Ether");
   }
 
   /**
    * Function that allows the contract to receive ETH
    */
-  receive() external payable { }
+  receive() external payable {}
 }
