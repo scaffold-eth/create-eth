@@ -9,7 +9,7 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
-import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
+import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, STARTER_CONTRACTS_DIR } from "../utils/consts";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 
@@ -319,6 +319,15 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
       );
     } else {
       await setUpExternalExtensionFiles(options, tmpDir);
+    }
+
+    if (options.solidityFramework) {
+      const externalExtensionSolidityPath = path.join(externalExtensionPath, "packages", options.solidityFramework);
+      const pathExists = fs.existsSync(externalExtensionSolidityPath);
+
+      if (!pathExists) {
+        await copyExtensionFiles(options, STARTER_CONTRACTS_DIR, targetDir);
+      }
     }
 
     await copyExtensionFiles(options, externalExtensionPath, targetDir);
