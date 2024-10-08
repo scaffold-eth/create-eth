@@ -153,7 +153,7 @@ export default config;`
 
 export default withDefaults(contents, {
   imports: "",
-  solidityVersion: "0.8.17",
+  solidityVersion: "0.8.20",
   networks: "",
   // set solidity compilers
   // https://hardhat.org/hardhat-runner/docs/advanced/multiple-solidity-versions#multiple-solidity-versions
