@@ -345,7 +345,12 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     }
 
     if (options.solidityFramework) {
-      const externalExtensionSolidityPath = path.join(externalExtensionPath, "packages", options.solidityFramework);
+      const externalExtensionSolidityPath = path.join(
+        externalExtensionPath,
+        "packages",
+        options.solidityFramework,
+        "contracts",
+      );
       // if external extension does not have solidity framework, we copy the example contracts
       if (!fs.existsSync(externalExtensionSolidityPath) && exampleContractsPath) {
         await copyExtensionFiles(options, exampleContractsPath, targetDir);
