@@ -158,7 +158,7 @@ const processTemplatedFiles = async (
           path: exampleContractTemplatePath,
           fileUrl: pathToFileURL(exampleContractTemplatePath).href,
           relativePath: exampleContractTemplatePath.split(exampleContractsPath)[1],
-          source: `starter-contracts ${solidityFramework}`,
+          source: `example-contracts ${solidityFramework}`,
         }))
         .flat()
     : [];
