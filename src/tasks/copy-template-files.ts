@@ -129,6 +129,7 @@ const processTemplatedFiles = async (
   { solidityFramework, externalExtension, dev: isDev }: Options,
   basePath: string,
   solidityFrameworkPath: string | null,
+  starterContractsPath: string | null,
   targetDir: string,
 ) => {
   const baseTemplatedFileDescriptors: TemplateDescriptor[] = findFilesRecursiveSync(basePath, path =>
@@ -147,6 +148,17 @@ const processTemplatedFiles = async (
           fileUrl: pathToFileURL(solidityFrameworkTemplatePath).href,
           relativePath: solidityFrameworkTemplatePath.split(solidityFrameworkPath)[1],
           source: `extension ${solidityFramework}`,
+        }))
+        .flat()
+    : [];
+
+  const starterContractsTemplateFileDescriptors: TemplateDescriptor[] = starterContractsPath
+    ? findFilesRecursiveSync(starterContractsPath, filePath => isTemplateRegex.test(filePath))
+        .map(starterContractTemplatePath => ({
+          path: starterContractTemplatePath,
+          fileUrl: pathToFileURL(starterContractTemplatePath).href,
+          relativePath: starterContractTemplatePath.split(starterContractsPath)[1],
+          source: `starter-contracts ${solidityFramework}`,
         }))
         .flat()
     : [];
@@ -174,6 +186,7 @@ const processTemplatedFiles = async (
       ...baseTemplatedFileDescriptors,
       ...solidityFrameworkTemplatedFileDescriptors,
       ...externalExtensionTemplatedFileDescriptors,
+      ...starterContractsTemplateFileDescriptors,
     ].map(async templateFileDescriptor => {
       const templateTargetName = templateFileDescriptor.path.match(isTemplateRegex)?.[1] as string;
 
@@ -183,6 +196,14 @@ const processTemplatedFiles = async (
 
       if (solidityFrameworkPath) {
         const argsFilePath = path.join(solidityFrameworkPath, argsPath);
+        const fileExists = fs.existsSync(argsFilePath);
+        if (fileExists) {
+          argsFileUrls.push(pathToFileURL(argsFilePath).href);
+        }
+      }
+
+      if (starterContractsPath) {
+        const argsFilePath = path.join(starterContractsPath, argsPath);
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
           argsFileUrls.push(pathToFileURL(argsFilePath).href);
@@ -307,6 +328,9 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     await copyExtensionFiles(options, solidityFrameworkPath, targetDir);
   }
 
+  const starterContractsPath =
+    options.solidityFramework && path.resolve(templateDir, STARTER_CONTRACTS_DIR, options.solidityFramework);
+
   // 3. Set up external extension if needed
   if (options.externalExtension) {
     let externalExtensionPath = path.join(tmpDir, "extension");
@@ -325,16 +349,20 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
       const externalExtensionSolidityPath = path.join(externalExtensionPath, "packages", options.solidityFramework);
       const pathExists = fs.existsSync(externalExtensionSolidityPath);
 
-      if (!pathExists) {
-        await copyExtensionFiles(options, STARTER_CONTRACTS_DIR, targetDir);
+      if (!pathExists && starterContractsPath) {
+        await copyExtensionFiles(options, starterContractsPath, targetDir);
       }
     }
 
     await copyExtensionFiles(options, externalExtensionPath, targetDir);
+  } else {
+    if (starterContractsPath) {
+      await copyExtensionFiles(options, starterContractsPath, targetDir);
+    }
   }
 
   // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, solidityFrameworkPath, targetDir);
+  await processTemplatedFiles(options, basePath, solidityFrameworkPath, starterContractsPath, targetDir);
 
   // 5. Delete tmp directory
   if (options.externalExtension && !options.dev) {
