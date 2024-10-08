@@ -9,7 +9,7 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
-import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, STARTER_CONTRACTS_DIR } from "../utils/consts";
+import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, EXAMPLE_CONTRACTS_DIR } from "../utils/consts";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 
@@ -129,7 +129,7 @@ const processTemplatedFiles = async (
   { solidityFramework, externalExtension, dev: isDev }: Options,
   basePath: string,
   solidityFrameworkPath: string | null,
-  starterContractsPath: string | null,
+  exampleContractsPath: string | null,
   targetDir: string,
 ) => {
   const baseTemplatedFileDescriptors: TemplateDescriptor[] = findFilesRecursiveSync(basePath, path =>
@@ -152,12 +152,12 @@ const processTemplatedFiles = async (
         .flat()
     : [];
 
-  const starterContractsTemplateFileDescriptors: TemplateDescriptor[] = starterContractsPath
-    ? findFilesRecursiveSync(starterContractsPath, filePath => isTemplateRegex.test(filePath))
-        .map(starterContractTemplatePath => ({
-          path: starterContractTemplatePath,
-          fileUrl: pathToFileURL(starterContractTemplatePath).href,
-          relativePath: starterContractTemplatePath.split(starterContractsPath)[1],
+  const starterContractsTemplateFileDescriptors: TemplateDescriptor[] = exampleContractsPath
+    ? findFilesRecursiveSync(exampleContractsPath, filePath => isTemplateRegex.test(filePath))
+        .map(exampleContractTemplatePath => ({
+          path: exampleContractTemplatePath,
+          fileUrl: pathToFileURL(exampleContractTemplatePath).href,
+          relativePath: exampleContractTemplatePath.split(exampleContractsPath)[1],
           source: `starter-contracts ${solidityFramework}`,
         }))
         .flat()
@@ -202,8 +202,8 @@ const processTemplatedFiles = async (
         }
       }
 
-      if (starterContractsPath) {
-        const argsFilePath = path.join(starterContractsPath, argsPath);
+      if (exampleContractsPath) {
+        const argsFilePath = path.join(exampleContractsPath, argsPath);
         const fileExists = fs.existsSync(argsFilePath);
         if (fileExists) {
           argsFileUrls.push(pathToFileURL(argsFilePath).href);
@@ -323,13 +323,12 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   // 2. Copy solidity framework folder
   const solidityFrameworkPath =
     options.solidityFramework && getSolidityFrameworkPath(options.solidityFramework, templateDir);
-
   if (solidityFrameworkPath) {
     await copyExtensionFiles(options, solidityFrameworkPath, targetDir);
   }
 
-  const starterContractsPath =
-    options.solidityFramework && path.resolve(templateDir, STARTER_CONTRACTS_DIR, options.solidityFramework);
+  const exampleContractsPath =
+    options.solidityFramework && path.resolve(templateDir, EXAMPLE_CONTRACTS_DIR, options.solidityFramework);
 
   // 3. Set up external extension if needed
   if (options.externalExtension) {
@@ -347,22 +346,20 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
 
     if (options.solidityFramework) {
       const externalExtensionSolidityPath = path.join(externalExtensionPath, "packages", options.solidityFramework);
-      const pathExists = fs.existsSync(externalExtensionSolidityPath);
-
-      if (!pathExists && starterContractsPath) {
-        await copyExtensionFiles(options, starterContractsPath, targetDir);
+      // if external extension does not have solidity framework, we copy the example contracts
+      if (!fs.existsSync(externalExtensionSolidityPath) && exampleContractsPath) {
+        await copyExtensionFiles(options, exampleContractsPath, targetDir);
       }
     }
 
     await copyExtensionFiles(options, externalExtensionPath, targetDir);
-  } else {
-    if (starterContractsPath) {
-      await copyExtensionFiles(options, starterContractsPath, targetDir);
-    }
   }
 
+  if (!options.externalExtension && exampleContractsPath) {
+    await copyExtensionFiles(options, exampleContractsPath, targetDir);
+  }
   // 4. Process templated files and generate output
-  await processTemplatedFiles(options, basePath, solidityFrameworkPath, starterContractsPath, targetDir);
+  await processTemplatedFiles(options, basePath, solidityFrameworkPath, exampleContractsPath, targetDir);
 
   // 5. Delete tmp directory
   if (options.externalExtension && !options.dev) {
