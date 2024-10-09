@@ -146,11 +146,11 @@ To avoid issues when named arguments have typos, the `withDefaults` utility will
 
 # Args files injection in Template files
 
-For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If there are multiple Args files, we combine them into an array
+For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If Args files are found, we combine them into an array.
 
 To see the list of template files and their matching args files, check [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
 
-I've thought about how the strings should be joined, but an option is to use [tagged templates](4). We can go as crazy as we want with tagged templates.
+I've thought about how the strings should be joined, but an option is to use [tagged templates](2). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
 
@@ -178,7 +178,7 @@ The special files and folders are:
 
 ## Merging package.json files
 
-The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
+The package we use to merge `package.json` files [merge-packages](1) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
 
 For example:
 
@@ -206,7 +206,5 @@ The first and last files are the first and second arguments when we call the fun
 
 This is a possible improvement in the speed of the cli. I've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
 
-[1]: https://github.com/nextauthjs/next-auth
-[2]: https://www.prisma.io/
-[3]: https://github.com/zppack/merge-packages
-[4]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
+[1]: https://github.com/zppack/merge-packages
+[2]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
