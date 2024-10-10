@@ -146,11 +146,11 @@ To avoid issues when named arguments have typos, the `withDefaults` utility will
 
 # Args files injection in Template files
 
-For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If there are multiple Args files, we combine them into an array
+For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If Args files are found, we combine them into an array.
 
 To see the list of template files and their matching args files, check [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
 
-I've thought about how the strings should be joined, but an option is to use [tagged templates](4). We can go as crazy as we want with tagged templates.
+I've thought about how the strings should be joined, but an option is to use [tagged templates](2). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
 
@@ -176,9 +176,25 @@ The special files and folders are:
 
 # Things worth mentioning
 
+## Recommended way to handle complex arguments in templates
+
+Most of the time you will use string arguments for templating, but sometimes you will need to add arrays, objects, bigints, etc. You can handle them however you want, but we're recommending to use the table below as a helper.
+
+| Pattern                     | Template                                                                                                   | Args                                                       | Result                                                                                                                |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Replace an object           | `const replacedObj = ${JSON.stringify(replacedObj[0])}`                                                    | `const replacedObj = { key1: "Replaced", key2: "Object" }` | `const replacedObj = { key1: "Replaced", key2: "Object" }`                                                            |
+| Replace an array            | `const replacedArr = ${JSON.stringify(replacedArr[0])}`                                                    | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                                                           |
+| Object, add new entries     | `const mergedObj = ${JSON.stringify(structuredClone({key1: 'value1', key2: 'value2', ...objToMerge[0]}))}` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };`                               |
+| Array, add new items        | `const arrWithAdditionalItems = ${JSON.stringify(structuredClone(['a', 'b', ...arrayToSpread[0]]))};`      | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"];`                                                        |
+| BigInt, simple var          | `const bigInt = BigInt("${someBigInt[0]}");`                                                               | `const someBigInt = 123n`                                  | `const bigInt = BigInt("123");`                                                                                       |
+| Simple object with bigints  | `const simpleObjectWithBigInt = { key1: BigInt("${simpleObjectWithBigInt[0].key1}") };`                    | `const simpleObjectWithBigInt = { key1: 123n }`            | `const simpleObjectWithBigInt = { key1: BigInt("123") };`                                                             |
+| Complex object with bigints | `const objWithBigInt = JSON.parse('${JSON.stringify(objWithBigInt[0])}', bigintReviver)`                   | `const objWithBigInt = { key1: 123n }`                     | `const objWithBigInt = JSON.parse('{"key1":{"$bigint":"123"}}', bigintReviver);`, which is equal to `{ key1: 123n } ` |
+
+Don't forget to import `bigintReviver` from `~~/utils/scaffold-eth/bigint-reviver` in the template file for the last pattern.
+
 ## Merging package.json files
 
-The package we use to merge `package.json` files [merge-packages](3) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
+The package we use to merge `package.json` files [merge-packages](1) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
 
 For example:
 
@@ -206,7 +222,5 @@ The first and last files are the first and second arguments when we call the fun
 
 This is a possible improvement in the speed of the cli. I've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
 
-[1]: https://github.com/nextauthjs/next-auth
-[2]: https://www.prisma.io/
-[3]: https://github.com/zppack/merge-packages
-[4]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
+[1]: https://github.com/zppack/merge-packages
+[2]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
