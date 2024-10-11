@@ -5,7 +5,11 @@ const contents = ({ ignoreTsAndLintBuildErrors, extraConfig }) =>
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  ${extraConfig[0] ? `${extraConfig[0]},` : ''}
+  ${extraConfig[0]
+    ? `${Object.entries(extraConfig[0])
+        .map(([key, value]) => `${key}: ${JSON.stringify(value)},`)
+        .join('\n  ')}`
+    : ''}
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: ${ignoreTsAndLintBuildErrors},
