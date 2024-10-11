@@ -9,7 +9,7 @@ import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-export const metadata = getMetadata(${metadata});
+export const metadata = getMetadata(${JSON.stringify(metadata[0])});
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -28,8 +28,8 @@ export default ScaffoldEthApp;`;
 
 export default withDefaults(contents, {
   imports: "",
-  metadata: `{
+  metadata: {
     title: "Scaffold-ETH 2 App",
     description: "Built with 🏗 Scaffold-ETH 2"
-  }`,
+  }
 });
