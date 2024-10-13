@@ -1,5 +1,16 @@
 import { withDefaults } from "../../../utils.js";
 
+const getExtendTheme = (extendTheme) => {
+  if (!extendTheme[0]) return '';
+
+  let content = extendTheme[0].trim();
+  if (content.startsWith('{') && content.endsWith('}')) {
+    content = content.slice(1, -1).trim();
+  }
+
+  return `${content},`;
+};
+
 const contents = ({ lightTheme, darkTheme, extendTheme }) => `/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
@@ -19,7 +30,7 @@ module.exports = {
   },
   theme: {
     extend: {
-      ${extendTheme[0] && `${extendTheme[0]},`}
+      ${getExtendTheme(extendTheme)}
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",
       },
