@@ -10,7 +10,6 @@ import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
-import "../utils/bigint-to-json";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 

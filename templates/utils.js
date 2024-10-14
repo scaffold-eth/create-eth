@@ -1,3 +1,5 @@
+import { inspect } from "util";
+
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>
   (receivedArgs) => {
@@ -24,9 +26,4 @@ export const withDefaults =
     return template(argsWithDefault);
   };
 
-export const getStringifiedObjectContent = (obj) =>
-  Object.entries(obj)
-    .map(([key, value]) => `${key}: ${JSON.stringify(value)},`)
-    .join("\n");
-  
-export const getStringifiedArrayContent = (arr) => arr.map(item => `${JSON.stringify(item)},`).join("\n");
+export const deepStringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })
