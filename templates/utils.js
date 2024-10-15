@@ -26,4 +26,4 @@ export const withDefaults =
     return template(argsWithDefault);
   };
 
-export const deepStringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })
+export const stringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })

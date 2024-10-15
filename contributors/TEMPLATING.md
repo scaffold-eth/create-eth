@@ -180,13 +180,19 @@ The special files and folders are:
 
 Most of the time you will use string arguments for templating, but sometimes you will need to add arrays, objects, bigints, etc. You can handle them however you want, but we're recommending to use the table below as a helper.
 
-| Pattern                 | Template                                                                                    | Args                                                       | Result                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Replace an object       | `const replacedObj = ${deepStringify(replacedObj[0])}`                                      | `const replacedObj = { key1: "Replaced", key2: "Object" }` | `const replacedObj = { key1: "Replaced", key2: "Object" }`                              |
-| Replace an array        | `const replacedArr = ${deepStringify(replacedArr[0])}`                                      | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                             |
-| Object, add new entries | `const mergedObj = ${deepStringify({ key1: "value1", key2: "value2", ...objToMerge[0] })};` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };` |
-| Array, add new items    | `const arrWithAdditionalItems = ${deepStringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
-| BigInt                  | `const bigInt = ${deepStringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
+Note: The `stringify` function used in the examples below should be imported from the `templates/utils.js` file:
+
+```javascript
+import { stringify } from "../path/to/templates/utils.js";
+```
+
+| Pattern                 | Template                                                                                | Args                                                       | Result                                                                                  |
+| ----------------------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Replace an object       | `const replacedObj = ${stringify(replacedObj[0])}`                                      | `const replacedObj = { key1: "Replaced", key2: "Object" }` | `const replacedObj = { key1: "Replaced", key2: "Object" }`                              |
+| Replace an array        | `const replacedArr = ${stringify(replacedArr[0])}`                                      | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                             |
+| Object, add new entries | `const mergedObj = ${stringify({ key1: "value1", key2: "value2", ...objToMerge[0] })};` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };` |
+| Array, add new items    | `const arrWithAdditionalItems = ${stringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
+| BigInt                  | `const bigInt = ${stringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
 
 ## Merging package.json files
 
