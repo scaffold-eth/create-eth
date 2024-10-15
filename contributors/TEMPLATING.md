@@ -186,9 +186,7 @@ Most of the time you will use string arguments for templating, but sometimes you
 | Replace an array        | `const replacedArr = ${deepStringify(replacedArr[0])}`                                      | `const replacedArr = ["Replaced", "Array"]`                | `const replacedArr = ["Replaced", "Array"]`                                             |
 | Object, add new entries | `const mergedObj = ${deepStringify({ key1: "value1", key2: "value2", ...objToMerge[0] })};` | `const objToMerge = { key3: "Merged", key4: "Object" }`    | `const mergedObj = { key1: "value1", key2: "value2", key3: "Merged", key4: "Object" };` |
 | Array, add new items    | `const arrWithAdditionalItems = ${deepStringify(['a', 'b', ...arrayToSpread[0]])}`          | `const arrayToSpread = ["Spread", "This"]`                 | `const arrWithAdditionalItems = ["a", "b", "Spread", "This"]`                           |
-| BigInt, simple var      | `const bigInt = ${deepStringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
-| Object with bigints     | `const objectWithBigInt = ${deepStringify(objectWithBigInt[0])}`                            | `const objectWithBigInt = { key1: 123n }`                  | `const objectWithBigInt = { key1: 123n };`                                              |
-|  |
+| BigInt                  | `const bigInt = ${deepStringify(someBigInt[0])};`                                           | `const someBigInt = 123n`                                  | `const bigInt = 123n;`                                                                  |
 
 ## Merging package.json files
 
