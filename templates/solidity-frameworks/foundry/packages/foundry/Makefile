@@ -9,9 +9,14 @@ setup-anvil-wallet:
 chain: setup-anvil-wallet
 	anvil
 
+# include variables from .env file if it exists
+ifneq (,$(wildcard .env))
+    include .env
+endif	
+
 # Start a fork
 fork: setup-anvil-wallet
-	anvil --fork-url ${FORK_URL} --chain-id 31337
+	anvil --fork-url ${FORKING_URL} --chain-id 31337
 
 # Build the project
 build:
