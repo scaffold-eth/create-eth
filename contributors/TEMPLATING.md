@@ -34,7 +34,7 @@ When a package enforces commonjs imports, our templates created within those pac
 
 ### Default values
 
-It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, I've created a utility function that receives the template and expected arguments with their default values, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
+It's a bit annoying having to define an empty array as a default value for all the arguments. To solve this, We've created a utility function that receives the template and expected arguments with their default values, and takes care of it. You can find it at `templates/utils.js`, the function named `withDefaults`.
 
 As a bonus, using this function will throw an error when an [Args file](#args-file-content) is trying to send an argument with a name not expected by the template.
 
@@ -92,7 +92,7 @@ const stringWithoutNewLines = `This string starts without a new line
 and ends without new lines`;
 ```
 
-If you do this, however, prettier will try to indent the backtick. To avoid that you can see I've added a bunch of `// prettier-ignore`s before the template strings.
+If you do this, however, prettier will try to indent the backtick. To avoid that you can see We've added a bunch of `// prettier-ignore`s before the template strings.
 
 # Args files
 
@@ -150,7 +150,7 @@ For each Template file, we search on the extensions the user selected for the ex
 
 To see the list of template files and their matching args files, check [TEMPLATE-FILES.md](./TEMPLATE-FILES.md).
 
-I've thought about how the strings should be joined, but an option is to use [tagged templates](2). We can go as crazy as we want with tagged templates.
+We've thought about how the strings should be joined, but an option is to use [tagged templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates). We can go as crazy as we want with tagged templates.
 
 # Extension folder anatomy
 
@@ -196,7 +196,7 @@ import { stringify } from "../path/to/templates/utils.js";
 
 ## Merging package.json files
 
-The package we use to merge `package.json` files [merge-packages](1) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
+The package we use to merge `package.json` files [merge-packages](https://www.npmjs.com/package/merge-packages) will attempt to find intersections of dependencies. If there is a conflict, the version from the last `package.json` will be taken.
 
 For example:
 
@@ -222,7 +222,4 @@ The first and last files are the first and second arguments when we call the fun
 
 ## Filesystem async methods
 
-This is a possible improvement in the speed of the cli. I've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
-
-[1]: https://github.com/zppack/merge-packages
-[2]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates
+This is a possible improvement in the speed of the cli. We've used the sync API to avoid adding extra complexity for the proof of concept, but it might be an improvement helping parallelize tasks. For example processing templates in parallel.
