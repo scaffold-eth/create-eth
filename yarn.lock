@@ -1297,7 +1297,7 @@ __metadata:
     merge-packages: ^0.1.6
     ncp: 2.0.0
     prettier: 3.3.2
-    rollup: 3.21.0
+    rollup: 3.29.5
     rollup-plugin-auto-external: 2.0.0
     tslib: 2.5.0
     typescript: 5.0.4
@@ -4075,9 +4075,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:3.21.0":
-  version: 3.21.0
-  resolution: "rollup@npm:3.21.0"
+"rollup@npm:3.29.5":
+  version: 3.29.5
+  resolution: "rollup@npm:3.29.5"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -4085,7 +4085,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: f3294d712147c0975c59ff81b3010dc08d07743cdad72fbe12879044b3e467139b3c2aeec85768656c4f7ec6a7b3d19354a78fc2050044bf8e90a499e145e31e
+  checksum: 6f8304e58ac8170a715e61e46c4aa674b2ae2587ed2a712dab58f72e5e54803ae40b485fbe6b3e6a694f4c8f7a59ab936ccf9f6b686c7cfd1f1970fa9ecadf1a
   languageName: node
   linkType: hard
 
