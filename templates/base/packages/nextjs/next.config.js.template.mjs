@@ -1,15 +1,11 @@
-import { withDefaults } from '../../../utils.js'
+import { stringify, withDefaults } from '../../../utils.js'
 
 const contents = ({ ignoreTsAndLintBuildErrors, extraConfig }) =>
 `// @ts-check
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  ${extraConfig[0]
-    ? `${Object.entries(extraConfig[0])
-        .map(([key, value]) => `${key}: ${JSON.stringify(value)},`)
-        .join('\n')}`
-    : ''}
+  ${extraConfig[0] ? `...${stringify(extraConfig[0])},` : ''}
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: ${ignoreTsAndLintBuildErrors},
@@ -29,5 +25,5 @@ module.exports = nextConfig;
 
 export default withDefaults(contents, {
   ignoreTsAndLintBuildErrors: 'process.env.NEXT_PUBLIC_IGNORE_BUILD_ERROR === "true"',
-  extraConfig: ''
+  extraConfig: null
 })
