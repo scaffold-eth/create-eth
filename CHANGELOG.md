@@ -1,5 +1,21 @@
 # create-eth
 
+## 0.0.58
+
+### Patch Changes
+
+- e9a969d: Template for externalContracts.ts
+- 9151c92: template: allow passing metadata & header logoText and description
+- ba4e12e: added recommended templating rules
+- 2270abb: fix foundry generate script
+
+## 0.0.57
+
+### Patch Changes
+
+- ad4c237: deprecate default alchemy key (scaffold-eth#955)
+- b6f0d70: Add template support for solidity compilers
+
 ## 0.0.56
 
 ### Patch Changes
