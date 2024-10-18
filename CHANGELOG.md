@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.59
+
+### Patch Changes
+
+- e950e6f: added nextjs config template
+
 ## 0.0.58
 
 ### Patch Changes
