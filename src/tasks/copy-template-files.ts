@@ -360,7 +360,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
     await copyExtensionFiles(options, externalExtensionPath, targetDir);
   }
 
-  if (!options.externalExtension && exampleContractsPath) {
+  if (!options.externalExtension && options.solidityFramework && exampleContractsPath) {
     await copyExtensionFiles(options, exampleContractsPath, targetDir);
   }
   // 4. Process templated files and generate output
