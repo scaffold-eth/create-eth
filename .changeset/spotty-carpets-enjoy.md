@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-fix foundry generate script
+added nextjs config template
