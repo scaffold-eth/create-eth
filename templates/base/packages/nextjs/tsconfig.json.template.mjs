@@ -1,6 +1,6 @@
 import { withDefaults } from '../../../utils.js'
 
-const contents = ({ extraPaths, extraPlugins, extraCompilerOptions, extraInclude, extraExclude }) => `{
+const contents = ({ extraPlugins, extraCompilerOptions }) => `{
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -17,7 +17,7 @@ const contents = ({ extraPaths, extraPlugins, extraCompilerOptions, extraInclude
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "~~/*": ["./*"]${extraPaths[0] ? `,${extraPaths[0]}` : ''}
+      "~~/*": ["./*"]
     },
     "plugins": [
       {
@@ -29,17 +29,14 @@ const contents = ({ extraPaths, extraPlugins, extraCompilerOptions, extraInclude
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"${extraInclude[0] ? `,${extraInclude[0]}` : ''}
+    ".next/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"${extraExclude[0] ? `,${extraExclude[0]}` : ''}
+    "node_modules"
   ]
 }`
 
 export default withDefaults(contents, {
-  extraPaths: '',
   extraPlugins: '',
-  extraCompilerOptions: '',
-  extraInclude: '',
-  extraExclude: ''
+  extraCompilerOptions: ''
 })
