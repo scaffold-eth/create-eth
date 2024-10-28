@@ -1,6 +1,6 @@
-import { withDefaults } from '../../../utils.js'
+import { stringify, withDefaults } from '../../../utils.js'
 
-const contents = ({ extraPlugins, extraCompilerOptions }) => `{
+const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
   "compilerOptions": {
     "target": "es2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -22,8 +22,10 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `{
     "plugins": [
       {
         "name": "next"
-      }${extraPlugins[0] ? `,${extraPlugins[0]}` : ''}
-    ]${extraCompilerOptions[0] ? `,${extraCompilerOptions[0]}` : ''}
+      },
+      ...extraPlugins[0]
+    ],
+    ...extraCompilerOptions[0]
   },
   "include": [
     "next-env.d.ts",
@@ -34,9 +36,9 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `{
   "exclude": [
     "node_modules"
   ]
-}`
+})}`
 
 export default withDefaults(contents, {
-  extraPlugins: '',
-  extraCompilerOptions: ''
+  extraPlugins: [''],
+  extraCompilerOptions: ['']
 })
