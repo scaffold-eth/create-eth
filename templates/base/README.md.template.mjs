@@ -50,7 +50,7 @@ ${
     ? `
 Run smart contract test with ${testCommand[0]}
 
-- Edit your smart contract \`YourContract.sol\` in ${contractsPath[0]}
+- Edit your smart contracts in ${contractsPath[0]}
 - Edit your frontend homepage at \`packages/nextjs/app/page.tsx\`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
 - Edit your deployment scripts in ${scriptsPath[0]}
 `
