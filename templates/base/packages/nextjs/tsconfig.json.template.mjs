@@ -23,9 +23,9 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
       {
         "name": "next"
       },
-      ...extraPlugins[0]
+      ...(extraPlugins?.[0] || [])
     ],
-    ...extraCompilerOptions[0]
+    ...(extraCompilerOptions?.[0] || {})
   },
   "include": [
     "next-env.d.ts",
@@ -39,6 +39,6 @@ const contents = ({ extraPlugins, extraCompilerOptions }) => `${stringify({
 })}`
 
 export default withDefaults(contents, {
-  extraPlugins: [''],
-  extraCompilerOptions: ['']
+  extraPlugins: null,
+  extraCompilerOptions: null
 })
