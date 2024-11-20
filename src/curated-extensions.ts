@@ -25,6 +25,10 @@ const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
     repository: "https://github.com/scaffold-eth/create-eth-extensions",
     branch: "eip-5792",
   },
+  randao: {
+    repository: "https://github.com/scaffold-eth/create-eth-extensions",
+    branch: "randao",
+  },  
 };
 
 export { CURATED_EXTENSIONS };
