@@ -1,30 +1,23 @@
 import { ExternalExtension } from "./types";
+import extensions from "./extensions.json";
 
-const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
-  subgraph: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "subgraph",
-  },
-  "eip-712": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-712",
-  },
-  ponder: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "ponder",
-  },
-  onchainkit: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "onchainkit",
-  },
-  "erc-20": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "erc-20",
-  },
-  "eip-5792": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-5792",
-  },
-};
+interface ExternalExtensionWithName extends ExternalExtension {
+  name: string;
+}
+
+const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = extensions.map((extension: ExternalExtensionWithName) => {
+  return {
+    [extension.name]: {
+      repository: extension.repository,
+      branch: extension.branch,
+      description: extension.description,
+      installCommand: extension.installCommand,
+      builder: extension.builder,
+      coBuilders: extension.coBuilders,
+    },
+  };
+}).reduce((acc, extension) => {
+  return { ...acc, ...extension };
+});
 
 export { CURATED_EXTENSIONS };
