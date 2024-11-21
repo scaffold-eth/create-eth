@@ -3,7 +3,7 @@ pre-commit:
   commands:
     type-check:
       glob: "src/**/*.{ts,tsx}"
-      run: yarn tsc --noEmit
+      run: yarn type-check
     lint:
       glob: "*.{js,ts,md,json}"
       run: yarn eslint --fix {staged_files}
