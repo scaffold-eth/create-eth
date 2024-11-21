@@ -11,10 +11,6 @@ const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = extensions
       [extension.name]: {
         repository: extension.repository,
         branch: extension.branch,
-        description: extension.description,
-        installCommand: extension.installCommand,
-        builder: extension.builder,
-        coBuilders: extension.coBuilders,
       },
     };
   })
