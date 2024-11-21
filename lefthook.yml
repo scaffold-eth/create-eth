@@ -5,7 +5,7 @@ pre-commit:
       glob: "src/**/*.{ts,tsx}"
       run: yarn type-check
     lint:
-      glob: "*.{js,ts,md,json}"
+      glob: "*.{js,ts,md}"
       run: yarn eslint --fix {staged_files}
     format:
       glob: "*.{js,ts,md,json}"
