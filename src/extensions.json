@@ -8,7 +8,6 @@
     "builder": "0x1A2d838c4bbd1e73d162d0777d142c1d783Cb831",
     "coBuilders": []
   },
-
   {
     "name": "eip-712",
     "description": "An implementation of EIP-712, allowing you to send, sign, and verify typed messages in a user-friendly manner.",
