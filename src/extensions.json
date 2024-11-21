@@ -43,9 +43,7 @@
     "branch": "erc-20",
     "installCommand": "npx create-eth@latest -e erc-20",
     "builder": "0x5dCb5f4F39Caa6Ca25380cfc42280330b49d3c93",
-    "coBuilders": [
-      "0x60583563D5879C2E59973E5718c7DE2147971807"
-    ]
+    "coBuilders": ["0x60583563D5879C2E59973E5718c7DE2147971807"]
   },
   {
     "name": "eip-5792",
