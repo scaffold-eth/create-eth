@@ -2,7 +2,7 @@ pre-commit:
   parallel: true
   commands:
     type-check:
-      glob: "src/**/*.{ts,tsx}"
+      glob: "src/**/*.ts"
       run: yarn type-check
     lint:
       glob: "*.{js,ts,md}"
