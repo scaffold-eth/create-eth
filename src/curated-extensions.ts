@@ -1,28 +1,16 @@
 import { ExternalExtension } from "./types";
 import extensions from "./extensions.json";
 
-interface ExternalExtensionWithName extends ExternalExtension {
-  name?: string;
-}
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
+  if (!ext.branch || !ext.repository || !ext.description) {
+    throw new Error(`Extension missing required fields: ${JSON.stringify(ext)}`);
+  }
 
-const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = extensions
-  .map((extension: ExternalExtensionWithName) => {
-    let name = extension.name;
-    if (!name && extension.branch) {
-      name = extension.branch;
-    }
-    if (!name) {
-      throw new Error("Extension must have a name or branch");
-    }
-    return {
-      [name]: {
-        repository: extension.repository,
-        branch: extension.branch,
-      },
-    };
-  })
-  .reduce((acc, extension) => {
-    return { ...acc, ...extension };
-  });
+  acc[ext.branch] = {
+    repository: ext.repository,
+    branch: ext.branch,
+  };
+  return acc;
+}, {});
 
 export { CURATED_EXTENSIONS };
