@@ -1,30 +1,31 @@
 import { ExternalExtension } from "./types";
+import curatedExtension from "./extensions.json";
 
-const CURATED_EXTENSIONS: { [key: string]: ExternalExtension } = {
-  subgraph: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "subgraph",
-  },
-  "eip-712": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-712",
-  },
-  ponder: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "ponder",
-  },
-  onchainkit: {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "onchainkit",
-  },
-  "erc-20": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "erc-20",
-  },
-  "eip-5792": {
-    repository: "https://github.com/scaffold-eth/create-eth-extensions",
-    branch: "eip-5792",
-  },
+type ExtensionJSON = {
+  extensionFlagValue: string;
+  repository: string;
+  branch?: string;
+  // fields usefull for scaffoldeth.io
+  description: string;
+  version?: string; // if not present we default to latest
+  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
 };
+
+const extensions: ExtensionJSON[] = curatedExtension;
+
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
+  if (!ext.repository) {
+    throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
+  }
+  if (!ext.extensionFlagValue) {
+    throw new Error(`Extension must have 'extensionFlagValue': ${JSON.stringify(ext)}`);
+  }
+
+  acc[ext.extensionFlagValue] = {
+    repository: ext.repository,
+    branch: ext.branch,
+  };
+  return acc;
+}, {});
 
 export { CURATED_EXTENSIONS };
