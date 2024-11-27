@@ -11,16 +11,29 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
     externalExtension = getArgumentFromExternalExtensionOption(CURATED_EXTENSIONS[externalExtension]);
   }
 
+  const isGithubUrl = externalExtension.startsWith("https://github.com/");
+
   // Check format: owner/project:branch (branch is optional)
   const regex = /^[^/]+\/[^/]+(:[^/]+)?$/;
-  if (!regex.test(externalExtension)) {
-    throw new Error(`Invalid extension format. Use "owner/project" or "owner/project:branch"`);
+  if (!regex.test(externalExtension) && !isGithubUrl) {
+    throw new Error(`Invalid extension format. Use "owner/project", "owner/project:branch" or github url.`);
   }
 
-  // Extract owner, project and branch
-  const owner = externalExtension.split("/")[0];
-  const project = externalExtension.split(":")[0].split("/")[1];
-  const branch = externalExtension.split(":")[1];
+  let owner;
+  let project;
+  let branch;
+
+  if (isGithubUrl) {
+    // Extract owner, project and branch from github url
+    owner = externalExtension.split("/")[3];
+    project = externalExtension.split("/")[4];
+    branch = externalExtension.split("/tree/")[1];
+  } else {
+    // Extract owner, project and branch from owner/project:branch
+    owner = externalExtension.split("/")[0];
+    project = externalExtension.split(":")[0].split("/")[1];
+    branch = externalExtension.split(":")[1];
+  }
 
   const githubUrl = `https://github.com/${owner}/${project}`;
   let githubBranchUrl;
