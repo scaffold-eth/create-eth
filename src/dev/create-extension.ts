@@ -84,6 +84,12 @@ const copyFiles = async (files: string[], projectName: string, projectPath: stri
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
     const sourceFileName = path.basename(sourcePath);
 
+    if (!fs.existsSync(sourcePath)) {
+      prettyLog.warning(`Source file not found, skipping: ${file}`, 2);
+      console.log("\n");
+      continue;
+    }
+
     if (templates.has(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
