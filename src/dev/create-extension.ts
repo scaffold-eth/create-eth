@@ -37,22 +37,18 @@ const getProjectPath = (rawArgs: string[]) => {
   return { projectPath };
 };
 
-const getDeletedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
+const getDiffFilesFromFirstCommit = async ({
+  projectPath,
+  diffFilter,
+}: {
+  projectPath: string;
+  diffFilter?: "d" | "D";
+}): Promise<string[]> => {
   const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
     cwd: projectPath,
   });
-  // Use --diff-filter=D to only get deleted files
-  const { stdout } = await execa("git", ["diff", "--diff-filter=D", "--name-only", `${firstCommit.trim()}..HEAD`], {
-    cwd: projectPath,
-  });
-  return stdout.split("\n").filter(Boolean);
-};
-
-const getChangedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
-  const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
-    cwd: projectPath,
-  });
-  const { stdout } = await execa("git", ["diff", "--diff-filter=d", "--name-only", `${firstCommit.trim()}..HEAD`], {
+  const diffFilterArg = diffFilter ? `--diff-filter=${diffFilter}` : "";
+  const { stdout } = await execa("git", ["diff", diffFilterArg, "--name-only", `${firstCommit.trim()}..HEAD`], {
     cwd: projectPath,
   });
   return stdout.split("\n").filter(Boolean);
@@ -196,8 +192,8 @@ const main = async (rawArgs: string[]) => {
     prettyLog.info(`Extension name: ${projectName}\n`);
 
     prettyLog.info("Getting list of changed files...", 1);
-    const changedFiles = await getChangedFilesFromFirstCommit(projectPath);
-    const deletedFiles = await getDeletedFilesFromFirstCommit(projectPath);
+    const changedFiles = await getDiffFilesFromFirstCommit({ projectPath, diffFilter: "d" });
+    const deletedFiles = await getDiffFilesFromFirstCommit({ projectPath, diffFilter: "D" });
 
     if (changedFiles.length === 0 && deletedFiles.length === 0) {
       prettyLog.warning("No changed files to copy.", 1);
