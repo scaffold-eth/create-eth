@@ -44,13 +44,33 @@ const getDiffFilesFromFirstCommit = async ({
   projectPath: string;
   diffFilter?: "d" | "D";
 }): Promise<string[]> => {
+  if (diffFilter === "D") {
+    // all files that have ever existed in the repo's history
+    const { stdout: allFiles } = await execa(
+      "git",
+      ["log", "--all", "--diff-filter=ACDMRT", "--name-only", "--format="],
+      { cwd: projectPath },
+    );
+
+    const { stdout: currentFiles } = await execa("git", ["ls-files"], {
+      cwd: projectPath,
+    });
+
+    const allFilesSet = new Set(allFiles.split("\n").filter(Boolean));
+    const currentFilesSet = new Set(currentFiles.split("\n").filter(Boolean));
+
+    return Array.from(allFilesSet).filter(file => !currentFilesSet.has(file));
+  }
+
   const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
     cwd: projectPath,
   });
+
   const diffFilterArg = diffFilter ? `--diff-filter=${diffFilter}` : "";
   const { stdout } = await execa("git", ["diff", diffFilterArg, "--name-only", `${firstCommit.trim()}..HEAD`], {
     cwd: projectPath,
   });
+
   return stdout.split("\n").filter(Boolean);
 };
 
