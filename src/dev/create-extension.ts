@@ -37,11 +37,22 @@ const getProjectPath = (rawArgs: string[]) => {
   return { projectPath };
 };
 
+const getDeletedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
+  const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
+    cwd: projectPath,
+  });
+  // Use --diff-filter=D to only get deleted files
+  const { stdout } = await execa("git", ["diff", "--diff-filter=D", "--name-only", `${firstCommit.trim()}..HEAD`], {
+    cwd: projectPath,
+  });
+  return stdout.split("\n").filter(Boolean);
+};
+
 const getChangedFilesFromFirstCommit = async (projectPath: string): Promise<string[]> => {
   const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
     cwd: projectPath,
   });
-  const { stdout } = await execa("git", ["diff", "--name-only", `${firstCommit.trim()}..HEAD`], {
+  const { stdout } = await execa("git", ["diff", "--diff-filter=d", "--name-only", `${firstCommit.trim()}..HEAD`], {
     cwd: projectPath,
   });
   return stdout.split("\n").filter(Boolean);
@@ -77,7 +88,36 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
   }
 };
 
-const copyFiles = async (files: string[], projectName: string, projectPath: string, templates: Set<string>) => {
+const copyFiles = async (
+  files: string[],
+  deletedFiles: string[],
+  projectName: string,
+  projectPath: string,
+  templates: Set<string>,
+) => {
+  // First handle deletions
+  for (const file of deletedFiles) {
+    const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
+    if (fs.existsSync(destPath)) {
+      await fs.promises.unlink(destPath);
+      prettyLog.success(`Removed deleted file: ${file}`, 2);
+      console.log("\n");
+
+      // Optionally remove empty directories
+      const dirPath = path.dirname(destPath);
+      try {
+        const remainingFiles = await fs.promises.readdir(dirPath);
+        if (remainingFiles.length === 0) {
+          await fs.promises.rmdir(dirPath);
+          prettyLog.success(`Removed empty directory: ${path.relative(EXTERNAL_EXTENSIONS_DIR, dirPath)}`, 2);
+          console.log("\n");
+        }
+      } catch {
+        // Directory might already be deleted, ignore error
+      }
+    }
+  }
+
   for (const file of files) {
     const pathSegmentsOfFile = file.split(path.sep);
     const sourcePath = path.resolve(projectPath, file);
@@ -157,14 +197,15 @@ const main = async (rawArgs: string[]) => {
 
     prettyLog.info("Getting list of changed files...", 1);
     const changedFiles = await getChangedFilesFromFirstCommit(projectPath);
+    const deletedFiles = await getDeletedFilesFromFirstCommit(projectPath);
 
-    if (changedFiles.length === 0) {
+    if (changedFiles.length === 0 && deletedFiles.length === 0) {
       prettyLog.warning("No changed files to copy.", 1);
       console.log("\n");
     } else {
       prettyLog.info(`Found ${changedFiles.length} changed files, processing them...`, 1);
       console.log("\n");
-      await copyFiles(changedFiles, projectName, projectPath, templates);
+      await copyFiles(changedFiles, deletedFiles, projectName, projectPath, templates);
     }
 
     prettyLog.info(`Files processed successfully, updated ${EXTERNAL_EXTENSIONS_DIR}/${projectName} directory.`);
