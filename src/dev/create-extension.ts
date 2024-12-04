@@ -85,13 +85,12 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
 };
 
 const copyFiles = async (
-  files: string[],
+  changedFiles: string[],
   deletedFiles: string[],
   projectName: string,
   projectPath: string,
   templates: Set<string>,
 ) => {
-  // First handle deletions
   for (const file of deletedFiles) {
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
     if (fs.existsSync(destPath)) {
@@ -99,7 +98,7 @@ const copyFiles = async (
       prettyLog.success(`Removed deleted file: ${file}`, 2);
       console.log("\n");
 
-      // Optionally remove empty directories
+      // remove empty directories
       const dirPath = path.dirname(destPath);
       try {
         const remainingFiles = await fs.promises.readdir(dirPath);
@@ -109,12 +108,12 @@ const copyFiles = async (
           console.log("\n");
         }
       } catch {
-        // Directory might already be deleted, ignore error
+        // directory might already be deleted, ignore error
       }
     }
   }
 
-  for (const file of files) {
+  for (const file of changedFiles) {
     const pathSegmentsOfFile = file.split(path.sep);
     const sourcePath = path.resolve(projectPath, file);
     const destPath = path.join(EXTERNAL_EXTENSIONS_DIR, projectName, TARGET_EXTENSION_DIR, file);
