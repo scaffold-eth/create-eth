@@ -37,31 +37,24 @@ const getProjectPath = (rawArgs: string[]) => {
   return { projectPath };
 };
 
-const getDiffFilesFromFirstCommit = async ({
-  projectPath,
-  isDeleted = false,
-}: {
-  projectPath: string;
-  isDeleted?: boolean;
-}): Promise<string[]> => {
-  if (isDeleted) {
-    // all files that have ever existed in the repo's history
-    const { stdout: allFiles } = await execa(
-      "git",
-      ["log", "--all", "--diff-filter=ACDMRT", "--name-only", "--format="],
-      { cwd: projectPath },
-    );
+const getDeletedFiles = async (projectPath: string): Promise<string[]> => {
+  const { stdout: allFiles } = await execa(
+    "git",
+    ["log", "--all", "--diff-filter=ACDMRT", "--name-only", "--format="],
+    { cwd: projectPath },
+  );
 
-    const { stdout: currentFiles } = await execa("git", ["ls-files"], {
-      cwd: projectPath,
-    });
+  const { stdout: currentFiles } = await execa("git", ["ls-files"], {
+    cwd: projectPath,
+  });
 
-    const allFilesSet = new Set(allFiles.split("\n").filter(Boolean));
-    const currentFilesSet = new Set(currentFiles.split("\n").filter(Boolean));
+  const allFilesSet = new Set(allFiles.split("\n").filter(Boolean));
+  const currentFilesArray = currentFiles.split("\n").filter(Boolean);
 
-    return Array.from(allFilesSet).filter(file => !currentFilesSet.has(file));
-  }
+  return Array.from(allFilesSet).filter(file => !currentFilesArray.includes(file));
+};
 
+const getChangedFilesSinceFirstCommit = async (projectPath: string): Promise<string[]> => {
   const { stdout: firstCommit } = await execa("git", ["rev-list", "--max-parents=0", "HEAD"], {
     cwd: projectPath,
   });
@@ -103,7 +96,7 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
   }
 };
 
-const copyFiles = async (
+const copyChanges = async (
   changedFiles: string[],
   deletedFiles: string[],
   projectName: string,
@@ -210,16 +203,16 @@ const main = async (rawArgs: string[]) => {
     prettyLog.info(`Extension name: ${projectName}\n`);
 
     prettyLog.info("Getting list of changed files...", 1);
-    const changedFiles = await getDiffFilesFromFirstCommit({ projectPath });
-    const deletedFiles = await getDiffFilesFromFirstCommit({ projectPath, isDeleted: true });
+    const changedFiles = await getChangedFilesSinceFirstCommit(projectPath);
+    const deletedFiles = await getDeletedFiles(projectPath);
 
     if (changedFiles.length === 0 && deletedFiles.length === 0) {
-      prettyLog.warning("No changed files to copy.", 1);
+      prettyLog.warning("There are no file changes to copy.", 1);
       console.log("\n");
     } else {
       prettyLog.info(`Found ${changedFiles.length} changed files, processing them...`, 1);
       console.log("\n");
-      await copyFiles(changedFiles, deletedFiles, projectName, projectPath, templates);
+      await copyChanges(changedFiles, deletedFiles, projectName, projectPath, templates);
     }
 
     prettyLog.info(`Files processed successfully, updated ${EXTERNAL_EXTENSIONS_DIR}/${projectName} directory.`);
