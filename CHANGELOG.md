@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.0.63
+
+### Patch Changes
+
+- ef55492: Format package.json files
+
 ## 0.0.62
 
 ### Patch Changes
