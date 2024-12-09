@@ -1,5 +1,14 @@
 # create-eth
 
+## 0.0.63
+
+### Patch Changes
+
+- dd5bf8f: - **Optimism and base networks verification (https://github.com/scaffold-eth/scaffold-eth-2/pull/996)**
+  - **move 99_deployScript as hardhat task (https://github.com/scaffold-eth/scaffold-eth-2/pull/1005)**
+  - **feat: use current yarn version in vercel on deploy via cli (https://github.com/scaffold-eth/scaffold-eth-2/pull/1007)**
+- ef55492: Format package.json files
+
 ## 0.0.62
 
 ### Patch Changes
