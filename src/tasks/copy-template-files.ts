@@ -24,6 +24,7 @@ const isArgsRegex = /([^/\\]*?)\.args\./;
 const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
 const isDeployedContractsRegex = /packages\/nextjs\/contracts\/deployedContracts\.ts/;
+const isDSStoreRegex = /\.DS_Store$/;
 
 const getSolidityFrameworkPath = (solidityFramework: SolidityFramework, templatesDirectory: string) =>
   path.resolve(templatesDirectory, SOLIDITY_FRAMEWORKS_DIR, solidityFramework);
@@ -39,7 +40,9 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
       const isPackageJson = isPackageJsonRegex.test(fileName);
       const skipDevOnly = isDev && (isYarnLock || isDeployedContracts || isPackageJson);
 
-      return !isTemplate && !skipDevOnly;
+      const isDSStore = isDSStoreRegex.test(fileName);
+
+      return !isTemplate && !skipDevOnly && !isDSStore;
     },
   });
 
@@ -81,8 +84,9 @@ const copyExtensionFiles = async (
       const isTemplate = isTemplateRegex.test(path);
       // PR NOTE: this wasn't needed before because ncp had the clobber: false
       const isPackageJson = isPackageJsonRegex.test(path);
+      const isDSStore = isDSStoreRegex.test(path);
       const shouldSkip =
-        isConfig || isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
+        isConfig || isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder || isDSStore;
       return !shouldSkip;
     },
   });
@@ -100,6 +104,7 @@ const copyExtensionFiles = async (
         const isArgs = isArgsRegex.test(path);
         const isTemplate = isTemplateRegex.test(path);
         const isPackageJson = isPackageJsonRegex.test(path);
+        const isDSStore = isDSStoreRegex.test(path);
 
         const unselectedSolidityFrameworks = [SOLIDITY_FRAMEWORKS.FOUNDRY, SOLIDITY_FRAMEWORKS.HARDHAT].filter(
           sf => sf !== solidityFramework,
@@ -107,7 +112,7 @@ const copyExtensionFiles = async (
         const isUnselectedSolidityFrameworksRegexes = unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}$`));
         const isUnselectedSolidityFramework = isUnselectedSolidityFrameworksRegexes.some(sfregex => sfregex.test(path));
 
-        const shouldSkip = isArgs || isTemplate || isPackageJson || isUnselectedSolidityFramework;
+        const shouldSkip = isArgs || isTemplate || isPackageJson || isUnselectedSolidityFramework || isDSStore;
 
         return !shouldSkip;
       },
