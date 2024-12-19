@@ -26,4 +26,10 @@ export const withDefaults =
     return template(argsWithDefault);
   };
 
-export const stringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })
+export const stringify = val => {
+  const str = inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null });
+  return str
+    .replace(/"\$\$\$([^"]+)"/g, '$1')
+    .replace(/'\$\$\$([^']+)'/g, '$1')
+    .replace(/(['"])(.*?\$\{.*?\}.*?)\1/g, '`$2`');
+};
