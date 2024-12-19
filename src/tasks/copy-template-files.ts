@@ -3,18 +3,100 @@ import { ExternalExtension, Options, SolidityFramework, TemplateDescriptor } fro
 import { findFilesRecursiveSync } from "../utils/find-files-recursively";
 import { mergePackageJson } from "../utils/merge-package-json";
 import fs from "fs";
-import { pathToFileURL } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import ncp from "ncp";
 import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, EXAMPLE_CONTRACTS_DIR } from "../utils/consts";
+import { createRequire } from "module";
+import vm from "vm";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 
 const copy = promisify(ncp);
 let copyOrLink = copy;
+
+// Type for dynamic import function
+type ImportFunction = (id: string) => Promise<Record<string, unknown>>;
+
+// Type definitions
+interface ModuleContext {
+  exports: Record<string, any>;
+  import: ImportFunction;
+  module: {
+    exports: Record<string, any>;
+  };
+  __filename: string;
+  __dirname: string;
+  [key: string]: any;
+}
+
+type ModuleFunction = (
+  exports: Record<string, any>,
+  importFunc: ImportFunction,
+  module: { exports: Record<string, any> },
+  __filename: string,
+  __dirname: string,
+) => void;
+
+async function loadArgsFile(argsFileUrl: string): Promise<Record<string, any>> {
+  const filePath = fileURLToPath(argsFileUrl);
+  const content = await fs.promises.readFile(filePath, "utf8");
+  createRequire(import.meta.url);
+
+  // Explicitly typed import function
+  const importFunction: ImportFunction = async (id: string) => {
+    const module = await import(id);
+    return module as Record<string, unknown>;
+  };
+
+  // Create base context object
+  const baseContext: ModuleContext = {
+    exports: {},
+    import: importFunction,
+    module: { exports: {} },
+    __filename: filePath,
+    __dirname: path.dirname(filePath),
+  };
+
+  // Create proxied context with type-safe getter
+  const context = new Proxy(baseContext, {
+    get: (target: ModuleContext, prop: string): unknown => {
+      if (prop in target) {
+        return target[prop];
+      }
+      return typeof prop === "string" ? prop : undefined;
+    },
+  });
+
+  // Convert the content to an ES module style export
+  const processedContent = content.replace(/export const/g, "module.exports.");
+
+  // Wrap the content
+  const wrappedContent = `
+    (function(exports, import_, module, __filename, __dirname) {
+      ${processedContent}
+    })`;
+
+  // Create and run the script
+  const script = new vm.Script(wrappedContent);
+  const contextObj = vm.createContext(context);
+
+  const moduleFunction = script.runInContext(contextObj) as ModuleFunction;
+
+  moduleFunction.call(
+    undefined,
+    context.exports,
+    context.import,
+    context.module,
+    context.__filename,
+    context.__dirname,
+  );
+
+  return context.module.exports;
+}
 
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
@@ -221,9 +303,7 @@ const processTemplatedFiles = async (
         }
       }
 
-      const args = await Promise.all(
-        argsFileUrls.map(async argsFileUrl => (await import(argsFileUrl)) as Record<string, any>),
-      );
+      const args = await Promise.all(argsFileUrls.map(loadArgsFile));
 
       const fileTemplate = (await import(templateFileDescriptor.fileUrl)).default as (
         args: Record<string, string[]>,

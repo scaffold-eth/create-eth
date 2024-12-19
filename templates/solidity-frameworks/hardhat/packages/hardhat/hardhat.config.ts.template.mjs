@@ -7,10 +7,16 @@ function deepMerge(target, ...sources) {
   if (source && typeof source === 'object') {
     for (const key in source) {
       if (source[key] && typeof source[key] === 'object') {
-        if (!target[key]) {
-          target[key] = Array.isArray(source[key]) ? [] : {};
+        if (Array.isArray(source[key])) {
+          // If the source value is an array, replace the target array
+          target[key] = source[key];
+        } else {
+          // If the source value is an object, recursively merge
+          if (!target[key]) {
+            target[key] = {};
+          }
+          deepMerge(target[key], source[key]);
         }
-        deepMerge(target[key], source[key]);
       } else {
         target[key] = source[key];
       }
@@ -43,29 +49,29 @@ const defaultConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}`,
+        url: `https://eth-mainnet.alchemyapi.io/v2/\${"providerApiKey"}`,
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
     },
     mainnet: {
-      url: `https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://eth-mainnet.alchemyapi.io/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://eth-sepolia.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     arbitrum: {
-      url: `https://arb-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://arb-mainnet.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     arbitrumSepolia: {
-      url: `https://arb-sepolia.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://arb-sepolia.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     optimism: {
-      url: `https://opt-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://opt-mainnet.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
       verify: {
         etherscan: {
           apiUrl: "https://api-optimistic.etherscan.io",
@@ -74,8 +80,8 @@ const defaultConfig = {
       },
     },
     optimismSepolia: {
-      url: `https://opt-sepolia.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://opt-sepolia.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia-optimistic.etherscan.io",
@@ -84,32 +90,32 @@ const defaultConfig = {
       },
     },
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://polygon-mainnet.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     polygonMumbai: {
-      url: `https://polygon-mumbai.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://polygon-mumbai.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     polygonZkEvm: {
-      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://polygonzkevm-mainnet.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     polygonZkEvmTestnet: {
-      url: `https://polygonzkevm-testnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: [deployerPrivateKey],
+      url: `https://polygonzkevm-testnet.g.alchemy.com/v2/\${"providerApiKey"}`,
+      accounts: ["deployerPrivateKey"],
     },
     gnosis: {
       url: "https://rpc.gnosischain.com",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     chiado: {
       url: "https://rpc.chiadochain.net",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     base: {
       url: "https://mainnet.base.org",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
       verify: {
         etherscan: {
           apiUrl: "https://api.basescan.org",
@@ -119,7 +125,7 @@ const defaultConfig = {
     },
     baseSepolia: {
       url: "https://sepolia.base.org",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
       verify: {
         etherscan: {
           apiUrl: "https://api-sepolia.basescan.org",
@@ -129,35 +135,35 @@ const defaultConfig = {
     },
     scrollSepolia: {
       url: "https://sepolia-rpc.scroll.io",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     scroll: {
       url: "https://rpc.scroll.io",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     pgn: {
       url: "https://rpc.publicgoods.network",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     pgnTestnet: {
       url: "https://sepolia.publicgoods.network",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     celo: {
       url: "https://forno.celo.org",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
     celoAlfajores: {
       url: "https://alfajores-forno.celo-testnet.org",
-      accounts: [deployerPrivateKey],
+      accounts: ["deployerPrivateKey"],
     },
   },
   etherscan: {
-    apiKey: `\${etherscanApiKey}`,
+    apiKey: `\${"etherscanApiKey"}`,
   },
   verify: {
     etherscan: {
-      apiKey: `\${etherscanApiKey}`,
+      apiKey: `\${"etherscanApiKey"}`,
     },
   },
   sourcify: {
@@ -165,12 +171,22 @@ const defaultConfig = {
   },
 };
 
+
+export const RUNTIME_VARIABLES = [
+  'deployerPrivateKey',
+  'providerApiKey',
+  'etherscanApiKey',
+  'etherscanOptimisticApiKey',
+  'basescanApiKey'
+];
+
+
 const contents = ({ preConfigContent, configOverride }) => {
   // Merge the default config with any overrides
   const finalConfig = deepMerge({}, defaultConfig);
   
   if (configOverride) {
-    deepMerge(finalConfig, configOverride);
+    deepMerge(finalConfig, configOverride[0]);
   }
 
   return `import * as dotenv from "dotenv";
@@ -200,7 +216,7 @@ const etherscanApiKey = process.env.ETHERSCAN_MAINNET_API_KEY || "DNXJA8RX2Q3VZ4
 const etherscanOptimisticApiKey = process.env.ETHERSCAN_OPTIMISTIC_API_KEY || "RM62RDISS1RH448ZY379NX625ASG1N633R";
 const basescanApiKey = process.env.BASESCAN_API_KEY || "ZZZEIPMT1MNJ8526VV2Y744CA7TNZR64G6";
 
-const config: HardhatUserConfig = ${stringify(finalConfig)};
+const config: HardhatUserConfig = ${stringify(finalConfig, RUNTIME_VARIABLES)};
 
 // Extend the deploy task
 task("deploy").setAction(async (args, hre, runSuper) => {
@@ -215,5 +231,5 @@ export default config;`;
 
 export default withDefaults(contents, {
   preConfigContent: "",
-  configOverrides: {},
+  configOverride: {},
 });
