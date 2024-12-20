@@ -23,7 +23,11 @@ export async function promptForMissingOptions(
       name: "project",
       message: "Your project name:",
       default: defaultOptions.project,
-      validate: (value: string) => value.length > 0,
+      validate: (value: string) => {
+        if (value.length === 0) return "Project name cannot be empty";
+        if (/\s/.test(value)) return "Project name cannot contain whitespace (spaces, tabs, etc)";
+        return true;
+      },
     },
     {
       type: "list",
