@@ -84,7 +84,7 @@ export async function parseArgumentsIntoOptions(
 
   const help = args["--help"] ?? false;
 
-  const project = args._[0] ?? null;
+  let project: string | null = args._[0] ?? null;
 
   // use the original extension arg
   const extensionName = args["--extension"] && rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
@@ -99,6 +99,11 @@ export async function parseArgumentsIntoOptions(
         )}\n`,
       ),
     );
+  }
+
+  if (project && /\s$/.test(project)) {
+    project = null;
+    console.log(chalk.yellow(" Project name cannot end with whitespace. Enter a valid project name."));
   }
 
   let solidityFrameworkChoices = [
