@@ -1,5 +1,68 @@
 # create-eth
 
+## 0.0.64
+
+### Patch Changes
+
+- Follow root level naming convention (https://github.com/scaffold-eth/scaffold-eth-2/pull/1006)
+- Fix useScaffoldEventHistory duplicated events (https://github.com/scaffold-eth/scaffold-eth-2/pull/1014)
+- feat: disable vercel telemetry (https://github.com/scaffold-eth/scaffold-eth-2/pull/1012)
+- Optional chainId config in Scaffold hooks (https://github.com/scaffold-eth/scaffold-eth-2/pull/931)
+- Foundry improvements (https://github.com/scaffold-eth/scaffold-eth-2/pull/1011)
+- make `useScaffoldWriteContract` & `useDeployedContractInfo` backward compatible (https://github.com/scaffold-eth/scaffold-eth-2/pull/1015)
+- fix: move warnings to useEffect (https://github.com/scaffold-eth/scaffold-eth-2/pull/1016)
+
+## 0.0.63
+
+### Patch Changes
+
+- Optimism and base networks verification (https://github.com/scaffold-eth/scaffold-eth-2/pull/996)
+- move 99_deployScript as hardhat task (https://github.com/scaffold-eth/scaffold-eth-2/pull/1005)\*\*
+- feat: use current yarn version in vercel on deploy via cli (https://github.com/scaffold-eth/scaffold-eth-2/pull/1007)
+- reverse rpc fallback order (https://github.com/scaffold-eth/scaffold-eth-2/pull/1010)
+- Encrypt deployer PK on .env file (when using hardhat) (https://github.com/scaffold-eth/scaffold-eth-2/pull/1008 )
+- Format package.json files
+
+## 0.0.62
+
+### Patch Changes
+
+- Add Celo to networks (https://github.com/scaffold-eth/scaffold-eth-2/pull/980)
+- fix: Input components in form tag (https://github.com/scaffold-eth/scaffold-eth-2/pull/992)
+- fix: removed unnecessary logs for decoding tx in block-explorer (https://github.com/scaffold-eth/scaffold-eth-2/pull/985)
+- Remove hardcoded colors (https://github.com/scaffold-eth/scaffold-eth-2/pull/991)
+- Fix typo in block explorer notification (https://github.com/scaffold-eth/scaffold-eth-2/pull/995)
+- Prettier for solidity (https://github.com/scaffold-eth/scaffold-eth-2/pull/994)
+- Allow updating global styles & metadatada. Tailwind theme is now an object. (https://github.com/scaffold-eth/create-eth/pull/151)
+
+## 0.0.61
+
+### Patch Changes
+
+- ab052e3: alchemy defaults
+
+## 0.0.60
+
+### Patch Changes
+
+- fix: localStorage -> sessionStorage in debug contracts page (https://github.com/scaffold-eth/scaffold-eth-2/pull/975)
+- fix: processing solidity-example template
+- skipQuickStart param for README template
+
+## 0.0.59
+
+### Patch Changes
+
+- 5ad5d8e: templates: optional YourContract.sol in extensions
+- e950e6f: added nextjs config template
+- a444817: - feat: update uniswap deps (https://github.com/scaffold-eth/scaffold-eth-2/pull/956)
+  - feat: update envfile (https://github.com/scaffold-eth/scaffold-eth-2/pull/958)
+  - Update usehooks-ts, remove use-debounce (https://github.com/scaffold-eth/scaffold-eth-2/pull/957)
+  - Update other packages (https://github.com/scaffold-eth/scaffold-eth-2/pull/960)
+  - feat: wagmi and viem (https://github.com/scaffold-eth/scaffold-eth-2/pull/971)
+  - Update ts, eslint, prettier (https://github.com/scaffold-eth/scaffold-eth-2/pull/963)
+  - feat: update husky and lintstaged (https://github.com/scaffold-eth/scaffold-eth-2/pull/959)
+
 ## 0.0.58
 
 ### Patch Changes
