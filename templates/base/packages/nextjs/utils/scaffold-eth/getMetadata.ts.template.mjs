@@ -1,4 +1,4 @@
-import { stringify, withDefaults } from '../../../../../utils.js'
+import { withDefaults } from '../../../../../utils.js'
 
 const contents = ({ titleTemplate, extraIcons, extraMetadata, thumbnailPath }) => `
 import type { Metadata } from "next";
