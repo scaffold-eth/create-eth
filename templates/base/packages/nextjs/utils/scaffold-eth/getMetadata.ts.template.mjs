@@ -57,7 +57,7 @@ export const getMetadata = ({
 
 export default withDefaults(contents, {
   extraIcons: {},
-  extraMetadata: {}
+  extraMetadata: {},
   titleTemplate: "%s | Scaffold-ETH 2",
   thumbnailPath: "/thumbnail.jpg",
 })
