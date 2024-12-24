@@ -8,14 +8,14 @@ fs_permissions = [{ access = "read-write", path = "./"}]
 default_network = "http://127.0.0.1:8545"
 localhost = "http://127.0.0.1:8545"
 
-mainnet = "https://cloudflare-eth.com"
-sepolia = "https://rpc2.sepolia.org"
-arbitrum = "https://arb1.arbitrum.io/rpc"
-arbitrumSepolia = "https://sepolia-rollup.arbitrum.io/rpc"
-optimism = "https://mainnet.optimism.io"
-optimismSepolia = "https://sepolia.optimism.io"
-polygon = "https://polygon-rpc.com"
-polygonMumbai = "https://rpc.ankr.com/polygon_mumbai"
+mainnet = "https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_API_KEY}"
+sepolia = "https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+arbitrum = "https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+arbitrumSepolia = "https://arb-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+optimism = "https://opt-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+optimismSepolia = "https://opt-sepolia.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+polygon = "https://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
+polygonMumbai = "https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}"
 polygonZkEvm = "https://zkevm-rpc.com"
 polygonZkEvmTestnet = "https://rpc.public.zkevm-test.net"
 gnosis = "https://rpc.gnosischain.com"
@@ -33,9 +33,8 @@ sepolia = { key = "${ETHERSCAN_API_KEY}" }
 
 
 [fmt]
-multiline_func_header = "params_first"
-line_length = 80
-tab_width = 2
+line_length = 120
+tab_width = 4
 quote_style = "double"
 bracket_spacing = true
 int_types = "long"

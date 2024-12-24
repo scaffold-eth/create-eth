@@ -9,14 +9,13 @@
     "account:import": "make account-import ACCOUNT_NAME=${1:-scaffold-eth-custom}",
     "chain": "make chain",
     "compile": "make compile",
-    "deploy": "make build-and-deploy RPC_URL=${1:-localhost}",
-    "deploy:verify": "make deploy-verify RPC_URL=${1:-localhost}",
+    "deploy": "node scripts-js/parseArgs.js",
     "flatten": "make flatten",
     "fork": "make fork FORK_URL=${1:-mainnet}",
     "format": "make format",
     "lint": "make lint",
-    "test": "make test",
-    "verify": "make build-and-verify RPC_URL=${1:-localhost}",
+    "test": "forge test",
+    "verify": "make verify RPC_URL=${1:-localhost}",
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {
@@ -28,6 +27,6 @@
     "toml": "~3.0.0"
   },
   "devDependencies": {
-    "shx": "~0.3.4"
+    "shx": "^0.3.4"
   }
 }

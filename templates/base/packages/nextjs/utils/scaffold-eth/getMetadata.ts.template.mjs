@@ -1,17 +1,17 @@
 import { stringify, withDefaults } from '../../../../../utils.js'
 
-const contents = ({ titleTemplate, extraIcons, extraMetadata }) => `
+const contents = ({ titleTemplate, extraIcons, extraMetadata, thumbnailPath }) => `
 import type { Metadata } from "next";
 
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? \`https://\${process.env.VERCEL_PROJECT_PRODUCTION_URL}\`
   : \`http://localhost:\${process.env.PORT || 3000}\`;
-const titleTemplate = "${titleTemplate[0] || '%s | Scaffold-ETH 2'}";
+const titleTemplate = "${titleTemplate}";
 
 export const getMetadata = ({
   title,
   description,
-  imageRelativePath = "/thumbnail.jpg",
+  imageRelativePath = "${thumbnailPath}",
 }: {
   title: string;
   description: string;
@@ -56,7 +56,8 @@ export const getMetadata = ({
 `
 
 export default withDefaults(contents, {
-  titleTemplate: '',
   extraIcons: {},
   extraMetadata: {}
+  titleTemplate: "%s | Scaffold-ETH 2",
+  thumbnailPath: "/thumbnail.jpg",
 })
