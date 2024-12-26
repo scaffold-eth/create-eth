@@ -14,7 +14,7 @@ const contents = ({ additionalVars }) => {
 # More info: https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables
 NEXT_PUBLIC_ALCHEMY_API_KEY=
 NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=
-${additionalVars.join("\n")}
+${additionalVars[0].join("\n")}
 `
 };
 
