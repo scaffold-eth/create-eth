@@ -2,6 +2,8 @@ import { Options, RawOptions, SolidityFrameworkChoices } from "../types";
 import inquirer from "inquirer";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 
+export const HAS_TRAILING_WHITESPACE_REGEX = /\s$/;
+
 // default values for unspecified args
 const defaultOptions: RawOptions = {
   project: "my-dapp-example",
@@ -25,7 +27,7 @@ export async function promptForMissingOptions(
       default: defaultOptions.project,
       validate: (value: string) => {
         if (value.length === 0) return "Project name cannot be empty";
-        if (/\s$/.test(value)) return "Project name cannot end with whitespace";
+        if (HAS_TRAILING_WHITESPACE_REGEX.test(value)) return "Project name cannot end with whitespace";
         return true;
       },
     },

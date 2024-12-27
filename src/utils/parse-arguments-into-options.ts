@@ -12,6 +12,7 @@ import { validateFoundryUp } from "./system-validation";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { HAS_TRAILING_WHITESPACE_REGEX } from "./prompt-for-missing-options";
 
 const validateExternalExtension = async (
   extensionName: string,
@@ -101,7 +102,7 @@ export async function parseArgumentsIntoOptions(
     );
   }
 
-  if (project && /\s$/.test(project)) {
+  if (project && HAS_TRAILING_WHITESPACE_REGEX.test(project)) {
     project = null;
     console.log(chalk.yellow(" Project name cannot end with whitespace. Enter a valid project name."));
   }
