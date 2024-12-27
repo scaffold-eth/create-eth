@@ -4,6 +4,16 @@ import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
 import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
+
+function deconstructGithubUrl(url: string) {
+  const urlParts = url.split("/");
+  const ownerName = urlParts[3];
+  const repoName = urlParts[4];
+  const branch = urlParts[5] === "tree" ? urlParts[6] : undefined;
+
+  return { ownerName, repoName, branch };
+}
+
 // Gets the data from the argument passed to the `--extension` option.
 // e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
@@ -24,10 +34,10 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
   let branch;
 
   if (isGithubUrl) {
-    // Extract owner, project and branch from github url
-    owner = externalExtension.split("/")[3];
-    project = externalExtension.split("/")[4];
-    branch = externalExtension.split("/tree/")[1];
+    const { ownerName, repoName, branch: urlBranch } = deconstructGithubUrl(externalExtension);
+    owner = ownerName;
+    project = repoName;
+    branch = urlBranch;
   } else {
     // Extract owner, project and branch from owner/project:branch
     owner = externalExtension.split("/")[0];
@@ -85,9 +95,7 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
   }
 
   const { branch, repository } = externalExtension;
-  const splitUrl = repository.split("/");
-  const ownerName = splitUrl[splitUrl.length - 2];
-  const repoName = splitUrl[splitUrl.length - 1];
+  const { ownerName, repoName } = deconstructGithubUrl(repository);
   const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${branch ? `?ref=${branch}` : ""}`;
   const res = await fetch(githubApiUrl);
   if (!res.ok) {
