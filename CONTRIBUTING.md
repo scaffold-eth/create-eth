@@ -37,6 +37,7 @@ Contributions are made via Issues and Pull Requests (PRs). A few general guideli
 - If you're running into an error, please give context. Explain what you're trying to do and how to reproduce the error.
 - Please use the same formatting in the code repository. You can configure your IDE to do it by using the prettier / linting config files included in each package.
 - If applicable, please edit the README.md file to reflect the changes.
+- If you're adding a new template file or modifying arguments of existing templates, please create a corresponding PR to the [Example Extension branch](https://github.com/scaffold-eth/create-eth-extensions/tree/example) of the [create-eth-extensions](https://github.com/scaffold-eth/create-eth-extensions) repository
 
 ### Issues
 
@@ -82,6 +83,7 @@ Here are some tips for a high-quality pull request:
 - Structure the description neatly to make it easy to consume by the readers. For example, you can include bullet points and screenshots instead of having one large paragraph.
 - Add the link to the issue if applicable.
 - Have a good commit message that summarises the work done.
+  // here?
 
 Once you submit your PR:
 
