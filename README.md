@@ -4,93 +4,25 @@
 
 # 🏗 create-eth
 
-CLI to create decentralized applications (dapps) using Scaffold-ETH 2.
-
-This is an alternative method of installing Scaffold-ETH. Instead of directly [cloning SE-2](https://docs.scaffoldeth.io/quick-start/installation#option-1-setup-using-git-clone), you can use create-eth to create your own custom instance, where you can choose among several configurations and extensions.
+CLI to create decentralized applications (dapps) using [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2).
 
 <h4 align="center">
-  <a href="https://github.com/scaffold-eth/scaffold-eth-2">SE-2 Repo</a> |
-  <a href="https://docs.scaffoldeth.io">SE-2 Docs</a> |
+  <a href="https://github.com/scaffold-eth/scaffold-eth-2">SE-2 Repository</a> |
+  <a href="https://docs.scaffoldeth.io">SE-2 Documentation</a> |
   <a href="https://scaffoldeth.io">SE-2 Website</a>
 </h4>
 
-## Requirements
+## Getting Started
 
-Before you begin, you need to install the following tools:
-
-- [Node (>= v18.18)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
-
-## Quickstart
-
-To get started with Scaffold-ETH 2, follow the steps below:
-
-1. Install from NPM Registry and follow the CLI instructions.
-
-```
-npx create-eth@latest
-```
-
-> 💬 Hint: If you choose Foundry as solidity framework in the CLI, you'll also need Foundryup installed in your machine. Checkout: [getfoundry.sh](https://getfoundry.sh)
-
-2. Run a local network in the first terminal:
-
-```
-yarn chain
-```
-
-This command starts a local Ethereum network using Hardhat or Foundry, depending on which one you selected in the CLI. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in:
-
-- `packages/hardhat/hardhat.config.ts` if you have Hardhat as solidity framework.
-- `packages/foundry/foundry.toml` if you have Foundry as solidity framework.
-
-3. On a second terminal, deploy the test contract:
-
-```
-yarn deploy
-```
-
-This command deploys a test smart contract to the local network. The contract can be modified to suit your needs. Is located in:
-
-- Hardhat => `packages/hardhat/contracts`
-- Foundry => `packages/foundry/contracts`
-
-The `yarn deploy` command uses a deploy script to deploy the contract to the network. You can customize it. Is located in:
-
-- Hardhat => `packages/hardhat/deploy`
-- Foundry => `packages/foundry/script`
-
-4. On a third terminal, start your NextJS app:
-
-```
-yarn start
-```
-
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
-
-Run smart contract test with `yarn hardhat:test` or `yarn foundry:test` depending of your solidity framework.
-
-**What's next**:
-
-Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to:
-
-- Edit your smart contracts
-- Edit your deployment scripts
-- Customize your frontend
-- Edit the app config
-- Writing and running tests
-- [Setting up external services and API keys](https://docs.scaffoldeth.io/deploying/deploy-smart-contracts#configuration-of-third-party-services-for-production-grade-apps)
-
-## Documentation
+How to create and configure your dapp using create-eth: [QuickStart Guide](https://docs.scaffoldeth.io/quick-start)
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
-## Contributing to create-eth
+## Contributing
 
-We welcome contributions to create-eth and Scaffold-ETH 2!
+We welcome contributions to both create-eth and Scaffold-ETH 2!
 
 For more information and guidelines for contributing, please see:
 
