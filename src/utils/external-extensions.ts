@@ -15,7 +15,6 @@ function deconstructGithubUrl(url: string) {
 }
 
 // Gets the data from the argument passed to the `--extension` option.
-// e.g. owner/project:branch => { githubBranchUrl, githubUrl, branch, owner, project }
 export const getDataFromExternalExtensionArgument = (externalExtension: string) => {
   if (CURATED_EXTENSIONS[externalExtension.toLowerCase()]) {
     externalExtension = getArgumentFromExternalExtensionOption(CURATED_EXTENSIONS[externalExtension]);
@@ -39,7 +38,7 @@ export const getDataFromExternalExtensionArgument = (externalExtension: string) 
     project = repoName;
     branch = urlBranch;
   } else {
-    // Extract owner, project and branch from owner/project:branch
+    // Extract owner, project and branch if format passed is owner/project:branch
     owner = externalExtension.split("/")[0];
     project = externalExtension.split(":")[0].split("/")[1];
     branch = externalExtension.split(":")[1];
