@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.0.66
+
+### Patch Changes
+
+- 5d85956: foundry: remove deploy:verify from base package.json
+- b4dbf8e: cli: allow github url as extension flag
+
 ## 0.0.65
 
 ### Patch Changes
