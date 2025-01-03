@@ -1,20 +1,60 @@
-> ⚠️ Under active development.
->
-> If you find any bug, please report as [issue](https://github.com/scaffold-eth/create-eth/issues) or send a message in [🏗 scaffold-eth developers chat](https://t.me/joinchat/F7nCRK3kI93PoCOk)
+## 🏗 create-eth
 
-# 🏗 create-eth
-
-CLI to create decentralized applications (dapps) using [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2).
+CLI to create decentralized applications (dapps) using Scaffold-ETH 2.
 
 <h4 align="center">
-  <a href="https://github.com/scaffold-eth/scaffold-eth-2">SE-2 Repository</a> |
   <a href="https://docs.scaffoldeth.io">SE-2 Documentation</a> |
   <a href="https://scaffoldeth.io">SE-2 Website</a>
 </h4>
 
-## Getting Started
+## Requirements
 
-How to create and configure your dapp using create-eth: [QuickStart Guide](https://docs.scaffoldeth.io/quick-start)
+Before you begin, you need to install the following tools:
+
+- [Node (>= v18.18)](https://nodejs.org/en/download/)
+- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
+- [Git](https://git-scm.com/downloads)
+
+## Quickstart
+
+To get started with Scaffold-ETH 2, follow the steps below:
+
+1. Install the latest version of Scaffold-ETH 2
+
+```
+npx create-eth@latest
+```
+
+This command will install all the necessary packages and dependencies, so it might take a while.
+
+> [!NOTE]
+> You can also initialize your project with one of our extensions to add specific features or starter-kits. Learn more in our [extensions documentation](https://docs.scaffoldeth.io/extensions/).
+
+2. Run a local network in the first terminal:
+
+```
+yarn chain
+```
+
+This command starts a local Ethereum network that runs on your local machine and can be used for testing and development. Learn how to [customize your network configuration](https://docs.scaffoldeth.io/quick-start/environment#1-initialize-a-local-blockchain).
+
+3. On a second terminal, deploy the test contract:
+
+```
+yarn deploy
+```
+
+This command deploys a test smart contract to the local network. You can find more information about how to customize your contract and deployment script in our [documentation](https://docs.scaffoldeth.io/quick-start/environment#2-deploy-your-smart-contract).
+
+4. On a third terminal, start your NextJS app:
+
+```
+yarn start
+```
+
+Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+
+## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details and guides of Scaffold-ETH 2.
 
