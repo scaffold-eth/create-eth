@@ -53,7 +53,7 @@ ${extraFormattingConfig.filter(Boolean).join("\n")}
 
 ${extraConfig.filter(Boolean).join("\n")}
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config`;
+# See more config options https://book.getfoundry.sh/reference/config/overview`;
 
 export default withDefaults(content, {
   extraProfileDefaults: "",
