@@ -10,7 +10,6 @@ type ValidateNpmNameResult =
     };
 
 export function validateNpmName(name: string): ValidateNpmNameResult {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const nameValidation = validateProjectName(name);
   if (nameValidation.validForNewPackages) {
     return { valid: true };
