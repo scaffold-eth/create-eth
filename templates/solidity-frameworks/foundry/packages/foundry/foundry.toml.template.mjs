@@ -1,11 +1,17 @@
 import { withDefaults } from "../../../../utils.js";
 
-const content = ({ profileDefaults, rpcEndpoints, etherscan, fmt, extraConfig }) => `[profile.default]
+const content = ({
+  extraProfileDefaults,
+  extraRpcEndpoints,
+  extraEthercsanConfig,
+  extraFormattingConfig,
+  extraConfig,
+}) => `[profile.default]
 src = 'contracts'
 out = 'out'
 libs = ['lib']
 fs_permissions = [{ access = "read-write", path = "./"}]
-${profileDefaults.filter(Boolean).join("\n")}
+${extraProfileDefaults.filter(Boolean).join("\n")}
 
 [rpc_endpoints]
 default_network = "http://127.0.0.1:8545"
@@ -29,12 +35,12 @@ scrollSepolia = "https://sepolia-rpc.scroll.io"
 scroll = "https://rpc.scroll.io"
 pgn = "https://rpc.publicgoods.network"
 pgnTestnet = "https://sepolia.publicgoods.network"
-${rpcEndpoints.filter(Boolean).join("\n")}
+${extraRpcEndpoints.filter(Boolean).join("\n")}
 
 [etherscan]
 polygonMumbai = { key = "\${ETHERSCAN_API_KEY}" }
 sepolia = { key = "\${ETHERSCAN_API_KEY}" }
-${etherscan.filter(Boolean).join("\n")}
+${extraEthercsanConfig.filter(Boolean).join("\n")}
 
 
 [fmt]
@@ -43,16 +49,16 @@ tab_width = 4
 quote_style = "double"
 bracket_spacing = true
 int_types = "long"
-${fmt.filter(Boolean).join("\n")}
+${extraFormattingConfig.filter(Boolean).join("\n")}
 
 ${extraConfig.filter(Boolean).join("\n")}
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config`;
 
 export default withDefaults(content, {
-  profileDefaults: "",
-  rpcEndpoints: "",
-  etherscan: "",
-  fmt: "",
+  extraProfileDefaults: "",
+  extraRpcEndpoints: "",
+  extraEthercsanConfig: "",
+  extraFormattingConfig: "",
   extraConfig: "",
 });
