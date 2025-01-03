@@ -12,7 +12,7 @@ import { validateFoundryUp } from "./system-validation";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { HAS_TRAILING_WHITESPACE_REGEX } from "./prompt-for-missing-options";
+import { validateNpmName } from "./validate-name";
 
 const validateExternalExtension = async (
   extensionName: string,
@@ -75,7 +75,7 @@ export async function parseArgumentsIntoOptions(
       "-h": "--help",
     },
     {
-      argv: rawArgs.slice(2).map(a => a.toLowerCase()),
+      argv: rawArgs.slice(2),
     },
   );
 
@@ -102,9 +102,16 @@ export async function parseArgumentsIntoOptions(
     );
   }
 
-  if (project && HAS_TRAILING_WHITESPACE_REGEX.test(project)) {
-    project = null;
-    console.log(chalk.yellow(" Project name cannot end with whitespace. Enter a valid project name."));
+  if (project) {
+    const validation = validateNpmName(project);
+    if (!validation.valid) {
+      console.error(
+        `Could not create a project called ${chalk.yellow(`"${project}"`)} because of naming restrictions:`,
+      );
+
+      validation.problems.forEach(p => console.error(`${chalk.red(">>")} Project ${p}`));
+      project = null;
+    }
   }
 
   let solidityFrameworkChoices = [
