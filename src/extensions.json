@@ -1,5 +1,11 @@
 [
   {
+    "extensionFlagValue": "example",
+    "description": "This Scaffold-ETH 2 extension includes examples of all possible .args.mjs files and demonstrates how to replace default contracts with custom implementations, add custom deployment scripts and contract tests, update package.json files, and integrate custom Next.js pages.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "example"
+  },
+  {
     "extensionFlagValue": "subgraph",
     "description": "This Scaffold-ETH 2 extension helps you build and test subgraphs locally for your contracts. It also enables interaction with the front-end and facilitates easy deployment to Subgraph Studio.",
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
