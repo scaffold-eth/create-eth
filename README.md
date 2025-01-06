@@ -1,4 +1,4 @@
-## 🏗 create-eth
+# 🏗 create-eth
 
 CLI to create decentralized applications (dapps) using Scaffold-ETH 2.
 
@@ -53,6 +53,10 @@ yarn start
 ```
 
 Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+
+**What's next**:
+
+Visit the [What's next section of our docs](https://docs.scaffoldeth.io/quick-start/environment#whats-next) to learn how to customize your contracts, frontend, and more.
 
 ## Documentation
 
