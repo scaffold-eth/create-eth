@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-restrict trailing whitespace in the project name
+validate project name for invalid characters
