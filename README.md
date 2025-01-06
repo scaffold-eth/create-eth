@@ -72,3 +72,13 @@ For more information and guidelines for contributing, please see:
 
 - [create-eth CONTRIBUTING.MD](https://github.com/scaffold-eth/create-eth/blob/main/CONTRIBUTING.md) if you want to contribute to the CLI.
 - [Scaffold-ETH 2 CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) if you want to contribute to SE-2 base code.
+
+## Community
+
+<h4 align="center">
+  <a href="https://buidlguidl.com">Buidlguidl Website</a> |
+  <a href="https://x.com/buidlguidl">Buidlguidl X</a> |
+  <a href="https://scaffoldeth.io">SE-2 Website</a> | 
+  <a href="https://x.com/ScaffoldETH">SE-2 X</a> |
+  <a href="https://t.me/joinchat/F7nCRK3kI93PoCOk">SE-2 developers chat</a>
+</h4>
