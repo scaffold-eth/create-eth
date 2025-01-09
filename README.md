@@ -64,9 +64,11 @@ Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
+Watch [BG Labs](https://www.youtube.com/playlist?list=PLJz1HruEnenIXdGq6kqJSNvXD-ZZkqXn_) - our video series on building with Scaffold-ETH 2.
+
 ## Contributing
 
-We welcome contributions to both create-eth and Scaffold-ETH 2!
+Built by [BuidlGuidl](https://buidlguidl.com) builders, we welcome contributions to both create-eth and Scaffold-ETH 2!
 
 For more information and guidelines for contributing, please see:
 
@@ -76,9 +78,7 @@ For more information and guidelines for contributing, please see:
 ## Community
 
 <h4 align="center">
-  <a href="https://buidlguidl.com">Buidlguidl Website</a> |
   <a href="https://x.com/buidlguidl">Buidlguidl X</a> |
-  <a href="https://scaffoldeth.io">SE-2 Website</a> | 
   <a href="https://x.com/ScaffoldETH">SE-2 X</a> |
   <a href="https://t.me/joinchat/F7nCRK3kI93PoCOk">SE-2 developers chat</a>
 </h4>
