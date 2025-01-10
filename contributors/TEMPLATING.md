@@ -176,6 +176,115 @@ The special files and folders are:
 
 # Things worth mentioning
 
+## Rules for template args:
+
+The reason for converting normal file to template is allowing customisation to that file for extension developer.
+This customisation can be broadly broken into:
+
+1. **When extending/modifying already declared variables/objects**:
+
+- Use `preConfigContent` (string) for imports and variable declarations
+- Use `<name>Override` (object) to extend existing variables/objects
+- Can reference variables in two ways:
+  - `$$$variableName` - For variables already defined in template
+  - `${variableName}` - For variables defined in your `preConfigContent`
+
+<details>
+  <summary>
+
+    Example `hardhat.config.js.template.mjs`
+
+  </summary>
+
+```typescript
+import { withDefaults } from "../utils";
+
+const defaultConfig = {
+  networks: {
+    hardhat: {
+      chainId: 31337,
+    },
+    mainnet: {
+      url: `https://eth-mainnet.g.alchemy.com/v2/$$$providerApiKey`,
+      accounts: ["$$$deployerPrivateKey"],
+    },
+  },
+};
+
+export default withDefaults(
+  ({ preConfigContent, configOverrides }) => `
+${preConfigContent}
+
+const config = ${stringify({ ...defaultConfig, ...configOverrides })};
+
+export default config;
+`,
+  {
+    preConfigContent: "",
+    configOverrides: {},
+  },
+);
+
+// In extension's args file (hardhat.config.ts.args.mjs)
+export const preConfigContent = `
+// Custom variables
+const CUSTOM_API_KEY = process.env.CUSTOM_API_KEY;
+`;
+
+export const configOverrides = {
+  networks: {
+    hardhat: {
+      forking: {
+        blockNumber: 1234567,
+      },
+    },
+    customNetwork: {
+      url: "https://custom.network",
+      accounts: ["$$$deployerPrivateKey"], // Use $$$ for template variables
+      blah: `test ${CUSTOM_API_KEY}`, // Use ${} for preConfigContent variables
+      verify: {
+        etherscan: {
+          apiUrl: "https://api.custom-explorer.io",
+          apiKey: "$$$etherscanApiKey",
+        },
+      },
+    },
+  },
+};
+```
+
+</details>
+
+2. When adding new code/logic:
+
+- Use descriptive/sensible `string` arguments. Depending on level of customisation.
+
+<details>
+  <summary>
+
+    Example `Component.tsx.template.mjs`
+
+  </summary>
+
+```typescript
+export default withDefaults(
+  ({ preConfigContent, renderContent }) => `
+import { Base } from './Base';
+${preConfigContent}
+
+export const Component = () => {
+${renderContent}
+};
+`,
+  {
+    preConfigContent: "",
+    renderContent: "",
+  },
+);
+```
+
+</details>
+
 ## Recommended way to handle complex arguments in templates
 
 Most of the time you will use string arguments for templating, but sometimes you will need to add arrays, objects, bigints, etc. You can handle them however you want, but we're recommending to use the table below as a helper.
