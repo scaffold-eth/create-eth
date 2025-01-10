@@ -64,7 +64,7 @@ Visit our [docs](https://docs.scaffoldeth.io) to learn all the technical details
 
 To know more about its features, check out our [website](https://scaffoldeth.io).
 
-Watch [BG Labs](https://www.youtube.com/playlist?list=PLJz1HruEnenIXdGq6kqJSNvXD-ZZkqXn_) - our video series on building with Scaffold-ETH 2.
+Watch [BG Labs](https://youtube.com/playlist?list=PLJz1HruEnenD77QAsqnk7KG8rSOMk0B99&si=JXZRn78_NBcvJJoZ) - our video series on building with Scaffold-ETH 2.
 
 ## Contributing
 
