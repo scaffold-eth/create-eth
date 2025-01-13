@@ -240,14 +240,14 @@ export const configOverrides = {
   networks: {
     hardhat: {
       forking: {
-        enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "false"', // enabled: process.env.MAINNET_FORKING_ENABLED === "false"
+        enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "false"', // (expression) enabled: process.env.MAINNET_FORKING_ENABLED === "false"
         blockNumber: 1234567,
       },
     },
     customNetwork: {
       url: "https://custom.network",
-      accounts: ["$$$deployerPrivateKey"], // accounts: [deployerPrivateKey]
-      blah: `test \${CUSTOM_API_KEY}`, // blah: `test ${CUSTOM_API_KEY}`
+      accounts: ["$$$deployerPrivateKey"], // (variable) accounts: [deployerPrivateKey]
+      blah: `test \${CUSTOM_API_KEY}`, // (string interpolation) blah: `test ${CUSTOM_API_KEY}`
       verify: {
         etherscan: {
           apiUrl: "https://api.custom-explorer.io",
