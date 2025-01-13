@@ -185,9 +185,10 @@ This customisation can be broadly broken into:
 
 - Use `preConfigContent` (string) for imports and variable declarations
 - Use `<name>Override` (object) to extend existing variables/objects
-- Can reference variables in two ways:
-  - `$$$variableName` - For variables already defined in template
-  - `${variableName}` - For variables defined in your `preConfigContent`
+- Can reference variables defined in template and `preConfigContent` in two ways:
+  - `$$$variableName` - When variable needs to be used without quotes (expressions/variables)
+    - example: `{ accounts: ["$$$deployerPrivateKey"] }` -> `{ accounts: [deployerPrivateKey] }`
+  - `\${variableName}` - When variable needs to be interpolated within a string
 
 <details>
   <summary>
@@ -202,11 +203,12 @@ import { withDefaults } from "../utils";
 const defaultConfig = {
   networks: {
     hardhat: {
+      enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "true"', // enabled: process.env.MAINNET_FORKING_ENABLED === "true"
       chainId: 31337,
     },
     mainnet: {
-      url: `https://eth-mainnet.g.alchemy.com/v2/$$$providerApiKey`,
-      accounts: ["$$$deployerPrivateKey"],
+      url: `https://eth-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
+      accounts: ["$$$deployerPrivateKey"], // ==> accounts: [deployerPrivateKey]
     },
   },
 };
@@ -214,6 +216,9 @@ const defaultConfig = {
 export default withDefaults(
   ({ preConfigContent, configOverrides }) => `
 ${preConfigContent}
+
+const deployerPrivateKey =
+  process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
 const config = ${stringify({ ...defaultConfig, ...configOverrides })};
 
@@ -235,13 +240,14 @@ export const configOverrides = {
   networks: {
     hardhat: {
       forking: {
+        enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "false"', // enabled: process.env.MAINNET_FORKING_ENABLED === "false"
         blockNumber: 1234567,
       },
     },
     customNetwork: {
       url: "https://custom.network",
-      accounts: ["$$$deployerPrivateKey"], // Use $$$ for template variables
-      blah: `test ${CUSTOM_API_KEY}`, // Use ${} for preConfigContent variables
+      accounts: ["$$$deployerPrivateKey"], // accounts: [deployerPrivateKey]
+      blah: `test \${CUSTOM_API_KEY}`, // blah: `test ${CUSTOM_API_KEY}`
       verify: {
         etherscan: {
           apiUrl: "https://api.custom-explorer.io",
