@@ -11,8 +11,9 @@
   "bin": "bin/create-dapp-se2.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
-    "build:dev": "yarn build && rollup -c src/dev/rollup.config.js",
+    "build:dev": "yarn build && rollup -c src/dev/rollup.config.js && rollup -c src/yolo/rollup.config.js",
     "create-extension": "node dist/create-extension/create-extension.js",
+    "create-extension-yolo": "node dist/create-extension-yolo/create-extension-yolo.js",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-se2.js",
     "lint": "eslint .",
