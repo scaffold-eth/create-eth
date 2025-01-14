@@ -49,49 +49,49 @@
   },
   {
     "extensionFlagValue": "challenge-0-simple-nft",
-    "description": "Learn the basics of Scaffold-ETH 2 by creating a simple NFT.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 0: Learn the basics of Scaffold-ETH 2 by creating a simple NFT.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-0-simple-nft--extension"
   },
   {
     "extensionFlagValue": "challenge-1-decentralized-staking",
-    "description": "Create a decentralized staking application where users can coordinate a group funding effort using smart contracts.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 1: Create a decentralized staking application where users can coordinate a group funding effort using smart contracts.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-1-decentralized-staking--extension"
   },
   {
     "extensionFlagValue": "challenge-2-token-vendor",
-    "description": "Create a decentralized token vendor that buys and sells tokens, learning about ERC20 approve pattern and contract interactions.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 2: Create a decentralized token vendor that buys and sells tokens, learning about ERC20 approve pattern and contract interactions.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-2-token-vendor--extension"
   },
   {
     "extensionFlagValue": "challenge-3-dice-game",
-    "description": "Create and attack a dice game by predicting randomness using block hash, exploring randomness vulnerabilities on blockchain.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 3: Create and attack a dice game by predicting randomness using block hash, exploring randomness vulnerabilities on blockchain.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-3-dice-game--extension"
   },
   {
     "extensionFlagValue": "challenge-4-dex",
-    "description": "Build a decentralized exchange (DEX) that swaps ETH to tokens and tokens to ETH, implementing automated market maker (AMM) mechanics.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 4: Build a decentralized exchange (DEX) that swaps ETH to tokens and tokens to ETH, implementing automated market maker (AMM) mechanics.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-4-dex--extension"
   },
   {
     "extensionFlagValue": "challenge-5-state-channels",
-    "description": "Build a state channel application to enable secure off-chain transactions with minimal blockchain interaction.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 5: Build a state channel application to enable secure off-chain transactions with minimal blockchain interaction.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-5-state-channels--extension"
   },
   {
     "extensionFlagValue": "challenge-6-multisig",
-    "description": "Create a multi-signature wallet that requires multiple approvals for transactions, learning about wallet security and access control.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 6: Create a multi-signature wallet that requires multiple approvals for transactions, learning about wallet security and access control.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-6-multisig--extension"
   },
   {
     "extensionFlagValue": "challenge-7-svg-nft",
-    "description": "Build NFTs with on-chain SVG generation, exploring dynamic NFT creation and on-chain metadata storage.",
+    "description": "This extension sets up the environment for SpeedRun Ethereum Challenge 7: Build NFTs with on-chain SVG generation, exploring dynamic NFT creation and on-chain metadata storage.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-7-svg-nft--extension"
   }
