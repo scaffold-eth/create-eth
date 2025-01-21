@@ -6,7 +6,7 @@ import {
   getSolidityFrameworkDirsFromExternalExtension,
 } from "./external-extensions";
 import chalk from "chalk";
-import { CURATED_EXTENSIONS } from "../curated-extensions";
+import { CURATED_EXTENSIONS } from "./external-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateFoundryUp } from "./system-validation";
 import fs from "fs";

@@ -2,8 +2,37 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
-import { CURATED_EXTENSIONS } from "../curated-extensions";
+import curatedExtension from "../extensions.json";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
+
+type ExtensionJSON = {
+  extensionFlagValue: string;
+  repository: string;
+  branch?: string;
+  // fields usefull for scaffoldeth.io
+  description: string;
+  version?: string; // if not present we default to latest
+  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
+};
+
+const extensions: ExtensionJSON[] = curatedExtension;
+
+const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
+  if (!ext.repository) {
+    throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
+  }
+  if (!ext.extensionFlagValue) {
+    throw new Error(`Extension must have 'extensionFlagValue': ${JSON.stringify(ext)}`);
+  }
+
+  acc[ext.extensionFlagValue] = {
+    repository: ext.repository,
+    branch: ext.branch,
+  };
+  return acc;
+}, {});
+
+export { CURATED_EXTENSIONS };
 
 function deconstructGithubUrl(url: string) {
   const urlParts = url.split("/");
