@@ -175,5 +175,3 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
 
   return filterSolidityFrameworkDirs(directories);
 };
-
-export { CURATED_EXTENSIONS, TRUSTED_GITHUB_ORGANIZATIONS };
