@@ -45,11 +45,11 @@ export async function parseArgumentsIntoOptions(
   const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
   // if dev mode, extension would be a string
-  if (typeof extension === "object" && !extension?.isTrusted) {
+  if (extension && typeof extension === "object" && !extension.isTrusted) {
     console.log(
       chalk.yellow(
         ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(
-          extension?.repository,
+          extension.repository,
         )}\n`,
       ),
     );
