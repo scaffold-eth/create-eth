@@ -1,4 +1,9 @@
-.PHONY: build deploy generate-abis verify-keystore account chain compile deploy-verify flatten fork format lint test verify
+import { withDefaults } from "../../../../utils.js";
+
+const content = ({
+  recipes,
+  postDeployRecipeToRun,
+}) => `.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
 
 DEPLOY_SCRIPT ?= script/Deploy.s.sol
 
@@ -14,11 +19,7 @@ chain: setup-anvil-wallet
 
 # Start a fork
 fork: setup-anvil-wallet
-	anvil --fork-url ${FORK_URL} --chain-id 31337
-
-# Build the project
-build:
-	forge build --via-ir --build-info --build-info-path out/build-info/
+	anvil --fork-url \${FORK_URL} --chain-id 31337
 
 # Deploy the contracts
 deploy:
@@ -36,8 +37,8 @@ deploy:
 		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi; \
 	fi
 
-# Build and deploy target
-build-and-deploy: build deploy generate-abis
+# Deploy and generate ABIs
+deploy-and-generate-abis: deploy generate-abis ${postDeployRecipeToRun.filter(Boolean).join(" ")}
 
 # Generate TypeScript ABIs
 generate-abis:
@@ -61,28 +62,11 @@ account-generate:
 
 # Import an existing account
 account-import:
-	@cast wallet import ${ACCOUNT_NAME} --interactive
+	@cast wallet import \${ACCOUNT_NAME} --interactive
 
 # Compile contracts
 compile:
 	forge compile
-
-# Deploy and verify
-deploy-verify:
-	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
-		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
-		exit 1; \
-	fi
-	@if [ "$(RPC_URL)" = "localhost" ]; then \
-		if [ "$(ETH_KEYSTORE_ACCOUNT)" = "scaffold-eth-default" ]; then \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --password localhost --broadcast --legacy --ffi --verify; \
-		else \
-			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --legacy --ffi --verify; \
-		fi \
-	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --legacy --ffi --verify; \
-	fi
-	node scripts-js/generateTsAbis.js
 
 # Flatten contracts
 flatten:
@@ -100,5 +84,9 @@ lint:
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
 
-build-and-verify: build verify
+${recipes.filter(Boolean).join("\n")}`;
 
+export default withDefaults(content, {
+  recipes: ``,
+  postDeployRecipeToRun: ``,
+});

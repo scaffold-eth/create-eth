@@ -1,57 +1,10 @@
-import type { Args, ExternalExtension, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
+import type { Args, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
 import arg from "arg";
-import * as https from "https";
-import {
-  getDataFromExternalExtensionArgument,
-  getSolidityFrameworkDirsFromExternalExtension,
-} from "./external-extensions";
+import { getSolidityFrameworkDirsFromExternalExtension, validateExternalExtension } from "./external-extensions";
 import chalk from "chalk";
-import { CURATED_EXTENSIONS } from "../curated-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateFoundryUp } from "./system-validation";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const validateExternalExtension = async (
-  extensionName: string,
-  dev: boolean,
-): Promise<{ repository: string; branch?: string } | string> => {
-  if (dev) {
-    // Check externalExtensions/${extensionName} exists
-    try {
-      const currentFileUrl = import.meta.url;
-      const externalExtensionsDirectory = path.resolve(
-        decodeURI(fileURLToPath(currentFileUrl)),
-        "../../externalExtensions",
-      );
-      await fs.promises.access(`${externalExtensionsDirectory}/${extensionName}`);
-    } catch {
-      throw new Error(`Extension not found in "externalExtensions/${extensionName}"`);
-    }
-
-    return extensionName;
-  }
-
-  const { githubUrl, githubBranchUrl, branch } = getDataFromExternalExtensionArgument(extensionName);
-
-  // Check if repository exists
-  await new Promise((resolve, reject) => {
-    https
-      .get(githubBranchUrl, res => {
-        if (res.statusCode !== 200) {
-          reject(new Error(`Extension not found: ${githubUrl}`));
-        } else {
-          resolve(null);
-        }
-      })
-      .on("error", err => {
-        reject(err);
-      });
-  });
-
-  return { repository: githubUrl, branch };
-};
+import { validateNpmName } from "./validate-name";
 
 // TODO update smartContractFramework code with general extensions
 export async function parseArgumentsIntoOptions(
@@ -74,7 +27,7 @@ export async function parseArgumentsIntoOptions(
       "-h": "--help",
     },
     {
-      argv: rawArgs.slice(2).map(a => a.toLowerCase()),
+      argv: rawArgs.slice(2),
     },
   );
 
@@ -84,21 +37,34 @@ export async function parseArgumentsIntoOptions(
 
   const help = args["--help"] ?? false;
 
-  const project = args._[0] ?? null;
+  let project: string | null = args._[0] ?? null;
 
   // use the original extension arg
-  const extensionName = args["--extension"] && rawArgs.slice(2).find(a => a.toLowerCase() === args["--extension"]);
+  const extensionName = args["--extension"];
   // ToDo. Allow multiple
   const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
-  if (!dev && extension && !CURATED_EXTENSIONS[args["--extension"] as string]) {
+  // if dev mode, extension would be a string
+  if (extension && typeof extension === "object" && !extension.isTrusted) {
     console.log(
       chalk.yellow(
         ` You are using a third-party extension. Make sure you trust the source of ${chalk.yellow.bold(
-          (extension as ExternalExtension).repository,
+          extension.repository,
         )}\n`,
       ),
     );
+  }
+
+  if (project) {
+    const validation = validateNpmName(project);
+    if (!validation.valid) {
+      console.error(
+        `Could not create a project called ${chalk.yellow(`"${project}"`)} because of naming restrictions:`,
+      );
+
+      validation.problems.forEach(p => console.error(`${chalk.red(">>")} Project ${p}`));
+      project = null;
+    }
   }
 
   let solidityFrameworkChoices = [

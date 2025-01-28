@@ -11,7 +11,8 @@
     "serve": "next start",
     "start": "next dev",
     "vercel": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env VERCEL_TELEMETRY_DISABLED=1",
-    "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1"
+    "vercel:yolo": "vercel --build-env YARN_ENABLE_IMMUTABLE_INSTALLS=false --build-env ENABLE_EXPERIMENTAL_COREPACK=1 --build-env NEXT_PUBLIC_IGNORE_BUILD_ERROR=true --build-env VERCEL_TELEMETRY_DISABLED=1",
+    "vercel:login": "vercel login"
   },
   "dependencies": {
     "@heroicons/react": "~2.1.5",
@@ -20,7 +21,7 @@
     "@uniswap/sdk-core": "~5.8.2",
     "@uniswap/v2-sdk": "~4.6.1",
     "blo": "~1.2.0",
-    "burner-connector": "~0.0.8",
+    "burner-connector": "0.0.9",
     "daisyui": "4.12.10",
     "next": "~14.2.11",
     "next-nprogress-bar": "~2.3.13",
@@ -31,8 +32,8 @@
     "react-dom": "~18.3.1",
     "react-hot-toast": "~2.4.0",
     "usehooks-ts": "~3.1.0",
-    "viem": "2.21.54",
-    "wagmi": "2.13.4",
+    "viem": "2.21.32",
+    "wagmi": "2.12.23",
     "zustand": "~5.0.0"
   },
   "devDependencies": {
