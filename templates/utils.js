@@ -1,4 +1,7 @@
 import { inspect } from "util";
+import createDeepMerge from "@fastify/deepmerge";
+
+export const deepMerge = createDeepMerge();
 
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>

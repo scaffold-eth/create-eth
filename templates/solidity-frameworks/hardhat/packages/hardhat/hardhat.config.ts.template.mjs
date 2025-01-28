@@ -1,24 +1,4 @@
-import { withDefaults, stringify } from "../../../../utils.js";
-
-function deepMerge(target, ...sources) {
-  if (!sources.length) return target;
-  const source = sources.shift();
-
-  if (source && typeof source === 'object') {
-    for (const key in source) {
-      if (source[key] && typeof source[key] === 'object') {
-        if (!target[key]) {
-          target[key] = Array.isArray(source[key]) ? [] : {};
-        }
-        deepMerge(target[key], source[key]);
-      } else {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return deepMerge(target, ...sources);
-}
+import { withDefaults, stringify, deepMerge } from "../../../../utils.js";
 
 const defaultConfig = {
   solidity: {
@@ -167,12 +147,8 @@ const defaultConfig = {
 
 const contents = ({ preConfigContent, configOverrides }) => {
   // Merge the default config with any overrides
-  const finalConfig = deepMerge({}, defaultConfig);
+  const finalConfig = deepMerge(defaultConfig, configOverrides[0] || {});
   
-  if (configOverrides) {
-    deepMerge(finalConfig, configOverrides[0]);
-  }
-
   return `import * as dotenv from "dotenv";
 dotenv.config();
 import { HardhatUserConfig } from "hardhat/config";
