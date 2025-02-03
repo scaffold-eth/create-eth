@@ -1,7 +1,15 @@
 import { inspect } from "util";
 import createDeepMerge from "@fastify/deepmerge";
 
-export const deepMerge = createDeepMerge();
+// https://github.com/fastify/deepmerge?tab=readme-ov-file#mergearray Example 1
+const replaceByClonedSource = (options) => {
+  const clone = options.clone
+  return  (_target, source) => {
+    return clone(source)
+  }
+}
+
+export const deepMerge = createDeepMerge({ mergeArray: replaceByClonedSource });
 
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>
