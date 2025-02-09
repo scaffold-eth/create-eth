@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.1.2-beta.0
+
+### Patch Changes
+
+- e399485: cli: allow projectName as path while initlializing the cli
+
 ## 0.1.1
 
 ### Patch Changes
