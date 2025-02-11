@@ -11,6 +11,7 @@ const defaultOptions: RawOptions = {
   dev: false,
   externalExtension: null,
   help: false,
+  yolo: false,
 };
 
 export async function promptForMissingOptions(
@@ -50,6 +51,7 @@ export async function promptForMissingOptions(
     dev: options.dev ?? defaultOptions.dev,
     solidityFramework: solidityFramework === "none" ? null : solidityFramework,
     externalExtension: options.externalExtension,
+    yolo: options.yolo,
   };
 
   return mergedOptions;
