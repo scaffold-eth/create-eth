@@ -1,4 +1,15 @@
 import { inspect } from "util";
+import createDeepMerge from "@fastify/deepmerge";
+
+// https://github.com/fastify/deepmerge?tab=readme-ov-file#mergearray Example 1
+const replaceByClonedSource = (options) => {
+  const clone = options.clone
+  return  (_target, source) => {
+    return clone(source)
+  }
+}
+
+export const deepMerge = createDeepMerge({ mergeArray: replaceByClonedSource });
 
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>
@@ -26,4 +37,10 @@ export const withDefaults =
     return template(argsWithDefault);
   };
 
-export const stringify = val => inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null })
+export const stringify = val => {
+  const str = inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null });
+  return str
+    .replace(/"\$\$([^"]+)\$\$"/g, '$1')
+    .replace(/'\$\$([^']+)\$\$'/g, '$1')
+    .replace(/(['"])(.*?\$\{.*?\}.*?)\1/g, '`$2`');
+};
