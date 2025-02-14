@@ -186,8 +186,8 @@ This customisation can be broadly broken into:
 - Use `preConfigContent` (string) for imports and variable declarations
 - Use `<name>Override` (object) to extend existing variables/objects
 - Can reference variables defined in template and `preConfigContent` in two ways:
-  - `$$$variableName` - When variable needs to be used without quotes (expressions/variables)
-    - example: `{ accounts: ["$$$deployerPrivateKey"] }` -> `{ accounts: [deployerPrivateKey] }`
+  - `$$variableName$$` - When variable needs to be used without quotes (expressions/variables)
+    - example: `{ accounts: ["$$deployerPrivateKey$$"] }` -> `{ accounts: [deployerPrivateKey] }`
   - `\${variableName}` - When variable needs to be interpolated within a string
 
 <details>
@@ -203,12 +203,12 @@ import { withDefaults } from "../utils";
 const defaultConfig = {
   networks: {
     hardhat: {
-      enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "true"', // enabled: process.env.MAINNET_FORKING_ENABLED === "true"
+      enabled: '$$process.env.MAINNET_FORKING_ENABLED === "true"$$', // enabled: process.env.MAINNET_FORKING_ENABLED === "true"
       chainId: 31337,
     },
     mainnet: {
       url: `https://eth-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
-      accounts: ["$$$deployerPrivateKey"], // ==> accounts: [deployerPrivateKey]
+      accounts: ["$$deployerPrivateKey$$"], // ==> accounts: [deployerPrivateKey]
     },
   },
 };
@@ -220,7 +220,7 @@ ${preConfigContent}
 const deployerPrivateKey =
   process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
-const config = ${stringify({ ...defaultConfig, ...configOverrides })};
+const config = ${stringify(deepMerge(defaultConfig, configOverrides[0]))};
 
 export default config;
 `,
@@ -240,18 +240,18 @@ export const configOverrides = {
   networks: {
     hardhat: {
       forking: {
-        enabled: '$$$process.env.MAINNET_FORKING_ENABLED === "false"', // (expression) enabled: process.env.MAINNET_FORKING_ENABLED === "false"
+        enabled: '$$process.env.MAINNET_FORKING_ENABLED === "false"$$', // (expression) enabled: process.env.MAINNET_FORKING_ENABLED === "false"
         blockNumber: 1234567,
       },
     },
     customNetwork: {
       url: "https://custom.network",
-      accounts: ["$$$deployerPrivateKey"], // (variable) accounts: [deployerPrivateKey]
+      accounts: ["$$deployerPrivateKey$$"], // (variable) accounts: [deployerPrivateKey]
       blah: `test \${CUSTOM_API_KEY}`, // (string interpolation) blah: `test ${CUSTOM_API_KEY}`
       verify: {
         etherscan: {
           apiUrl: "https://api.custom-explorer.io",
-          apiKey: "$$$etherscanApiKey",
+          apiKey: "$$etherscanApiKey$$",
         },
       },
     },
