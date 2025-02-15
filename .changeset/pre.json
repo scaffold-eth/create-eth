@@ -4,5 +4,7 @@
   "initialVersions": {
     "create-eth": "0.1.1"
   },
-  "changesets": []
+  "changesets": [
+    "strange-hounds-eat"
+  ]
 }
