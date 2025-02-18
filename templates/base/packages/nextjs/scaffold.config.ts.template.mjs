@@ -12,8 +12,9 @@ export type ScaffoldConfig = {
 };
 
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
-
-${customChains.map(chain => `
+${customChains.length > 0 ? customChains.map(chain => {
+  if (chain.name) {  // Ensure chain.name is not undefined or null
+    return `
 const ${chain.name.toLowerCase().replace(/\s+/g, '')} = defineChain({
   id: ${chain.id},
   name: ${JSON.stringify(chain.name)},
@@ -34,8 +35,12 @@ const ${chain.name.toLowerCase().replace(/\s+/g, '')} = defineChain({
     },
   },
 });
-`).join('\n')}
-
+`;
+  } else {
+    // If chain.name is not defined, return an empty string (no code is generated)
+    return '';
+  }
+}).join('\n') : ''}
 const scaffoldConfig = {
   // The networks on which your DApp is live
   targetNetworks: [${chainName.map(chain => `chains.${chain}`).join(', ')}],

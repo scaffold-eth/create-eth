@@ -2,9 +2,9 @@ import { withDefaults } from "../../../../../utils.js";
 
 const content = ({ verifyContractArgs }) => {
     // Split each argument into its own array element
-    const args = verifyContractArgs.join(',').split(',').map(arg => arg.trim());
+    const args = verifyContractArgs.join(',').split(',').map(arg => arg.trim()).filter(arg => arg !== '');
     const formattedArgs = args
-        .map((arg, index) => `        inputs[${index + 8}] = "${arg}";`)
+        .map((arg, index) => `        inputs[${index + 9}] = "${arg}";`)
         .join('\n');
 
     return `//SPDX-License-Identifier: MIT
@@ -64,7 +64,7 @@ contract VerifyAll is Script {
         bytes memory constructorArgs =
             BytesLib.slice(deployedBytecode, compiledBytecode.length, deployedBytecode.length - compiledBytecode.length);
 
-        string[] memory inputs = new string[](${8 + args.length});
+        string[] memory inputs = new string[](${9 + args.length});
         inputs[0] = "forge";
         inputs[1] = "verify-contract";
         inputs[2] = vm.toString(contractAddr);
@@ -73,7 +73,8 @@ contract VerifyAll is Script {
         inputs[5] = vm.toString(block.chainid);
         inputs[6] = "--constructor-args";
         inputs[7] = vm.toString(constructorArgs);
-        ${formattedArgs}
+        inputs[8] = "--watch";
+        ${args.length > 0 ? '\n' + formattedArgs : ''}
 
         FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
 
@@ -111,9 +112,5 @@ contract VerifyAll is Script {
 };
 
 export default withDefaults(content, {
-    verifyContractArgs: [
-        "--watch",
-        "--compiler-version",
-        "v0.8.19"
-    ]
+    verifyContractArgs: []
 }); 
