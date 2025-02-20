@@ -1,7 +1,8 @@
 import { withDefaults } from '../../../utils.js'
 
-const contents = ({ customChains, chainName }) =>
-`${customChains.length ? 'import { defineChain } from "viem";\n' : ''}import * as chains from "viem/chains";
+const contents = ({ chainName, imports, customChain }) =>
+`import * as chains from "viem/chains";
+${imports.filter(Boolean).join("\n")}
 
 export type ScaffoldConfig = {
   targetNetworks: readonly chains.Chain[];
@@ -12,38 +13,10 @@ export type ScaffoldConfig = {
 };
 
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
-${customChains.length > 0 ? customChains.map(chain => {
-  if (chain.name) {  // Ensure chain.name is not undefined or null
-    return `
-const ${chain.name.toLowerCase().replace(/\s+/g, '')} = defineChain({
-  id: ${chain.id},
-  name: ${JSON.stringify(chain.name)},
-  nativeCurrency: {
-    name: ${JSON.stringify(chain.nativeCurrency.name)},
-    symbol: ${JSON.stringify(chain.nativeCurrency.symbol)},
-    decimals: ${chain.nativeCurrency.decimals}
-  },
-  rpcUrls: {
-    default: {
-      http: ${JSON.stringify(chain.rpcUrls.default.http)},
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: ${JSON.stringify(chain.blockExplorers.default.name)},
-      url: ${JSON.stringify(chain.blockExplorers.default.url)},
-    },
-  },
-});
-`;
-  } else {
-    // If chain.name is not defined, return an empty string (no code is generated)
-    return '';
-  }
-}).join('\n') : ''}
+
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [${chainName.map(chain => `chains.${chain}`).join(', ')}],
+  targetNetworks: [${chainName.map(chain => `chains.${chain}`).join(', ')} ${customChain.filter(Boolean) ? `, ${customChain}` : ''}],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
@@ -69,6 +42,7 @@ export default scaffoldConfig;
 `
 
 export default withDefaults(contents, {
-  chainName: ['foundry'],
-  customChains: [], // No custom chains by default
+  chainName: 'mainnet',
+  customChain:"",
+  imports: ""
 })
