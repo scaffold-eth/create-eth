@@ -74,7 +74,7 @@ contract VerifyAll is Script {
         inputs[6] = "--constructor-args";
         inputs[7] = vm.toString(constructorArgs);
         inputs[8] = "--watch";
-        ${args.length > 0 ? '\n' + formattedArgs : ''}
+        ${formattedArgs}
 
         FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
 
