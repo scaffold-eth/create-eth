@@ -1,4 +1,13 @@
-//SPDX-License-Identifier: MIT
+import { withDefaults } from "../../../../../utils.js";
+
+const content = ({ verifyContractArgs }) => {
+    // Split each argument into its own array element
+    const args = verifyContractArgs.join(',').split(',').map(arg => arg.trim()).filter(arg => arg !== '');
+    const formattedArgs = args
+        .map((arg, index) => `        inputs[${index + 9}] = "${arg}";`)
+        .join('\n');
+
+    return `//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 import "forge-std/Script.sol";
@@ -55,7 +64,7 @@ contract VerifyAll is Script {
         bytes memory constructorArgs =
             BytesLib.slice(deployedBytecode, compiledBytecode.length, deployedBytecode.length - compiledBytecode.length);
 
-        string[] memory inputs = new string[](9);
+        string[] memory inputs = new string[](${9 + args.length});
         inputs[0] = "forge";
         inputs[1] = "verify-contract";
         inputs[2] = vm.toString(contractAddr);
@@ -65,6 +74,7 @@ contract VerifyAll is Script {
         inputs[6] = "--constructor-args";
         inputs[7] = vm.toString(constructorArgs);
         inputs[8] = "--watch";
+        ${formattedArgs}
 
         FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
 
@@ -98,4 +108,9 @@ contract VerifyAll is Script {
     function searchStr(uint96 idx, string memory searchKey) internal pure returns (string memory) {
         return string.concat(".transactions[", vm.toString(idx), "].", searchKey);
     }
-}
+}`;
+};
+
+export default withDefaults(content, {
+    verifyContractArgs: []
+}); 
