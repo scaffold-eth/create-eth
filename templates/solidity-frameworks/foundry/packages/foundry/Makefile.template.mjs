@@ -1,4 +1,9 @@
-.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
+import { withDefaults } from "../../../../utils.js";
+
+const content = ({
+  recipes,
+  postDeployRecipeToRun,
+}) => `.PHONY: build deploy generate-abis verify-keystore account chain compile flatten fork format lint test verify
 
 DEPLOY_SCRIPT ?= script/Deploy.s.sol
 
@@ -14,7 +19,7 @@ chain: setup-anvil-wallet
 
 # Start a fork
 fork: setup-anvil-wallet
-	anvil --fork-url ${FORK_URL} --chain-id 31337
+	anvil --fork-url \${FORK_URL} --chain-id 31337
 
 # Deploy the contracts
 deploy:
@@ -33,7 +38,7 @@ deploy:
 	fi
 
 # Deploy and generate ABIs
-deploy-and-generate-abis: deploy generate-abis
+deploy-and-generate-abis: deploy generate-abis ${postDeployRecipeToRun.filter(Boolean).join(" ")}
 
 # Generate TypeScript ABIs
 generate-abis:
@@ -57,7 +62,7 @@ account-generate:
 
 # Import an existing account
 account-import:
-	@cast wallet import ${ACCOUNT_NAME} --interactive
+	@cast wallet import \${ACCOUNT_NAME} --interactive
 
 # Compile contracts
 compile:
@@ -73,8 +78,15 @@ format:
 
 # Lint code
 lint:
-	forge fmt --check && prettier --check ./script/**/*.js
+	forge fmt --check && prettier --check ./scripts-js/**/*.js
 
 # Verify contracts
 verify:
 	forge script script/VerifyAll.s.sol --ffi --rpc-url $(RPC_URL)
+
+${recipes.filter(Boolean).join("\n")}`;
+
+export default withDefaults(content, {
+  recipes: ``,
+  postDeployRecipeToRun: ``,
+});

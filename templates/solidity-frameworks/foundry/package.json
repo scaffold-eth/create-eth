@@ -6,7 +6,6 @@
     "chain": "yarn foundry:chain",
     "compile": "yarn foundry:compile",
     "deploy": "yarn foundry:deploy",
-    "deploy:verify": "yarn foundry:deploy-verify",
     "fork": "yarn foundry:fork",
     "format": "yarn next:format && yarn foundry:format",
     "foundry:account": "yarn workspace @se-2/foundry account",
@@ -23,7 +22,7 @@
     "foundry:test": "yarn workspace @se-2/foundry test",
     "foundry:verify": "yarn workspace @se-2/foundry verify",
     "generate": "yarn foundry:generate",
-    "lint": "yarn nextjs:lint && yarn foundry:lint",
+    "lint": "yarn next:lint && yarn foundry:lint",
     "test": "yarn foundry:test",
     "verify": "yarn foundry:verify"
   }
