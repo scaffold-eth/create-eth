@@ -2,4 +2,4 @@
 "create-eth": patch
 ---
 
-fix husky pre-commit not woking in insatnce
+fix husky pre-commit hook not working in generated instance
