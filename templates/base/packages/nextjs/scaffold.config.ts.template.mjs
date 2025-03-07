@@ -8,7 +8,7 @@ const defaultScaffoldConfig = {
     onlyLocalBurnerWallet: true,
   };
 
-const contents = ({ preConfigContent, configOverrides }) => {
+const contents = ({ preConfigContent, configOverrides, extraConfigTypeName }) => {
   // add solidityFramework network
   const targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
   const extensionConfigOverrides = configOverrides[configOverrides.length - 1] || {};
@@ -21,7 +21,7 @@ const contents = ({ preConfigContent, configOverrides }) => {
 
   return  `import * as chains from "viem/chains";
 
-export type ScaffoldConfig = {
+export type BaseConfig = {
   // The networks on which your DApp is live
   targetNetworks: readonly chains.Chain[];
 
@@ -44,6 +44,8 @@ export type ScaffoldConfig = {
   onlyLocalBurnerWallet: boolean;
 };
 
+export type ScaffoldConfig = BaseConfig ${extraConfigTypeName[0] ? `& ${extraConfigTypeName[0]}` : ''};
+
 export const DEFAULT_ALCHEMY_API_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 ${preConfigContent[0] || ''}
 ;
@@ -55,5 +57,6 @@ export default scaffoldConfig;`;
 
 export default withDefaults(contents, {
   preConfigContent: "",
+  extraConfigTypeName: "",
   configOverrides: {},
 });
