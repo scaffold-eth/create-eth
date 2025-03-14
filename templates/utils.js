@@ -9,7 +9,21 @@ const replaceByClonedSource = (options) => {
   }
 }
 
-export const deepMerge = createDeepMerge({ mergeArray: replaceByClonedSource });
+const deepMergeWithoutKeysOrder = createDeepMerge({ mergeArray: replaceByClonedSource });
+
+export const deepMerge = (...args) => {
+  const mergedConfig = deepMergeWithoutKeysOrder(...args);
+  const finalConfig = {};
+  for (const key of Object.keys(args[0])) {
+    finalConfig[key] = mergedConfig[key];
+  }
+  for (const key of Object.keys(mergedConfig)) {
+    if (!(key in finalConfig)) {
+      finalConfig[key] = mergedConfig[key];
+    }
+  }
+  return finalConfig;
+}
 
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) =>
