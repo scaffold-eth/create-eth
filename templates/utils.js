@@ -51,8 +51,26 @@ export const withDefaults =
     return template(argsWithDefault);
   };
 
-export const stringify = val => {
-  const str = inspect(val, { depth: null, compact: true, maxArrayLength: null, maxStringLength: null });
+export const stringify = (val, comments = {}) => {
+  let str = inspect(val, { 
+    depth: null, 
+    compact: false,
+    maxArrayLength: null, 
+    maxStringLength: null
+  });
+  
+  // Add comments above their respective properties
+  if (Object.keys(comments).length > 0) {
+    str = str.replace(/^\s*(\w+):/gm, (match, prop) => {
+      const indent = match.match(/^\s*/)[0];
+      return comments[prop] 
+        ? comments[prop].split('\n')
+            .map(comment => `${indent}// ${comment}`)
+            .join('\n') + '\n' + match
+        : match;
+    });
+  }
+
   return str
     .replace(/"\$\$([^"]+)\$\$"/g, '$1')
     .replace(/'\$\$([^']+)\$\$'/g, '$1')
