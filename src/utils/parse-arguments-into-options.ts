@@ -25,6 +25,8 @@ export async function parseArgumentsIntoOptions(
 
       "--help": Boolean,
       "-h": "--help",
+
+      "--yolo": Boolean,
     },
     {
       argv: rawArgs.slice(2),
@@ -36,6 +38,8 @@ export async function parseArgumentsIntoOptions(
   const dev = args["--dev"] ?? false; // info: use false avoid asking user
 
   const help = args["--help"] ?? false;
+
+  const yolo = args["--yolo"] ?? false;
 
   let project: string | null = args._[0] ?? null;
 
@@ -97,6 +101,7 @@ export async function parseArgumentsIntoOptions(
       externalExtension: extension,
       help,
       solidityFramework: solidityFramework as RawOptions["solidityFramework"],
+      yolo,
     },
     solidityFrameworkChoices,
   };
