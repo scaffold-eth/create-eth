@@ -97,25 +97,39 @@ const addComments = (val, comments = {}) => {
       let position = match.index + match[0].length;
       let baseIndent = match[2];
       
+      // Handle special case for paths ending with a dot (comment for the object itself)
+      if (parts.length === 2 && parts[1] === "") {
+        // This is a comment for the object itself (e.g., "rpcOverrides.")
+        // Position should be right after the opening brace, with proper newline
+        pathMap.set(path, {
+          position: position,
+          indent: baseIndent + "  ", // Indent one level deeper
+          comment: comments[path],
+          isObjectComment: true, // Flag to handle special formatting
+          objectIndent: baseIndent // Store the indentation of the object itself
+        });
+        return;
+      }
+      
       // Navigate through each nested level
       for (let i = 1; i < parts.length; i++) {
         const part = parts[i];
         const expectedIndent = baseIndent + '  '.repeat(i);
         
-        // Look for this property at the correct indentation level
-        regex = new RegExp(`(\\n)(${expectedIndent})(${part}):\\s`, 'g');
-        regex.lastIndex = position; // Start search from current position
-        
-        match = regex.exec(str);
-        if (!match) break; // Property not found at this level
-        
+          // Look for this property at the correct indentation level
+          regex = new RegExp(`(\\n)(${expectedIndent})(${part}):\\s`, 'g');
+          regex.lastIndex = position; // Start search from current position
+        match = regex.exec(str) || match;
+        if (!match && part !== "") break; // Property not found at this level
         // If this is the target property (last in path), store its info
         if (i === parts.length - 1) {
           // The position should be right after the newline character
-          const exactPosition = match.index + match[1].length;
+          const exactPosition = match ? match.index + match[1].length : 
+                               (part === "" ? position : position + parts[i - 1].length + 3);
+          
           pathMap.set(path, {
             position: exactPosition,
-            indent: match[2],
+            indent: match ? match[2] : expectedIndent,
             comment: comments[path]
           });
         } else {
@@ -130,13 +144,29 @@ const addComments = (val, comments = {}) => {
       .sort((a, b) => b[1].position - a[1].position);
     
     for (const [path, info] of sortedPaths) {
-      const { position, indent, comment } = info;
+      const { position, indent, comment, isObjectComment, objectIndent } = info;
       const commentBlock = comment.split('\n')
         .map(line => `${indent}// ${line}`)
         .join('\n');
       
       // Insert the comment before the property, ensuring it's on a new line
-      str = str.slice(0, position) + commentBlock + '\n' + str.slice(position);
+      if (isObjectComment) {
+        // For object comments, add a newline after the brace and ensure proper indentation
+        // First, find the position of the closing brace
+        const closingBracePos = str.indexOf('}', position);
+        
+        if (closingBracePos !== -1) {
+          // Insert comment after opening brace
+          str = str.slice(0, position) + '\n' + commentBlock + '\n' + 
+                // Fix the closing brace indentation - using the stored objectIndent
+                str.slice(position, closingBracePos) + objectIndent + str.slice(closingBracePos);
+        } else {
+          // Fallback if closing brace not found
+          str = str.slice(0, position) + '\n' + commentBlock + '\n' + str.slice(position);
+        }
+      } else {
+        str = str.slice(0, position) + commentBlock + '\n' + str.slice(position);
+      }
     }
   }
   return str;

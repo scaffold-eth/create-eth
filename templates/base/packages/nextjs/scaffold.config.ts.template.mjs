@@ -4,6 +4,7 @@ const defaultScaffoldConfig = {
     targetNetworks: ["$$chains.mainnet$$"],
     pollingInterval: 30000,
     alchemyApiKey: "$$process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY$$",
+    rpcOverrides: {},
     walletConnectProjectId: "$$process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '3a8170812b534d0ff9d794f19a901d64'$$",
     onlyLocalBurnerWallet: true,
   };
@@ -27,6 +28,7 @@ export type BaseConfig = {
   targetNetworks: readonly chains.Chain[];
   pollingInterval: number;
   alchemyApiKey: string;
+  rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
   onlyLocalBurnerWallet: boolean;
 };
@@ -40,7 +42,8 @@ const scaffoldConfig = ${stringify(finalConfig, {
   pollingInterval: "The interval at which your front-end polls the RPC servers for new data (it has no effect if you only target the local network (default is 4000))",
   alchemyApiKey: "This is ours Alchemy's default API key.\nYou can get your own at https://dashboard.alchemyapi.io\nIt's recommended to store it in an env variable:\n.env.local for local testing, and in the Vercel/system env config for live apps.",
   walletConnectProjectId: "This is ours WalletConnect's default project ID.\nYou can get your own at https://cloud.walletconnect.com\nIt's recommended to store it in an env variable:\n.env.local for local testing, and in the Vercel/system env config for live apps.",
-  onlyLocalBurnerWallet: "Only show the Burner Wallet when running on hardhat network"
+  rpcOverrides: "If you want to use a different RPC for a specific network, you can add it here.\nThe key is the chain ID, and the value is the HTTP RPC URL",
+  "rpcOverrides.": "Example:\n[chains.mainnet.id]: \"https://mainnet.buidlguidl.com\",",
 })} as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;`;
