@@ -73,10 +73,11 @@ const addComments = (val, comments = {}) => {
   Object.keys(comments)
     .filter(key => !key.includes("."))
     .forEach(prop => {
-      const regex = new RegExp(`(^|\\n)(\\s*)(${prop}):\\s`, "g");
+      const topLevelPropertyRegex = new RegExp(`(^|\\n)(\\s*)(${prop}):\\s`, "g");
+      // Matches: "\n  propertyName: "
       let match;
 
-      while ((match = regex.exec(str)) !== null) {
+      while ((match = topLevelPropertyRegex.exec(str)) !== null) {
         // Verify this is a top-level property (indentation level check)
         if (match[2].length === 2) {
           const position = match.index + (match[1] ? match[1].length : 0);
@@ -97,8 +98,9 @@ const addComments = (val, comments = {}) => {
 
       // Start by finding the top-level object
       let currentPath = parts[0];
-      let regex = new RegExp(`(^|\\n)(\\s*)(${currentPath}):\\s*\\{`, "g");
-      let match = regex.exec(str);
+      const objectStartRegex = new RegExp(`(^|\\n)(\\s*)(${currentPath}):\\s*\\{`, "g");
+      // Matches: "\n  objectName: {"
+      let match = objectStartRegex.exec(str);
 
       if (!match) return; // Top object not found
 
@@ -124,10 +126,10 @@ const addComments = (val, comments = {}) => {
         const part = parts[i];
         const expectedIndent = baseIndent + "  ".repeat(i);
 
-        // Look for this property at the correct indentation level
-        regex = new RegExp(`(\\n)(${expectedIndent})(${part}):\\s`, "g");
-        regex.lastIndex = position; // Start search from current position
-        match = regex.exec(str) || match;
+        const nestedPropertyRegex = new RegExp(`(\\n)(${expectedIndent})(${part}):\\s`, "g");
+        nestedPropertyRegex.lastIndex = position; // Start search from current position
+        // Matches: "\n    nestedProperty: " (with the correct indentation)
+        match = nestedPropertyRegex.exec(str) || match;
         if (!match && part !== "") break; // Property not found at this level
         // If this is the target property (last in path), store its info
         if (i === parts.length - 1) {
