@@ -176,7 +176,14 @@ const etherscanApiKey = process.env.ETHERSCAN_MAINNET_API_KEY || "DNXJA8RX2Q3VZ4
 const etherscanOptimisticApiKey = process.env.ETHERSCAN_OPTIMISTIC_API_KEY || "RM62RDISS1RH448ZY379NX625ASG1N633R";
 const basescanApiKey = process.env.BASESCAN_API_KEY || "ZZZEIPMT1MNJ8526VV2Y744CA7TNZR64G6";
 
-const config: HardhatUserConfig = ${stringify(finalConfig)};
+const config: HardhatUserConfig = ${stringify(finalConfig, {
+  // ".array" is a workaround to get the correct indentation for the property
+  "solidity.compilers.array.settings.optimizer.runs": "https://docs.soliditylang.org/en/latest/using-the-compiler.html#optimizer-options",
+  "namedAccounts.deployer.default": "By default, it will take the first Hardhat account as the deployer",
+  "networks.hardhat": "View the networks that are pre-configured.\nIf the network you are looking for is not here you can add new network settings",
+  "etherscan": "Configuration for harhdat-verify plugin",
+  "verify": "Configuration for etherscan-verify from hardhat-deploy plugin"
+})};
 
 // Extend the deploy task
 task("deploy").setAction(async (args, hre, runSuper) => {
