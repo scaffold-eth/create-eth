@@ -7,6 +7,7 @@ import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
 import { validateFoundryUp } from "./utils/system-validation";
 import { showHelpMessage } from "./utils/show-help-message";
+import { createProjectYolo } from "./yolo";
 
 export async function cli(args: Args) {
   try {
@@ -22,7 +23,11 @@ export async function cli(args: Args) {
       await validateFoundryUp();
     }
 
-    await createProject(options);
+    if (options.yolo) {
+      await createProjectYolo(options);
+    } else {
+      await createProject(options);
+    }
   } catch (error: any) {
     console.error(chalk.red.bold(error.message || "An unknown error occurred."));
     return;
