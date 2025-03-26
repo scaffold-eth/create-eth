@@ -90,9 +90,9 @@ const contents = ({ preConfigContent, configOverrides }) => {
   // Merge the default config with any overrides
   const finalConfig = deepMerge(defaultTailwindConfig, configOverrides[0] || {});
 
-  return  `/** @type {import('tailwindcss').Config} */
-${preConfigContent[0] || ''}
+  return  `${preConfigContent[0] || ''}
 
+/** @type {import('tailwindcss').Config} */
 module.exports = ${stringify(finalConfig, {
   plugins: "eslint-disable-next-line @typescript-eslint/no-require-imports",
   daisyui: "DaisyUI theme colors"
