@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.0-beta.0
+
+### Major Changes
+
+- d14462d: adjust level of customization and improved ways to pass args to tmeplates
+
 ## 0.1.5
 
 ### Patch Changes
