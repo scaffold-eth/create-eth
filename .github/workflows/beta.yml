@@ -18,16 +18,30 @@ jobs:
         with:
           node-version: "18.x"
 
+      - name: Check for existing release PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          existing_pr=$(gh pr list --state open --json title --jq '.[] | select(.title | contains("Version Packages"))')
+          if [ -n "$existing_pr" ]; then
+            echo "Beta Release PR already exists."
+            echo "SKIP_RELEASE=true" >> $GITHUB_ENV
+          fi
+
       - name: Install Dependencies
+        if: ${{ env.SKIP_RELEASE != 'true' }}
         run: yarn install
 
       - name: Build
+        if: ${{ env.SKIP_RELEASE != 'true' }}
         run: yarn build
 
       - name: Authenticate with npm
+        if: ${{ env.SKIP_RELEASE != 'true' }}
         run: npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
 
       - name: Create Beta Release
+        if: ${{ env.SKIP_RELEASE != 'true' }}
         id: changesets
         uses: changesets/action@v1
         with:
