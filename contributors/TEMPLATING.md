@@ -297,6 +297,8 @@ Most of the time you will use string arguments for templating, but sometimes you
 
 The `stringify` and `deepMerge` functions used in the examples below should be imported from the `templates/utils.js` file:
 
+> NOTE: If if the template file is `.json` file, you should use `JSON.stringify` instead of `stringify` utility. This makes sure the JSON is formatted correctly.
+
 ```javascript
 import { stringify, deepMerge } from "../path/to/templates/utils.js";
 ```
