@@ -16,6 +16,7 @@ const defaultOptions: RawOptions = {
 export async function promptForMissingOptions(
   options: RawOptions,
   solidityFrameworkChoices: SolidityFrameworkChoices,
+  fromScaffoldEth: boolean,
 ): Promise<Options> {
   const cliAnswers = Object.fromEntries(Object.entries(options).filter(([, value]) => value !== null));
   const questions = [
@@ -50,6 +51,7 @@ export async function promptForMissingOptions(
     dev: options.dev ?? defaultOptions.dev,
     solidityFramework: solidityFramework === "none" ? null : solidityFramework,
     externalExtension: options.externalExtension,
+    fromScaffoldEth,
   };
 
   return mergedOptions;
