@@ -13,6 +13,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { getArgumentFromExternalExtensionOption } from "./utils/external-extensions";
 import { SOLIDITY_FRAMEWORKS } from "./utils/consts";
+import { createProjectFromScaffoldEth } from "./from-scaffold-eth";
 
 export async function createProject(options: Options) {
   console.log(`\n`);
@@ -33,7 +34,12 @@ export async function createProject(options: Options) {
         title: `🚀 Creating a new Scaffold-ETH 2 app in ${chalk.green.bold(
           options.project,
         )}${options.externalExtension ? ` with the ${chalk.green.bold(options.dev ? options.externalExtension : getArgumentFromExternalExtensionOption(options.externalExtension))} extension` : ""}`,
-        task: () => copyTemplateFiles(options, templateDirectory, targetDirectory),
+        task: () => {
+          if (options.fromScaffoldEth) {
+            return createProjectFromScaffoldEth(options, targetDirectory);
+          }
+          return copyTemplateFiles(options, templateDirectory, targetDirectory);
+        },
       },
       {
         title: "📦 Installing dependencies with yarn, this could take a while",
@@ -56,12 +62,21 @@ export async function createProject(options: Options) {
           if (!options.install) {
             return "Can't use source prettier, since `yarn install` was skipped";
           }
+          if (options.fromScaffoldEth) {
+            return "Skipping prettier format to preserve the original scaffold-eth-2 repository code";
+          }
           return false;
         },
       },
       {
         title: `📡 Initializing Git repository${options.solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY ? " and submodules" : ""}`,
         task: () => createFirstGitCommit(targetDirectory, options),
+        skip: () => {
+          if (options.fromScaffoldEth) {
+            return "Extension code was applied and committed on top of the scaffold-eth-2 repository";
+          }
+          return false;
+        },
       },
     ],
     { rendererOptions: { collapseSkips: false, suffixSkips: true } },

@@ -10,8 +10,7 @@ import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
 import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, EXAMPLE_CONTRACTS_DIR } from "../utils/consts";
-
-const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
+import { deleteTempDirectory, setupRepository, EXTERNAL_EXTENSION_TMP_DIR } from "../utils/common";
 
 const copy = promisify(ncp);
 let copyOrLink = copy;
@@ -314,22 +313,6 @@ ${
   );
 };
 
-const setUpExternalExtensionFiles = async (options: Options, tmpDir: string) => {
-  // 1. Create tmp directory to clone external extension
-  await fs.promises.mkdir(tmpDir);
-
-  const { repository, branch } = options.externalExtension as ExternalExtension;
-
-  // 2. Clone external extension
-  if (branch) {
-    await execa("git", ["clone", "--branch", branch, repository, tmpDir], {
-      cwd: tmpDir,
-    });
-  } else {
-    await execa("git", ["clone", repository, tmpDir], { cwd: tmpDir });
-  }
-};
-
 export async function copyTemplateFiles(options: Options, templateDir: string, targetDir: string) {
   copyOrLink = options.dev ? link : copy;
   const basePath = path.join(templateDir, BASE_DIR);
@@ -359,7 +342,11 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
         "extension",
       );
     } else {
-      await setUpExternalExtensionFiles(options, tmpDir);
+      await setupRepository(
+        tmpDir,
+        (options.externalExtension as ExternalExtension).repository,
+        (options.externalExtension as ExternalExtension).branch,
+      );
     }
 
     if (options.solidityFramework) {
@@ -393,9 +380,7 @@ export async function copyTemplateFiles(options: Options, templateDir: string, t
   );
 
   // 5. Delete tmp directory
-  if (options.externalExtension && !options.dev) {
-    await fs.promises.rm(tmpDir, { recursive: true });
-  }
+  await deleteTempDirectory(options, tmpDir);
 
   // 6. Initialize git repo to avoid husky error
   await execa("git", ["init"], { cwd: targetDir });
