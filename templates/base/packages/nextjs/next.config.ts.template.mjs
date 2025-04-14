@@ -15,8 +15,6 @@ const defaultConfig = {
 const contents = ({ preConfigContent, configOverrides, postConfigContent, finalNextConfigName }) => {
   // Merge the default config with any overrides
   const finalConfig = deepMerge(defaultConfig, configOverrides[0] || {});
-  console.log(configOverrides[0]);
-  console.log(finalConfig);
 
   return `import type { NextConfig } from "next";
 ${preConfigContent[0] || ''}
