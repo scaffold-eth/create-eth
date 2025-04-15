@@ -1,6 +1,10 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ imports, externalExtensionName, description }) => {
+const contents = ({ imports, externalExtensionName, description, fullContentOverride }) => {
+  if (fullContentOverride[0]) {
+    return fullContentOverride[0];
+  }
+
   return `
 "use client";
 
@@ -83,5 +87,6 @@ export default withDefaults(contents, {
   </code>
 </p>
 `,
-  externalExtensionName: ""
+  externalExtensionName: "",
+  fullContentOverride: "",
 });

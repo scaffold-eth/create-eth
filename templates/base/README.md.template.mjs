@@ -64,9 +64,15 @@ const contents = ({
   contractsPath,
   scriptsPath,
   testCommand,
-  extraContents,
-}) =>
-  `# 🏗 Scaffold-ETH 2
+  extraContent,
+  fullContentOverride,
+}) => {
+
+  if (fullContentOverride[0]) {
+    return fullContentOverride[0];
+  }
+
+  return `# 🏗 Scaffold-ETH 2
 
 <h4 align="center">
   <a href="https://docs.scaffoldeth.io">Documentation</a> |
@@ -104,7 +110,7 @@ ${skipQuickStart[0] ? "" : getQuickStart({
   scriptsPath,
   testCommand,
 })}
-${extraContents.filter(Boolean).join("\n")}
+${extraContent.filter(Boolean).join("\n")}
 ## Documentation
 
 Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
@@ -116,6 +122,7 @@ To know more about its features, check out our [website](https://scaffoldeth.io)
 We welcome contributions to Scaffold-ETH 2!
 
 Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.`;
+}
 
 export default withDefaults(contents, {
   skipQuickStart: false,
@@ -124,5 +131,6 @@ export default withDefaults(contents, {
   contractsPath: "",
   scriptsPath: "",
   testCommand: "",
-  extraContents: "",
+  extraContent: "",
+  fullContentOverride: "",
 });
