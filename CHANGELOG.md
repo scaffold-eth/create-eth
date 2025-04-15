@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.0-beta.1
+
+### Patch Changes
+
+- eff6cb2: move fastify/deepmerge to main dependency
+
 ## 1.0.0-beta.0
 
 ### Major Changes

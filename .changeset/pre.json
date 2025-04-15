@@ -5,6 +5,7 @@
     "create-eth": "0.1.1"
   },
   "changesets": [
+    "cold-rings-sing",
     "strange-hounds-eat"
   ]
 }
