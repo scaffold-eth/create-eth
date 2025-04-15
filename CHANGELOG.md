@@ -4,7 +4,7 @@
 
 ### Major Changes
 
-- adjust level of customization and improved ways to pass args to tmeplates
+- adjust level of customization and improved ways to pass args to tmeplates, learn more about rules [here](https://github.com/scaffold-eth/create-eth/blob/beta/contributors/TEMPLATING.md#rules-for-template-args)
 - updated `scaffold.config.ts.template.mjs` checkout new args example in [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
 - updated `hardhat.config.ts.template.mjs` checkout new args example in [hardhat.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/hardhat.config.ts.args.mjs)
 - updated `tailwind.config.js.template.mjs` checkout new args example in [tailwind.config.js.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tailwind.config.js.args.mjs)
