@@ -4,7 +4,35 @@
 
 ### Major Changes
 
-- d14462d: adjust level of customization and improved ways to pass args to tmeplates
+- adjust level of customization and improved ways to pass args to tmeplates
+- updated `scaffold.config.ts.template.mjs` checkout new args example in [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
+- updated `hardhat.config.ts.template.mjs` checkout new args example in [hardhat.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/hardhat.config.ts.args.mjs)
+- updated `tailwind.config.js.template.mjs` checkout new args example in [tailwind.config.js.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tailwind.config.js.args.mjs)
+- updated `tsconfig.json.template.mjs` (nextjs / hardhat) checkout new args example in [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tsconfig.json.args.mjs) (nextjs) and [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/tsconfig.json.args.mjs) (hardhat)
+- updated `next.config.ts.template.mjs` checkout new args example in [next.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/next.config.ts.args.mjs)
+- updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
+- updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
+
+## 0.1.7
+
+### Patch Changes
+
+- up burner-connector (https://github.com/scaffold-eth/scaffold-eth-2/pull/1074)
+- up next version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1075)
+- chore: comments casing in hardhat.config (https://github.com/scaffold-eth/scaffold-eth-2/pull/1080)
+- Add a SE-2 cursor project rule (https://github.com/scaffold-eth/scaffold-eth-2/pull/966)
+- Migrate to Eslint v9 (https://github.com/scaffold-eth/scaffold-eth-2/pull/1077)
+- remove pgn and update polygon networks in hardhat config (https://github.com/scaffold-eth/scaffold-eth-2/pull/1071)
+
+## 0.1.6
+
+### Patch Changes
+
+- NextJs v15 upgrade (https://github.com/scaffold-eth/scaffold-eth-2/pull/1036)
+- New foundry deployment workflow (https://github.com/scaffold-eth/scaffold-eth-2/pull/972)
+- New RPC config in scaffold.config (https://github.com/scaffold-eth/scaffold-eth-2/pull/1057)
+- Fix: import on wagmi package (https://github.com/scaffold-eth/scaffold-eth-2/pull/1061)
+- Small tweaks to home page layout (https://github.com/scaffold-eth/scaffold-eth-2/pull/1064)
 
 ## 0.1.5
 
