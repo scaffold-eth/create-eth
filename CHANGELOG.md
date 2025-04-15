@@ -1,5 +1,18 @@
 # create-eth
 
+## 1.0.0-beta.0
+
+### Major Changes
+
+- adjust level of customization and improved ways to pass args to tmeplates, learn more about rules [here](https://github.com/scaffold-eth/create-eth/blob/beta/contributors/TEMPLATING.md#rules-for-template-args)
+- updated `scaffold.config.ts.template.mjs` checkout new args example in [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
+- updated `hardhat.config.ts.template.mjs` checkout new args example in [hardhat.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/hardhat.config.ts.args.mjs)
+- updated `tailwind.config.js.template.mjs` checkout new args example in [tailwind.config.js.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tailwind.config.js.args.mjs)
+- updated `tsconfig.json.template.mjs` (nextjs / hardhat) checkout new args example in [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tsconfig.json.args.mjs) (nextjs) and [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/tsconfig.json.args.mjs) (hardhat)
+- updated `next.config.ts.template.mjs` checkout new args example in [next.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/next.config.ts.args.mjs)
+- updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
+- updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
+
 ## 0.1.7
 
 ### Patch Changes
