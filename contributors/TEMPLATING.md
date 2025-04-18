@@ -184,7 +184,7 @@ This customisation can be broadly broken into:
 1. **When extending/modifying already declared variables/objects**:
 
 - Use `preConfigContent` (string) for imports and variable declarations
-- Use `<name>Override` (object) to extend existing variables/objects
+- Use `<name>Overrides` (object) to extend existing variables/objects
 - Can reference variables defined in template and `preConfigContent` in two ways:
   - `$$variableName$$` - When variable needs to be used without quotes (expressions/variables)
     - example: `{ accounts: ["$$deployerPrivateKey$$"] }` -> `{ accounts: [deployerPrivateKey] }`
@@ -276,7 +276,7 @@ export const configOverrides = {
 export default withDefaults(
   ({ preConfigContent, renderContent }) => `
 import { Base } from './Base';
-${preConfigContent}
+${preConfigContent[0] || ""}
 
 export const Component = () => {
 ${renderContent}
