@@ -14,7 +14,7 @@ import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithPro
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-${preConfigContent.filter(Boolean).join("\n")}
+${preConfigContent[0] || ''}
 
 export const metadata = getMetadata(${stringify(finalMetadata)});
 

@@ -13,7 +13,7 @@ import { Address } from "~~/components/scaffold-eth";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-${preConfigContent}
+${preConfigContent[0] || ''}
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();

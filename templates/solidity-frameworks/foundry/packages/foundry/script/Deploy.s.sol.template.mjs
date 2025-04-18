@@ -4,7 +4,7 @@ const content = ({ preConfigContent, deploymentsLogic }) => `//SPDX-License-Iden
 pragma solidity ^0.8.19;
 
 import "./DeployHelpers.s.sol";
-${preConfigContent.filter(Boolean).join("\n")}
+${preConfigContent[0] || ''}
 
 /**
  * @notice Main deployment script for all contracts
