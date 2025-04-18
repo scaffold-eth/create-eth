@@ -12,7 +12,7 @@ const defaultMenuLinks = [
   },
 ];
 
-const contents = ({ menuIconImports, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
+const contents = ({ preContent, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
   // make sure debug contracts is the last item
   const menuLinks = deepMerge([defaultMenuLinks[0]], [...(extraMenuLinksObjects[0] || []), defaultMenuLinks[1]]);
 
@@ -26,7 +26,7 @@ import { hardhat } from "viem/chains";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
-${menuIconImports.filter(Boolean).join("\n")}
+${preContent.filter(Boolean).join("\n")}
 
 type HeaderMenuLink = {
   label: string;
@@ -124,7 +124,7 @@ export const Header = () => {
 };
 
 export default withDefaults(contents, {
-  menuIconImports: "",
+  preContent: "",
   extraMenuLinksObjects: "",
   logoTitle: "Scaffold-ETH",
   logoSubtitle: "Ethereum dev stack"

@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ providerNames, providerSetups, providerImports, providerProps, globalClassNames }) => {
+const contents = ({ providerNames, preContent, providerProps, globalClassNames }) => {
   // filter out empty strings
   const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
 
@@ -20,7 +20,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-${providerImports.filter(Boolean).join("\n")}
+${preContent.filter(Boolean).join("\n")}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -44,8 +44,6 @@ export const queryClient = new QueryClient({
     },
   },
 });
-
-${providerSetups.filter(Boolean).join("\n")}
 
 export const ScaffoldEthAppWithProviders = ({ children }: { children: React.ReactNode }) => {
   const { resolvedTheme } = useTheme();
@@ -76,8 +74,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
 export default withDefaults(contents, {
   providerNames: "",
-  providerSetups: "",
-  providerImports: "",
+  preContent: "",
   providerProps: "",
   globalClassNames: "",
 });
