@@ -10,8 +10,12 @@ const replaceByClonedSource = options => {
 };
 
 const deepMergeWithoutKeysOrder = createDeepMerge({ mergeArray: replaceByClonedSource });
+const deepMergeArray = createDeepMerge();
 
 export const deepMerge = (...args) => {
+  if (Array.isArray(args[0])) {
+    return deepMergeArray(...args);
+  }
   const mergedConfig = deepMergeWithoutKeysOrder(...args);
   const finalConfig = {};
   for (const key of Object.keys(args[0])) {
