@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ imports, externalExtensionName, description, fullContentOverride }) => {
+const contents = ({ preConfigContent, externalExtensionName, description, fullContentOverride }) => {
   if (fullContentOverride[0]) {
     return fullContentOverride[0];
   }
@@ -13,7 +13,7 @@ import { Address } from "~~/components/scaffold-eth";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-${imports}
+${preConfigContent[0] || ''}
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
@@ -68,7 +68,7 @@ export default Home;
 };
 
 export default withDefaults(contents, {
-  imports: ``,
+  preConfigContent: ``,
   description: `
 <p className="text-center text-lg">
   Get started by editing{" "}

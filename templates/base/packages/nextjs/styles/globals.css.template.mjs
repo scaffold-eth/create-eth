@@ -1,7 +1,7 @@
 import { withDefaults } from '../../../../utils.js'
 
-const contents = ({ globalImports }) =>
-`${globalImports}
+const contents = ({ preConfigContent }) =>
+`${preConfigContent}
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -37,5 +37,5 @@ p {
 `
 
 export default withDefaults(contents, {
-  globalImports: ''
+  preConfigContent: ''
 })
