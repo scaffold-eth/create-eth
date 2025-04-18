@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ providerNames, preContent, providerProps, globalClassNames }) => {
+const contents = ({ providerNames, preConfigContent, providerProps, globalClassNames }) => {
   // filter out empty strings
   const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
 
@@ -20,7 +20,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-${preContent.filter(Boolean).join("\n")}
+${preConfigContent.filter(Boolean).join("\n")}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -74,7 +74,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
 export default withDefaults(contents, {
   providerNames: "",
-  preContent: "",
+  preConfigContent: "",
   providerProps: "",
   globalClassNames: "",
 });

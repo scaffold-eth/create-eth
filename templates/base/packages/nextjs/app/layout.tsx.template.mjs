@@ -5,16 +5,16 @@ const defaultMetadata = {
   description: "Built with 🏗 Scaffold-ETH 2"
 }
 
-const contents = ({ imports, metadataOverrides }) => {
+const contents = ({ preConfigContent, metadataOverrides }) => {
   const finalMetadata = deepMerge(defaultMetadata, metadataOverrides[0] || {});
 
   return `
-${imports.filter(Boolean).join("\n")}
 import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+${preConfigContent.filter(Boolean).join("\n")}
 
 export const metadata = getMetadata(${stringify(finalMetadata)});
 
@@ -34,6 +34,6 @@ export default ScaffoldEthApp;`;
 };
 
 export default withDefaults(contents, {
-  imports: "",
+  preConfigContent: "",
   metadataOverrides: ""
 });
