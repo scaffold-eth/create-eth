@@ -1,6 +1,20 @@
-import { withDefaults } from "../../../../utils.js";
-const contents = ({ menuIconImports, menuObjects, logoTitle, logoSubtitle }) => {
-  const stringifiedAdditionalMenuLinks = menuObjects.filter(Boolean).join(",\n");
+import { withDefaults, stringify, deepMerge } from "../../../../utils.js";
+
+const defaultMenuLinks = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Debug Contracts",
+    href: "/debug",
+    icon: '$$<BugAntIcon className="h-4 w-4" />$$',
+  },
+];
+
+const contents = ({ menuIconImports, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
+  // make sure debug contracts is the last item
+  const menuLinks = deepMerge([defaultMenuLinks[0]], [...(extraMenuLinksObjects[0] || []), defaultMenuLinks[1]]);
 
   return `"use client";
 
@@ -20,18 +34,7 @@ type HeaderMenuLink = {
   icon?: React.ReactNode;
 };
 
-export const menuLinks: HeaderMenuLink[] = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  ${stringifiedAdditionalMenuLinks && `${stringifiedAdditionalMenuLinks},`}
-  {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
-  },
-];
+export const menuLinks: HeaderMenuLink[] = ${stringify(menuLinks)};
 
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
@@ -122,7 +125,7 @@ export const Header = () => {
 
 export default withDefaults(contents, {
   menuIconImports: "",
-  menuObjects: "",
+  extraMenuLinksObjects: "",
   logoTitle: "Scaffold-ETH",
   logoSubtitle: "Ethereum dev stack"
 });
