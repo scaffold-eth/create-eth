@@ -14,7 +14,7 @@ const defaultMenuLinks = [
 
 const contents = ({ preConfigContent, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
   // make sure debug contracts is the last item
-  const menuLinks = deepMerge([defaultMenuLinks[0]], [...(extraMenuLinksObjects[0] || []), defaultMenuLinks[1]]);
+  const menuLinks = [defaultMenuLinks[0], ...(extraMenuLinksObjects[0] || []), defaultMenuLinks[1]];
 
   return `"use client";
 
