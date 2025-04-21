@@ -14,6 +14,7 @@ const deepMergeArray = createDeepMerge();
 
 export const deepMerge = (...args) => {
   if (Array.isArray(args[0])) {
+    // For arrays, use deepMergeArray which concatenates array elements
     return deepMergeArray(...args);
   }
   const mergedConfig = deepMergeWithoutKeysOrder(...args);
