@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.0-beta.2
+
+### Patch Changes
+
+- 47c0a4a: rename args from ${somethingImports} => ${preConfigContent} in templates files
+
 ## 1.0.0-beta.1
 
 ### Patch Changes
