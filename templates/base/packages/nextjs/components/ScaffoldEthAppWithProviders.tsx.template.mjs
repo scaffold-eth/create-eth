@@ -1,10 +1,14 @@
-import { withDefaults } from "../../../../utils.js";
+import { stringify, withDefaults } from "../../../../utils.js";
 
-const contents = ({ providerNames, preConfigContent, providerProps, globalClassNames }) => {
-  // filter out empty strings
-  const providerOpeningTags = providerNames.filter(Boolean).map((name, index) => `<${name} ${providerProps[index]}>`);
+const defaultProviders = [
+  '$$createProvider(WagmiProvider, { config: wagmiConfig })$$',
+  '$$createProvider(QueryClientProvider, { client: queryClient })$$',
+  '$$createProvider(ProgressBar, { height: "3px", color: "#2299dd" })$$',
+  '$$createProvider(RainbowKitProvider, { avatar: BlockieAvatar, theme: mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme() })$$',
+]
 
-  const providerClosingTags = providerNames.filter(Boolean).map(name => `</${name}>`).reverse();
+const contents = ({ preConfigContent, globalClassNames, extraProviders, overrideProviders }) => {
+  const providers = overrideProviders?.[0].length > 0 ? overrideProviders[0] : [...defaultProviders, ...(extraProviders[0] || [])]
 
   return `"use client";
 
@@ -20,6 +24,7 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+import { composeProviders, createProvider } from "~~/utils/scaffold-eth/composeProviders";
 ${preConfigContent[0] || ''}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
@@ -54,27 +59,21 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
     setMounted(true);
   }, []);
 
+  const providers = ${stringify(providers)};
+
+  const ComposedProviders = composeProviders(providers);
+
   return (
-    <WagmiProvider config={wagmiConfig}>
-    ${providerOpeningTags.join("\n")}
-      <QueryClientProvider client={queryClient}>
-        <ProgressBar height="3px" color="#2299dd" />
-        <RainbowKitProvider
-          avatar={BlockieAvatar}
-          theme={mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()}
-        >
-          <ScaffoldEthApp>{children}</ScaffoldEthApp>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    ${providerClosingTags.join("\n")}
-    </WagmiProvider>
+    <ComposedProviders>
+      <ScaffoldEthApp>{children}</ScaffoldEthApp>
+    </ComposedProviders>
   );
 };`;
 };
 
 export default withDefaults(contents, {
-  providerNames: "",
   preConfigContent: "",
-  providerProps: "",
   globalClassNames: "",
+  extraProviders: [],
+  overrideProviders: [],
 });
