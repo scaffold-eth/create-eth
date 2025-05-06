@@ -9,9 +9,11 @@ const defaultScaffoldConfig = {
     onlyLocalBurnerWallet: true,
   };
 
-const contents = ({ preConfigContent, configOverrides, extraConfigTypeName }) => {
+const contents = ({ preConfigContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
   // add solidityFramework network
-  const targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
+  let targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
+  // if skipLocalChainInTargetNetworks is true, don't include solidityFramework network
+  targetNetworks = skipLocalChainInTargetNetworks ? targetNetworks.slice(1) : targetNetworks;
   const extensionConfigOverrides = configOverrides[configOverrides.length - 1] || {};
   if (targetNetworks?.length && Object.keys(extensionConfigOverrides).length > 0) {
     extensionConfigOverrides.targetNetworks = targetNetworks;
@@ -53,4 +55,5 @@ export default withDefaults(contents, {
   preConfigContent: "",
   extraConfigTypeName: "",
   configOverrides: {},
+  skipLocalChainInTargetNetworks: false,
 });
