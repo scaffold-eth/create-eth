@@ -3,7 +3,6 @@ import { stringify, withDefaults } from "../../../../utils.js";
 const defaultProviders = [
   '$$createProvider(WagmiProvider, { config: wagmiConfig })$$',
   '$$createProvider(QueryClientProvider, { client: queryClient })$$',
-  '$$createProvider(ProgressBar, { height: "3px", color: "#2299dd" })$$',
   '$$createProvider(RainbowKitProvider, { avatar: BlockieAvatar, theme: mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme() })$$',
 ]
 
@@ -65,6 +64,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
   return (
     <ComposedProviders>
+      <ProgressBar height="3px" color="#2299dd" />
       <ScaffoldEthApp>{children}</ScaffoldEthApp>
     </ComposedProviders>
   );
