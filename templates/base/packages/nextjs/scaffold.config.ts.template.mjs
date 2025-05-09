@@ -13,7 +13,7 @@ const contents = ({ preConfigContent, configOverrides, extraConfigTypeName, skip
   // add solidityFramework network
   let targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
   // if skipLocalChainInTargetNetworks is true, don't include solidityFramework network
-  targetNetworks = skipLocalChainInTargetNetworks ? targetNetworks.slice(1) : targetNetworks;
+  targetNetworks = skipLocalChainInTargetNetworks?.[0] ? targetNetworks.slice(1) : targetNetworks;
   const extensionConfigOverrides = configOverrides[configOverrides.length - 1] || {};
   if (targetNetworks?.length && Object.keys(extensionConfigOverrides).length > 0) {
     extensionConfigOverrides.targetNetworks = targetNetworks;
