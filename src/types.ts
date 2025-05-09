@@ -24,6 +24,7 @@ export type Options = {
 } & {
   externalExtension: RawOptions["externalExtension"];
   solidityFramework: SolidityFramework | null;
+  fromScaffoldEth: boolean;
 };
 
 export type TemplateDescriptor = {

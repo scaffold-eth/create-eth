@@ -4,37 +4,75 @@ import fs from "fs";
 import { promisify } from "util";
 import { execa } from "execa";
 import ncp from "ncp";
+import { EXTERNAL_EXTENSIONS_DIR, prettyLog, TARGET_EXTENSION_DIR } from "./create-extension-common";
 import { fileURLToPath } from "url";
 import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR } from "../utils/consts";
-import chalk from "chalk";
+import { Args } from "../types";
+import { createExtensionFromScaffoldEth } from "./create-extension-from-scaffold-eth";
 
-const EXTERNAL_EXTENSIONS_DIR = "externalExtensions";
-const TARGET_EXTENSION_DIR = "extension";
 const TEMPLATE_FILE_SUFFIX = ".template.mjs";
 const DEPLOYED_CONTRACTS_FILE = "deployedContracts.ts";
 const YARN_LOCK_FILE = "yarn.lock";
 const PACKAGE_JSON_FILE = "package.json";
 const NEXTJS_DIR = "nextjs";
 
-const prettyLog = {
-  info: (message: string, indent = 0) => console.log(chalk.cyan(`${"  ".repeat(indent)}${message}`)),
-  success: (message: string, indent = 0) => console.log(chalk.green(`${"  ".repeat(indent)}✔︎ ${message}`)),
-  warning: (message: string, indent = 0) => console.log(chalk.yellow(`${"  ".repeat(indent)}⚠ ${message}`)),
-  error: (message: string, indent = 0) => console.log(chalk.red(`${"  ".repeat(indent)}✖ ${message}`)),
-};
-
 const ncpPromise = promisify(ncp);
 
 const currentFileUrl = import.meta.url;
 const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)), "../../../templates");
 
-const getProjectPath = (rawArgs: string[]) => {
-  const args = arg({}, { argv: rawArgs.slice(2) });
-  const projectPath = args._[0];
+const parseArguments = (
+  rawArgs: Args,
+): {
+  projectPath: string;
+  fromScaffoldEth: boolean;
+  scaffoldEthRepo: string | null;
+} => {
+  const args = arg(
+    {
+      "--from-scaffold-eth": Boolean,
+      "-f": "--from-scaffold-eth",
+    },
+    {
+      argv: rawArgs.slice(2),
+    },
+  );
+
+  const projectPath = args._[0] ?? null;
+
   if (!projectPath) {
     throw new Error("Project path is required");
   }
-  return { projectPath };
+
+  const fromScaffoldEth = args["--from-scaffold-eth"] ?? false;
+
+  let scaffoldEthRepo: string | null = null;
+
+  const fromIndex = rawArgs.findIndex(arg => arg === "--from-scaffold-eth" || arg === "-f");
+
+  if (fromIndex !== -1 && rawArgs[fromIndex + 1] && !rawArgs[fromIndex + 1].startsWith("-")) {
+    scaffoldEthRepo = rawArgs[fromIndex + 1];
+  }
+
+  if (fromScaffoldEth && !scaffoldEthRepo && !fs.existsSync(projectPath)) {
+    throw new Error(
+      "A local scaffold-eth repository or repository reference (URL, owner/repo, or owner/repo:branch) is required",
+    );
+  }
+
+  if (projectPath === scaffoldEthRepo) {
+    throw new Error("Project name is required");
+  }
+
+  if (scaffoldEthRepo && fs.existsSync(projectPath)) {
+    throw new Error(`Cannot use scaffold-eth repository: directory already exists at ${projectPath}`);
+  }
+
+  return {
+    projectPath,
+    fromScaffoldEth,
+    scaffoldEthRepo: scaffoldEthRepo,
+  };
 };
 
 const getDeletedFiles = async (projectPath: string): Promise<string[]> => {
@@ -192,15 +230,22 @@ const copyChanges = async (
   }
 };
 
-const main = async (rawArgs: string[]) => {
+const main = async (rawArgs: Args) => {
   try {
-    const { projectPath } = getProjectPath(rawArgs);
+    const { projectPath, fromScaffoldEth, scaffoldEthRepo } = parseArguments(rawArgs);
+
     const projectName = path.basename(projectPath);
-    const templates = new Set<string>();
-    await findTemplateFiles(templateDirectory, templates);
 
     console.log("\n");
     prettyLog.info(`Extension name: ${projectName}\n`);
+
+    if (fromScaffoldEth) {
+      await createExtensionFromScaffoldEth(projectName, scaffoldEthRepo);
+      return;
+    }
+
+    const templates = new Set<string>();
+    await findTemplateFiles(templateDirectory, templates);
 
     prettyLog.info("Getting list of changed files...", 1);
     const changedFiles = await getChangedFilesSinceFirstCommit(projectPath);
