@@ -31,16 +31,16 @@ const templateDirectory = path.resolve(decodeURI(fileURLToPath(currentFileUrl)),
 const getParsedArgs = (rawArgs: string[]) => {
   const args = arg(
     {
-      "--from-scaffold-eth": String,
+      "--from-commit": String,
     },
     { argv: rawArgs.slice(2) },
   );
   const projectPath = args._[0];
-  const fromScaffoldEth = args["--from-scaffold-eth"];
+  const fromCommit = args["--from-commit"];
   if (!projectPath) {
     throw new Error("Project path is required");
   }
-  return { projectPath, fromScaffoldEth };
+  return { projectPath, fromCommit };
 };
 
 const getDeletedFiles = async (projectPath: string): Promise<string[]> => {
@@ -202,7 +202,7 @@ const copyChanges = async (
 
 const main = async (rawArgs: string[]) => {
   try {
-    const { projectPath, fromScaffoldEth: baseCommit } = getParsedArgs(rawArgs);
+    const { projectPath, fromCommit: baseCommit } = getParsedArgs(rawArgs);
     const projectName = path.basename(projectPath);
     const templates = new Set<string>();
     await findTemplateFiles(templateDirectory, templates);
