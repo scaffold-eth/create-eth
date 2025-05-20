@@ -5,7 +5,7 @@ const defaultMetadata = {
   description: "Built with 🏗 Scaffold-ETH 2"
 }
 
-const contents = ({ preConfigContent, metadataOverrides }) => {
+const contents = ({ preConfigContent, metadataOverrides, htmlClassNames }) => {
   const finalMetadata = deepMerge(defaultMetadata, metadataOverrides[0] || {});
 
   return `
@@ -20,7 +20,7 @@ export const metadata = getMetadata(${stringify(finalMetadata)});
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning ${htmlClassNames ? `className={\`${htmlClassNames}\`}` : ''}>
       <body>
         <ThemeProvider enableSystem>
           <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>
@@ -35,5 +35,6 @@ export default ScaffoldEthApp;`;
 
 export default withDefaults(contents, {
   preConfigContent: "",
-  metadataOverrides: ""
+  metadataOverrides: "",
+  htmlClassNames: ""
 });
