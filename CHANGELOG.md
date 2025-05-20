@@ -19,6 +19,27 @@
 - updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
 - updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
 
+## 0.2.1
+
+### Patch Changes
+
+- 60caf91: - Add chain metadata to `useSelectedNetwork` hook (https://github.com/scaffold-eth/scaffold-eth-2/pull/1093)
+  - Add `account:reveal-pk` in foundry (https://github.com/scaffold-eth/scaffold-eth-2/pull/1094)
+
+## 0.2.0
+
+### Minor Changes
+
+- 9776c87: - Tailwind v4 + Daisy v5 migration (https://github.com/scaffold-eth/scaffold-eth-2/pull/1078)
+  - remove react-copy-to-clipboard and use native solution (https://github.com/scaffold-eth/scaffold-eth-2/pull/1084)
+  - yarn account:reveal-pk (https://github.com/scaffold-eth/scaffold-eth-2/pull/1091)
+
+## 0.1.8
+
+### Patch Changes
+
+- dfcd3b2: fix: remove outdated typescript-eslint/eslint-plugin
+
 ## 0.1.7
 
 ### Patch Changes
