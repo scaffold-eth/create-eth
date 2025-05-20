@@ -1,6 +1,6 @@
 import { withDefaults } from '../../../../utils.js'
 
-const contents = ({ overrideContent }) =>
+const contents = ({ overrideCSS }) =>
 `@import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
@@ -123,11 +123,11 @@ const contents = ({ overrideContent }) =>
   opacity: 80%;
 }
   
-${overrideContent[0] ? `
+${overrideCSS[0] ? `
   /* -- EXTENSION OVERRIDES -- */
-  ${overrideContent[0]}
+  ${overrideCSS[0]}
 ` : ''}`
 
 export default withDefaults(contents, {
-  overrideContent: ''
+  overrideCSS: ''
 })
