@@ -1,8 +1,7 @@
 import { withDefaults } from '../../../../utils.js'
 
-const contents = ({ preConfigContent }) =>
-`${preConfigContent}
-@import "tailwindcss";
+const contents = ({ overrideContent }) =>
+`@import "tailwindcss";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
@@ -122,8 +121,13 @@ const contents = ({ preConfigContent }) =>
 
 .link:hover {
   opacity: 80%;
-}`
+}
+  
+${overrideContent[0] ? `
+  /* -- EXTENSION OVERRIDES -- */
+  ${overrideContent[0]}
+` : ''}`
 
 export default withDefaults(contents, {
-  preConfigContent: ''
+  overrideContent: ''
 })
