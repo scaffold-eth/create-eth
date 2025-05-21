@@ -165,13 +165,22 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
 
   const { branch, repository } = externalExtension;
   const { ownerName, repoName } = deconstructGithubUrl(repository);
-  const githubApiUrl = `https://api.github.com/repos/${ownerName}/${repoName}/contents/extension/packages${branch ? `?ref=${branch}` : ""}`;
-  const res = await fetch(githubApiUrl);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch the githubApiUrl ${githubApiUrl}`);
-  }
-  const listOfContents = (await res.json()) as { name: string; type: "dir" | "file" }[];
-  const directories = listOfContents.filter(item => item.type === "dir").map(dir => dir.name);
 
-  return filterSolidityFrameworkDirs(directories);
+  const frameworkChecks = solidityFrameworks.map(async framework => {
+    const githubUrl = `https://github.com/${ownerName}/${repoName}/tree/${branch}/extension/packages/${framework}`;
+    try {
+      const res = await fetch(githubUrl);
+      if (res.ok) {
+        return framework as SolidityFramework;
+      }
+    } catch {
+      // Skip if directory doesn't exist
+    }
+    return null;
+  });
+
+  const results = await Promise.all(frameworkChecks);
+  const frameworkDirs = results.filter((framework): framework is SolidityFramework => framework !== null);
+
+  return frameworkDirs;
 };
