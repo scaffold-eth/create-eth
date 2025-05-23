@@ -1,5 +1,20 @@
 # create-eth
 
+## 1.0.0-beta.2
+
+### Patch Changes
+
+- allow more customization with `preConfigContent` arg
+  - checkout [layout.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/layout.tsx.args.mjs) for example
+  - [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) for example
+  - [Header.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/Header.tsx.args.mjs)
+  - [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+  - [getMetadata.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/utils/scaffold-eth/getMetadata.ts.args.mjs)
+  - [Deploy.s.sol.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/foundry/script/Deploy.s.sol.args.mjs)
+- allow skipping local chain in `scaffold.config.ts` checkout [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
+- Updated `ScaffoldEthProvider` to add new providers check [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- Allow overriding wagmi config in `wagmiConfig.tsx` checkout [wagmiConfig.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/services/web3/wagmiConfig.tsx.args.mjs)
+
 ## 1.0.0-beta.1
 
 ### Patch Changes
