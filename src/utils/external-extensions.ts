@@ -170,15 +170,14 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
     const githubUrl = `https://github.com/${ownerName}/${repoName}/tree/${branch}/extension/packages/${framework}`;
     try {
       const res = await fetch(githubUrl);
-      if (res.ok) {
-        return framework as SolidityFramework;
-      }
-      // Directory doesn't exist
-      return null;
-    } catch {
-      console.warn(
-        `${framework.charAt(0).toUpperCase() + framework.slice(1)} framework check failed. You can verify it at ${githubUrl}.`,
+      if (res.status === 200) return framework as SolidityFramework;
+      if (res.status === 404) return null;
+
+      throw new Error(
+        `${framework.charAt(0).toUpperCase() + framework.slice(1)} framework check failed with status ${res.status}. You can verify it at ${githubUrl}.`,
       );
+    } catch (err) {
+      console.warn((err as Error).message);
 
       return framework as SolidityFramework;
     }
