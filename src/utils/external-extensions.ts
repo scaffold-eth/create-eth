@@ -10,10 +10,10 @@ type ExtensionJSON = {
   extensionFlagValue: string;
   repository: string;
   branch?: string;
-  // fields usefull for scaffoldeth.io
+  // fields useful for scaffoldeth.io
   description: string;
   version?: string; // if not present we default to latest
-  name?: string; // human redable name, if not present we default to branch or extensionFlagValue on UI
+  name?: string; // human readable name, if not present we default to branch or extensionFlagValue on UI
 };
 
 const TRUSTED_GITHUB_ORGANIZATIONS = ["scaffold-eth", "buidlguidl"];
@@ -173,10 +173,15 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
       if (res.ok) {
         return framework as SolidityFramework;
       }
+      // Directory doesn't exist
+      return null;
     } catch {
-      // Skip if directory doesn't exist
+      console.warn(
+        `${framework.charAt(0).toUpperCase() + framework.slice(1)} framework check failed. You can verify it at ${githubUrl}.`,
+      );
+      // Possibility to verify yourself on github and choose the framework
+      return framework as SolidityFramework;
     }
-    return null;
   });
 
   const results = await Promise.all(frameworkChecks);
