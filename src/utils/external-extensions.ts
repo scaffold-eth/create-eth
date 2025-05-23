@@ -179,7 +179,7 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
       console.warn(
         `${framework.charAt(0).toUpperCase() + framework.slice(1)} framework check failed. You can verify it at ${githubUrl}.`,
       );
-      // Possibility to verify yourself on github and choose the framework
+
       return framework as SolidityFramework;
     }
   });
