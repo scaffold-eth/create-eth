@@ -20,7 +20,7 @@ export const checkSystemRequirements = async () => {
   try {
     const { stdout: nodeVersion } = await execa("node", ["--version"]);
     const cleanNodeVersion = nodeVersion.replace("v", "");
-    if (!semver.gte(cleanNodeVersion, "20.18.3")) {
+    if (semver.lt(cleanNodeVersion, "20.18.3")) {
       errors.push(`Node.js version must be >= 20.18.3. Current version: ${nodeVersion}`);
     }
   } catch {
@@ -29,7 +29,7 @@ export const checkSystemRequirements = async () => {
 
   try {
     const { stdout: yarnVersion } = await execa("yarn", ["--version"]);
-    if (!semver.gte(yarnVersion, "1.0.0")) {
+    if (semver.lt(yarnVersion, "1.0.0")) {
       errors.push(`Yarn version should be >= 1.0.0. Recommended version is >= 2.0.0. Current version: ${yarnVersion}`);
     }
   } catch {
@@ -44,7 +44,7 @@ export const checkSystemRequirements = async () => {
     const versionMatch = gitVersion.match(/(\d+\.\d+\.\d+)/);
     const cleanGitVersion = versionMatch ? versionMatch[1] : null;
 
-    if (cleanGitVersion && !semver.gte(cleanGitVersion, "2.20.0")) {
+    if (cleanGitVersion && semver.lt(cleanGitVersion, "2.20.0")) {
       errors.push(`Git version should be >= 2.20.0 for modern features. Current version: ${gitVersion}`);
     }
   } catch {
