@@ -43,9 +43,17 @@ export const withDefaults =
     Object.keys(receivedArgs).forEach(receivedArgName => {
       if (!expectedArgsNames.includes(receivedArgName)) {
         throw new Error(
-          `Templated received unexpected argument \`${receivedArgName}\`. Expecting only ${expectedArgsNames
+          `Template received unexpected argument \`${receivedArgName}\`. Expecting only ${expectedArgsNames
             .map(name => `\`${name}\``)
             .join(", ")}`,
+        );
+      }
+
+      if (typeof receivedArgs[receivedArgName][0] !== typeof expectedArgsDefaults[receivedArgName]) {
+        throw new Error(
+          `Template argument \`${receivedArgName}\` has wrong type. Expecting ${
+            typeof expectedArgsDefaults[receivedArgName]
+          }. Received ${typeof receivedArgs[receivedArgName][0]}.`,
         );
       }
     });

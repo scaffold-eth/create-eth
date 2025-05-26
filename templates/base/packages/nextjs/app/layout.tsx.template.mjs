@@ -35,6 +35,6 @@ export default ScaffoldEthApp;`;
 
 export default withDefaults(contents, {
   preConfigContent: "",
-  metadataOverrides: "",
+  metadataOverrides: {},
   htmlClassNames: ""
 });
