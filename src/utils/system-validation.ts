@@ -37,18 +37,9 @@ export const checkSystemRequirements = async () => {
   }
 
   try {
-    const { stdout: gitVersion } = await execa("git", ["--version"]);
-    // Handle both Windows and Unix-style Git version outputs
-    // Windows: git version 2.39.2.windows.1
-    // Unix: git version 2.39.2
-    const versionMatch = gitVersion.match(/(\d+\.\d+\.\d+)/);
-    const cleanGitVersion = versionMatch ? versionMatch[1] : null;
-
-    if (cleanGitVersion && semver.lt(cleanGitVersion, "2.20.0")) {
-      errors.push(`Git version should be >= 2.20.0 for modern features. Current version: ${gitVersion}`);
-    }
+    await execa("git", ["--version"]);
   } catch {
-    errors.push("Git is not installed. Please install Git >= 2.20.0");
+    errors.push("Git is not installed. Please install Git");
   }
 
   return { errors };
