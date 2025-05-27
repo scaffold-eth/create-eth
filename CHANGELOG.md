@@ -1,5 +1,16 @@
 # create-eth
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- c2b1cd2: readme arg extraContent => extraContents
+
+  manifest.json.template.mjs arg extraContent => extraContents
+
+- 417df71: - fix dark mode variant (https://github.com/scaffold-eth/scaffold-eth-2/pull/1096)
+  - Up viem, wagmi and rainbowkit (fixes indexDB warning)(https://github.com/scaffold-eth/scaffold-eth-2/pull/1099)
+
 ## 1.0.0-beta.2
 
 ### Patch Changes
