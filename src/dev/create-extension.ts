@@ -139,7 +139,10 @@ const copyChanges = async (
 
     if (templates.has(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
-      prettyLog.info(`Please instead create/update: ${destPath}.args.mjs`, 3);
+      await createDirectories(file, projectName);
+      const argsFilePath = `${destPath}.args.mjs`;
+      await fs.promises.writeFile(argsFilePath, "");
+      prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
       console.log("\n");
       continue;
     }
