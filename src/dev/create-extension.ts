@@ -148,11 +148,26 @@ const copyChanges = async (
 
     if (normalizedTemplatesArray.includes(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
-      await createDirectories(file, projectName);
-      const argsFilePath = `${destPath}.args.mjs`;
       const templateIndex = normalizedTemplatesArray.indexOf(file);
+
+      const templateContent = await fs.promises.readFile(
+        path.join(templateDirectory, `${templatesArray[templateIndex]}.template.mjs`),
+        "utf8",
+      );
+      const defaultArgs = extractWithDefaultsArg(templateContent);
+
+      if (!defaultArgs) {
+        prettyLog.info(`.gitignore and .env files could not be changed`, 3);
+        console.log("\n");
+        continue;
+      }
+      const argsFilePath = `${destPath}.args.mjs`;
+      await createDirectories(file, projectName);
+      const constants = convertDefaultArgsToConstants(defaultArgs);
+
       const referenceComment = `// Reference the template file that will use this here: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
-      await fs.promises.writeFile(argsFilePath, referenceComment);
+      const fileContent = `${referenceComment}\n\n// Default args:\n${constants}\n`;
+      await fs.promises.writeFile(argsFilePath, fileContent);
       prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
       console.log("\n");
       continue;
@@ -204,6 +219,54 @@ const copyChanges = async (
     prettyLog.success(`Copied: ${file}`, 2);
     console.log("\n");
   }
+};
+
+const extractWithDefaultsArg = (templateContent: string): string | null => {
+  const withDefaultsRegex = /export\s+default\s+withDefaults\s*\(\s*[^,]+,\s*({[\s\S]*?})\s*\)/;
+  const match = templateContent.match(withDefaultsRegex);
+
+  if (!match) {
+    return null;
+  }
+
+  return match[1].trim();
+};
+
+const convertDefaultArgsToConstants = (defaultArgs: string) => {
+  // Remove the outer curly braces and split by commas
+  const content = defaultArgs.replace(/^{|}$/g, "").trim();
+
+  // Split by commas but not inside arrays or objects
+  const lines: string[] = [];
+  let currentLine = "";
+  let bracketCount = 0;
+
+  for (let i = 0; i < content.length; i++) {
+    const char = content[i];
+    if (char === "{" || char === "[") bracketCount++;
+    if (char === "}" || char === "]") bracketCount--;
+
+    if (char === "," && bracketCount === 0) {
+      lines.push(currentLine.trim());
+      currentLine = "";
+    } else {
+      currentLine += char;
+    }
+  }
+  if (currentLine) lines.push(currentLine.trim());
+
+  const constants = lines
+    .map(line => {
+      const colonIndex = line.indexOf(":");
+      if (colonIndex === -1) return null;
+
+      const key = line.slice(0, colonIndex).trim();
+      const value = line.slice(colonIndex + 1).trim();
+      return `export const ${key} = ${value};`;
+    })
+    .filter(Boolean);
+
+  return constants.join("\n");
 };
 
 const main = async (rawArgs: string[]) => {
