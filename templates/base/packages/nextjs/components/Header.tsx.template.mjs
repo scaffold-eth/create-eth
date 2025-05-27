@@ -115,7 +115,7 @@ export const Header = () => {
 
 export default withDefaults(contents, {
   preConfigContent: "",
-  extraMenuLinksObjects: "",
+  extraMenuLinksObjects: [],
   logoTitle: "Scaffold-ETH",
   logoSubtitle: "Ethereum dev stack"
 });
