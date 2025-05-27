@@ -38,6 +38,20 @@ export const checkSystemRequirements = async () => {
 
   try {
     await execa("git", ["--version"]);
+
+    try {
+      await execa("git", ["config", "user.name"]);
+    } catch {
+      errors.push("Git user.name is not configured. Please set it using: git config --global user.name 'Your Name'");
+    }
+
+    try {
+      await execa("git", ["config", "user.email"]);
+    } catch {
+      errors.push(
+        "Git user.email is not configured. Please set it using: git config --global user.email 'your.email@example.com'",
+      );
+    }
   } catch {
     errors.push("Git is not installed. Please install Git");
   }
