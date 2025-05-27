@@ -71,6 +71,21 @@ const createDirectories = async (filePath: string, projectName: string) => {
   await fs.promises.mkdir(dirPath, { recursive: true });
 };
 
+const normalizeRelativePath = (relativePath: string) => {
+  const pathSegments = relativePath.split(path.sep);
+
+  if (pathSegments[0] === BASE_DIR) {
+    relativePath = pathSegments.slice(1).join(path.sep);
+  } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
+    const framework = pathSegments[1];
+    if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
+      relativePath = pathSegments.slice(2).join(path.sep);
+    }
+  }
+
+  return relativePath;
+};
+
 const findTemplateFiles = async (dir: string, templates: Set<string>) => {
   const files = await fs.promises.readdir(dir, { withFileTypes: true });
   for (const file of files) {
@@ -78,18 +93,9 @@ const findTemplateFiles = async (dir: string, templates: Set<string>) => {
     if (file.isDirectory()) {
       await findTemplateFiles(fullPath, templates);
     } else if (file.name.endsWith(TEMPLATE_FILE_SUFFIX)) {
-      let relativePath = path.relative(templateDirectory, fullPath).replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
-      const pathSegments = relativePath.split(path.sep);
-
-      // Normalize the relative path by stripping the initial parts
-      if (pathSegments[0] === BASE_DIR) {
-        relativePath = pathSegments.slice(1).join(path.sep);
-      } else if (pathSegments[0] === SOLIDITY_FRAMEWORKS_DIR) {
-        const framework = pathSegments[1];
-        if (Object.values(SOLIDITY_FRAMEWORKS).includes(framework as any)) {
-          relativePath = pathSegments.slice(2).join(path.sep);
-        }
-      }
+      const relativePath = path
+        .relative(templateDirectory, fullPath)
+        .replace(new RegExp(`${TEMPLATE_FILE_SUFFIX}$`), "");
 
       templates.add(relativePath);
     }
@@ -137,11 +143,16 @@ const copyChanges = async (
       continue;
     }
 
-    if (templates.has(file)) {
+    const templatesArray = Array.from(templates);
+    const normalizedTemplatesArray = templatesArray.map(normalizeRelativePath);
+
+    if (normalizedTemplatesArray.includes(file)) {
       prettyLog.warning(`Skipping file: ${file}`, 2);
       await createDirectories(file, projectName);
       const argsFilePath = `${destPath}.args.mjs`;
-      await fs.promises.writeFile(argsFilePath, "");
+      const templateIndex = normalizedTemplatesArray.indexOf(file);
+      const referenceComment = `// Reference the template file that will use this here: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
+      await fs.promises.writeFile(argsFilePath, referenceComment);
       prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
       console.log("\n");
       continue;
