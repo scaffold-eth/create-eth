@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.2.3
+
+### Patch Changes
+
+- 94f18a3: - remove hardcode string and use AddressType (https://github.com/scaffold-eth/scaffold-eth-2/pull/1103)
+
 ## 0.2.2
 
 ### Patch Changes
