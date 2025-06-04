@@ -1,6 +1,16 @@
 import { inspect } from "util";
 import createDeepMerge from "@fastify/deepmerge";
 
+const getType = (value) => {
+  if (Array.isArray(value)) {
+    return 'array';
+  }
+  if (value === null) {
+    return 'null';
+  }
+  return typeof value;
+};
+
 // https://github.com/fastify/deepmerge?tab=readme-ov-file#mergearray Example 1
 const replaceByClonedSource = options => {
   const clone = options.clone;
@@ -49,11 +59,14 @@ export const withDefaults =
         );
       }
 
-      if (typeof receivedArgs[receivedArgName][0] !== typeof expectedArgsDefaults[receivedArgName]) {
+      const receivedType = getType(receivedArgs[receivedArgName][0]);
+      const expectedType = getType(expectedArgsDefaults[receivedArgName]);
+
+      if (receivedType !== expectedType) {
         throw new Error(
           `Template argument \`${receivedArgName}\` has wrong type. Expecting ${
-            typeof expectedArgsDefaults[receivedArgName]
-          }. Received ${typeof receivedArgs[receivedArgName][0]}.`,
+            expectedType
+          }. Received ${receivedType}.`,
         );
       }
     });
