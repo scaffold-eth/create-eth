@@ -6,7 +6,7 @@ const defaultProviders = [
   '$$createProvider(RainbowKitProvider, { avatar: BlockieAvatar, theme: mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme() })$$',
 ]
 
-const contents = ({ preConfigContent, globalClassNames, extraProviders, overrideProviders }) => {
+const contents = ({ preContent, globalClassNames, extraProviders, overrideProviders }) => {
   const providers = overrideProviders?.[0].length > 0 ? overrideProviders[0] : [...defaultProviders, ...(extraProviders[0] || [])]
 
   return `"use client";
@@ -24,7 +24,7 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
 import { composeProviders, createProvider } from "~~/utils/scaffold-eth/composeProviders";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   useInitializeNativeCurrencyPrice();
@@ -72,7 +72,7 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   globalClassNames: "",
   extraProviders: [],
   overrideProviders: [],

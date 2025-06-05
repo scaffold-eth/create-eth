@@ -5,7 +5,7 @@ const defaultMetadata = {
   description: "Built with 🏗 Scaffold-ETH 2"
 }
 
-const contents = ({ preConfigContent, metadataOverrides, htmlClassNames }) => {
+const contents = ({ preContent, metadataOverrides, htmlClassNames }) => {
   const finalMetadata = deepMerge(defaultMetadata, metadataOverrides[0] || {});
 
   return `
@@ -14,7 +14,7 @@ import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithPro
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 export const metadata = getMetadata(${stringify(finalMetadata)});
 
@@ -34,7 +34,7 @@ export default ScaffoldEthApp;`;
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   metadataOverrides: {},
   htmlClassNames: ""
 });
