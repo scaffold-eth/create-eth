@@ -1,13 +1,22 @@
 import { stringify, withDefaults } from "../../../../utils.js";
 
-const defaultProviders = [
-  '$$createProvider(WagmiProvider, { config: wagmiConfig })$$',
-  '$$createProvider(QueryClientProvider, { client: queryClient })$$',
-  '$$createProvider(RainbowKitProvider, { avatar: BlockieAvatar, theme: mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme() })$$',
-]
+const defaultProviders = {
+  WagmiProvider: { config: "$$wagmiConfig$$" },
+  QueryClientProvider: { client: "$$queryClient$$" },
+  RainbowKitProvider: {
+    avatar: "$$BlockieAvatar$$",
+    theme: "$$mounted ? (isDarkMode ? darkTheme() : lightTheme()) : lightTheme()$$"
+  }
+};
 
 const contents = ({ preContent, globalClassNames, extraProviders, overrideProviders }) => {
-  const providers = overrideProviders?.[0].length > 0 ? overrideProviders[0] : [...defaultProviders, ...(extraProviders[0] || [])]
+  const providersObject = overrideProviders?.[0]
+    ? overrideProviders[0]
+    : { ...defaultProviders, ...(extraProviders[0] || {}) };
+
+  const providers = Object.entries(providersObject).map(([providerName, props]) =>
+    `$$createProvider(${providerName}, ${JSON.stringify(props)})$$`
+  );
 
   return `"use client";
 
@@ -74,6 +83,6 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 export default withDefaults(contents, {
   preContent: "",
   globalClassNames: "",
-  extraProviders: [],
-  overrideProviders: [],
+  extraProviders: {},
+  overrideProviders: {},
 });
