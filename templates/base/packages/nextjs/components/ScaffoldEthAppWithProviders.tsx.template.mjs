@@ -10,9 +10,10 @@ const defaultProviders = {
 };
 
 const contents = ({ preContent, globalClassNames, extraProviders, overrideProviders }) => {
-  const providersObject = overrideProviders?.[0]
-    ? overrideProviders[0]
-    : { ...defaultProviders, ...(extraProviders[0] || {}) };
+  const providersObject =
+    overrideProviders?.[0] && Object.keys(overrideProviders[0]).length > 0
+      ? overrideProviders[0]
+      : { ...defaultProviders, ...(extraProviders[0] || {}) };
 
   const providers = Object.entries(providersObject).map(([providerName, props]) =>
     `$$createProvider(${providerName}, ${JSON.stringify(props)})$$`
