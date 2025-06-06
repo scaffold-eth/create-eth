@@ -183,9 +183,9 @@ This customisation can be broadly broken into:
 
 1. **When extending/modifying already declared variables/objects**:
 
-- Use `preConfigContent` (string) for imports and variable declarations
+- Use `preContent` (string) for imports and variable declarations
 - Use `<name>Overrides` (object) to extend existing variables/objects
-- Can reference variables defined in template and `preConfigContent` in two ways:
+- Can reference variables defined in template and `preContent` in two ways:
   - `$$variableName$$` - When variable needs to be used without quotes (expressions/variables)
     - example: `{ accounts: ["$$deployerPrivateKey$$"] }` -> `{ accounts: [deployerPrivateKey] }`
   - `\${variableName}` - When variable needs to be interpolated within a string
@@ -214,8 +214,8 @@ const defaultConfig = {
 };
 
 export default withDefaults(
-  ({ preConfigContent, configOverrides }) => `
-${preConfigContent}
+  ({ preContent, configOverrides }) => `
+${preContent}
 
 const deployerPrivateKey =
   process.env.__RUNTIME_DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
@@ -225,13 +225,13 @@ const config = ${stringify(deepMerge(defaultConfig, configOverrides[0]))};
 export default config;
 `,
   {
-    preConfigContent: "",
+    preContent: "",
     configOverrides: {},
   },
 );
 
 // In extension's args file (hardhat.config.ts.args.mjs)
-export const preConfigContent = `
+export const preContent = `
 // Custom variables
 const CUSTOM_API_KEY = process.env.CUSTOM_API_KEY;
 `;
@@ -274,16 +274,16 @@ export const configOverrides = {
 
 ```typescript
 export default withDefaults(
-  ({ preConfigContent, renderContent }) => `
+  ({ preContent, renderContent }) => `
 import { Base } from './Base';
-${preConfigContent[0] || ""}
+${preContent[0] || ""}
 
 export const Component = () => {
 ${renderContent}
 };
 `,
   {
-    preConfigContent: "",
+    preContent: "",
     renderContent: "",
   },
 );

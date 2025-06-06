@@ -7,7 +7,7 @@ const defaultWagmiConfig = {
   client: `$$({ chain }) => { let rpcFallbacks = [http()]; const rpcOverrideUrl = (scaffoldConfig.rpcOverrides as ScaffoldConfig["rpcOverrides"])?.[chain.id]; if (rpcOverrideUrl) { rpcFallbacks = [http(rpcOverrideUrl), http()]; } else { const alchemyHttpUrl = getAlchemyHttpUrl(chain.id); if (alchemyHttpUrl) { const isUsingDefaultKey = scaffoldConfig.alchemyApiKey === DEFAULT_ALCHEMY_API_KEY; rpcFallbacks = isUsingDefaultKey ? [http(), http(alchemyHttpUrl)] : [http(alchemyHttpUrl), http()]; } } return createClient({ chain, transport: fallback(rpcFallbacks), ...(chain.id !== (hardhat as Chain).id ? { pollingInterval: scaffoldConfig.pollingInterval, } : {}), }); }$$`,
 }
 
-const contents = ({ preConfigContent, configOverrides }) => {
+const contents = ({ preContent, configOverrides }) => {
   const finalConfig = deepMerge(defaultWagmiConfig, configOverrides[0] || {});
 
   return `import { wagmiConnectors } from "./wagmiConnectors";
@@ -16,7 +16,7 @@ import { hardhat, mainnet } from "viem/chains";
 import { createConfig } from "wagmi";
 import scaffoldConfig, { DEFAULT_ALCHEMY_API_KEY, ScaffoldConfig } from "~~/scaffold.config";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 const { targetNetworks } = scaffoldConfig;
 
@@ -30,6 +30,6 @@ export const wagmiConfig = createConfig(${stringify(finalConfig)});
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   configOverrides: {},
 });

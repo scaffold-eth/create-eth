@@ -9,7 +9,7 @@ const defaultScaffoldConfig = {
     onlyLocalBurnerWallet: true,
   };
 
-const contents = ({ preConfigContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
+const contents = ({ preContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
   // add solidityFramework network
   let targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
   // if skipLocalChainInTargetNetworks is true, don't include solidityFramework network
@@ -24,7 +24,7 @@ const contents = ({ preConfigContent, configOverrides, extraConfigTypeName, skip
 
   return  `import * as chains from "viem/chains";
 
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 export type BaseConfig = {
   targetNetworks: readonly chains.Chain[];
@@ -52,7 +52,7 @@ export default scaffoldConfig;`;
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   extraConfigTypeName: "",
   configOverrides: {},
   skipLocalChainInTargetNetworks: false,

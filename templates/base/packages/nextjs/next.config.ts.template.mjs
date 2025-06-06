@@ -12,12 +12,12 @@ const defaultConfig = {
   webpack: `$$config => { config.resolve.fallback = { fs: false, net: false, tls: false }; config.externals.push("pino-pretty", "lokijs", "encoding"); return config; }$$`,
 }
 
-const contents = ({ preConfigContent, configOverrides, postConfigContent, finalNextConfigName }) => {
+const contents = ({ preContent, configOverrides, postConfigContent, finalNextConfigName }) => {
   // Merge the default config with any overrides
   const finalConfig = deepMerge(defaultConfig, configOverrides[0] || {});
 
   return `import type { NextConfig } from "next";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 const nextConfig: NextConfig = ${stringify(finalConfig)};
 
@@ -37,7 +37,7 @@ module.exports = ${finalNextConfigName[0]};`
 }
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   configOverrides: {},
   postConfigContent: "",
   finalNextConfigName: "nextConfig",
