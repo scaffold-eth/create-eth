@@ -33,13 +33,13 @@ const defaultMetadata = {
 }
 
 
-const contents = ({ titleTemplate, thumbnailPath, preConfigContent, metadataOverrides }) =>  {
+const contents = ({ titleTemplate, thumbnailPath, preContent, metadataOverrides }) =>  {
   
   const finalMetadata = deepMerge(defaultMetadata, metadataOverrides[0] || {})
   
   return `
 import type { Metadata } from "next";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
   ? \`https://\${process.env.VERCEL_PROJECT_PRODUCTION_URL}\`
@@ -65,5 +65,5 @@ export default withDefaults(contents, {
   metadataOverrides: {},
   titleTemplate: "%s | Scaffold-ETH 2",
   thumbnailPath: "/thumbnail.jpg",
-  preConfigContent: '',
+  preContent: '',
 })

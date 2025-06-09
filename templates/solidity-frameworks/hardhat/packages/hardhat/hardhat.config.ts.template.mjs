@@ -137,7 +137,7 @@ const defaultConfig = {
   },
 };
 
-const contents = ({ preConfigContent, configOverrides }) => {
+const contents = ({ preContent, configOverrides }) => {
   // Merge the default config with any overrides
   const finalConfig = deepMerge(defaultConfig, configOverrides[0] || {});
   
@@ -154,7 +154,7 @@ import "hardhat-deploy";
 import "hardhat-deploy-ethers";
 import { task } from "hardhat/config";
 import generateTsAbis from "./scripts/generateTsAbis";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 // If not set, it uses ours Alchemy's default API key.
 // You can get your own at https://dashboard.alchemyapi.io
@@ -189,6 +189,6 @@ export default config;`;
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
+  preContent: "",
   configOverrides: {},
 });
