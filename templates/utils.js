@@ -77,7 +77,7 @@ export const withDefaults =
     Object.keys(receivedArgs).forEach(receivedArgName => {
       if (!expectedArgsNames.includes(receivedArgName)) {
         throw new Error(
-          `Template ${callerFile} received unexpected argument \`${receivedArgName}\`. Expecting only ${expectedArgsNames
+          `Template ${callerFile} received unexpected argument \`${receivedArgName}\`. Expected only ${expectedArgsNames
             .map(name => `\`${name}\``)
             .join(", ")}`,
         );
@@ -88,9 +88,9 @@ export const withDefaults =
 
       if (receivedType !== expectedType) {
         throw new Error(
-          `Template ${callerFile} argument \`${receivedArgName}\` has wrong type. Expecting ${
+          `Template ${callerFile} argument \`${receivedArgName}\` has wrong type. Expected ${
             expectedType
-          }. Received ${receivedType}.`,
+          } but received ${receivedType}.`,
         );
       }
     });
