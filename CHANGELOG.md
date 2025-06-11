@@ -1,5 +1,12 @@
 # create-eth
 
+## 1.0.0-beta.4
+
+### Patch Changes
+
+- ac7a3c3: - remove hardcode string and use AddressType (https://github.com/scaffold-eth/scaffold-eth-2/pull/1103)
+- ac7a3c3: templatise abi.d.ts to allow AddressType override
+
 ## 1.0.0-beta.3
 
 ### Patch Changes
