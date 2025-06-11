@@ -1,5 +1,14 @@
 # create-eth
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- rename arg `preConfigContent` => `preContent`
+- new way of passing providers to `ScaffoldEthAppWithProviders.tsx` checkout [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- readme arg `extraContent` => `extraContents`
+- manifest.json.template.mjs arg `extraContent` => `extraContents`
+
 ## 1.0.0-beta.2
 
 ### Patch Changes
