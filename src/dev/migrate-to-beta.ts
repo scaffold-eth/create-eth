@@ -19,41 +19,37 @@ const getParsedArgs = (rawArgs: string[]) => {
     {
       "--help": Boolean,
       "-h": "--help",
-      "--fix": Boolean,
-      "--dry-run": Boolean,
     },
     { argv: rawArgs.slice(2) },
   );
 
   if (args["--help"]) {
     console.log(`
-Usage: yarn migrate-to-beta <extension-path> [options]
+Usage: yarn migrate-to-beta <extension-base-path>
 
 Arguments:
-  extension-path    Path to the extension directory to migrate
+  extension-base-path    Path to the extension directory (script will automatically look for /extension subdirectory)
 
 Options:
-  --help, -h        Show this help message
-  --fix             Automatically fix simple issues (e.g., rename args)
-  --dry-run         Show what would be changed without making changes
+  --help, -h             Show this help message
 
 Examples:
   yarn migrate-to-beta externalExtensions/my-extension
-  yarn migrate-to-beta externalExtensions/my-extension --fix
-  yarn migrate-to-beta externalExtensions/my-extension --dry-run
+  yarn migrate-to-beta externalExtensions/se-2-challenges
     `);
     process.exit(0);
   }
 
-  const extensionPath = args._[0];
-  if (!extensionPath) {
+  const basePath = args._[0];
+  if (!basePath) {
     throw new Error("Extension path is required. Use --help for usage information.");
   }
 
+  // Automatically append /extension to the path
+  const extensionPath = path.join(basePath, "extension");
+
   return {
     extensionPath,
-    fix: args["--fix"] || false,
-    dryRun: args["--dry-run"] || false,
   };
 };
 
@@ -65,7 +61,6 @@ interface ArgsComparison {
   missingArgs: string[];
   renamedArgs: Array<{ old: string; new: string }>;
   newArgs: string[];
-  differentValues: Array<{ arg: string; current: any; beta: any }>;
 }
 
 // Known arg renames based on the changelog
@@ -135,7 +130,6 @@ const compareArgs = (
   missingArgs: string[];
   renamedArgs: Array<{ old: string; new: string }>;
   newArgs: string[];
-  differentValues: Array<{ arg: string; current: any; beta: any }>;
 } => {
   const currentKeys = new Set(Object.keys(currentArgs));
   const betaKeys = new Set(Object.keys(betaArgs));
@@ -143,7 +137,6 @@ const compareArgs = (
   const missingArgs: string[] = [];
   const renamedArgs: Array<{ old: string; new: string }> = [];
   const newArgs: string[] = [];
-  const differentValues: Array<{ arg: string; current: any; beta: any }> = [];
 
   // Check for renamed args
   for (const [oldName, newName] of Object.entries(KNOWN_RENAMES)) {
@@ -168,58 +161,7 @@ const compareArgs = (
     }
   }
 
-  // Check for different values in common args
-  for (const key of Object.keys(currentArgs)) {
-    if (Object.prototype.hasOwnProperty.call(betaArgs, key)) {
-      const currentValue = currentArgs[key];
-      const betaValue = betaArgs[key];
-
-      if (JSON.stringify(currentValue) !== JSON.stringify(betaValue)) {
-        differentValues.push({ arg: key, current: currentValue, beta: betaValue });
-      }
-    }
-  }
-
-  return { missingArgs, renamedArgs, newArgs, differentValues };
-};
-
-const generateFixedArgsContent = (
-  currentArgs: Record<string, any>,
-  betaArgs: Record<string, any>,
-  renamedArgs: Array<{ old: string; new: string }>,
-): string => {
-  const fixedArgs: Record<string, any> = { ...currentArgs };
-
-  // Apply renames
-  for (const { old, new: newName } of renamedArgs) {
-    if (fixedArgs[old] !== undefined) {
-      fixedArgs[newName] = fixedArgs[old];
-      delete fixedArgs[old];
-    }
-  }
-
-  // Add new args from beta (with placeholder values)
-  for (const [key, value] of Object.entries(betaArgs)) {
-    if (!Object.prototype.hasOwnProperty.call(fixedArgs, key)) {
-      fixedArgs[key] = value;
-    }
-  }
-
-  // Generate the content
-  let content = "";
-  for (const [key, value] of Object.entries(fixedArgs)) {
-    if (typeof value === "string") {
-      content += `export const ${key} = ${JSON.stringify(value)};\n\n`;
-    } else if (Array.isArray(value)) {
-      content += `export const ${key} = ${JSON.stringify(value, null, 2)};\n\n`;
-    } else if (typeof value === "object") {
-      content += `export const ${key} = ${JSON.stringify(value, null, 2)};\n\n`;
-    } else {
-      content += `export const ${key} = ${JSON.stringify(value)};\n\n`;
-    }
-  }
-
-  return content;
+  return { missingArgs, renamedArgs, newArgs };
 };
 
 const analyzeExtension = async (extensionPath: string): Promise<ArgsComparison[]> => {
@@ -228,19 +170,16 @@ const analyzeExtension = async (extensionPath: string): Promise<ArgsComparison[]
   prettyLog.info("Scanning for .args.mjs files...");
 
   const currentArgsFiles = await findAllArgsFiles(extensionPath);
-  const betaArgsFiles = await findAllArgsFiles(BETA_EXTENSION_DIR);
 
-  // Get all unique relative paths
-  const allRelativePaths = new Set([...currentArgsFiles, ...betaArgsFiles]);
-
-  for (const relativePath of allRelativePaths) {
+  // Only process files that exist in the current extension
+  for (const relativePath of currentArgsFiles) {
     const currentFile = path.join(extensionPath, relativePath);
     const betaFile = path.join(BETA_EXTENSION_DIR, relativePath);
 
     const currentArgs = await loadArgsFile(currentFile);
     const betaArgs = await loadArgsFile(betaFile);
 
-    if (Object.keys(currentArgs).length > 0 || Object.keys(betaArgs).length > 0) {
+    if (Object.keys(currentArgs).length > 0) {
       const comparison = compareArgs(currentArgs, betaArgs);
 
       comparisons.push({
@@ -256,24 +195,10 @@ const analyzeExtension = async (extensionPath: string): Promise<ArgsComparison[]
   return comparisons;
 };
 
-const reportComparison = (comparison: ArgsComparison, fix: boolean, dryRun: boolean) => {
+const reportComparison = (comparison: ArgsComparison) => {
   const relativePath = path.relative(process.cwd(), comparison.currentFile);
-  const fileExists = fs.existsSync(comparison.currentFile);
-
-  if (!fileExists && Object.keys(comparison.betaArgs).length === 0) {
-    return; // Skip files that don't exist in either
-  }
 
   console.log(`\n${chalk.bold(relativePath)}`);
-
-  if (!fileExists) {
-    prettyLog.warning("File does not exist in current extension", 1);
-    prettyLog.info("This file exists in beta version with args:", 1);
-    for (const arg of Object.keys(comparison.betaArgs)) {
-      prettyLog.info(`• ${arg}`, 2);
-    }
-    return;
-  }
 
   if (Object.keys(comparison.betaArgs).length === 0) {
     prettyLog.warning("File exists in current but not in beta version", 1);
@@ -306,39 +231,14 @@ const reportComparison = (comparison: ArgsComparison, fix: boolean, dryRun: bool
     }
   }
 
-  if (comparison.differentValues.length > 0) {
-    hasIssues = true;
-    prettyLog.info("Different values:", 1);
-    for (const { arg, current, beta } of comparison.differentValues) {
-      prettyLog.info(`${arg}:`, 2);
-      prettyLog.info(`Current: ${JSON.stringify(current)}`, 3);
-      prettyLog.info(`Beta: ${JSON.stringify(beta)}`, 3);
-    }
-  }
-
   if (!hasIssues) {
     prettyLog.success("No issues found", 1);
-  } else if (fix && !dryRun) {
-    try {
-      const fixedContent = generateFixedArgsContent(
-        comparison.currentArgs,
-        comparison.betaArgs,
-        comparison.renamedArgs,
-      );
-
-      fs.writeFileSync(comparison.currentFile, fixedContent);
-      prettyLog.success("Fixed automatically", 1);
-    } catch (err) {
-      prettyLog.error(`Failed to fix: ${String(err)}`, 1);
-    }
-  } else if (fix && dryRun) {
-    prettyLog.info("Would fix automatically with --fix (without --dry-run)", 1);
   }
 };
 
 const main = async (rawArgs: string[]) => {
   try {
-    const { extensionPath, fix, dryRun } = getParsedArgs(rawArgs);
+    const { extensionPath } = getParsedArgs(rawArgs);
 
     if (!fs.existsSync(extensionPath)) {
       throw new Error(`Extension path does not exist: ${extensionPath}`);
@@ -352,10 +252,6 @@ const main = async (rawArgs: string[]) => {
     prettyLog.info(`Analyzing extension: ${extensionPath}`);
     prettyLog.info(`Comparing with beta version: ${BETA_EXTENSION_DIR}`);
 
-    if (dryRun) {
-      prettyLog.info("Running in dry-run mode - no changes will be made");
-    }
-
     const comparisons = await analyzeExtension(extensionPath);
 
     if (comparisons.length === 0) {
@@ -367,16 +263,13 @@ const main = async (rawArgs: string[]) => {
 
     for (const comparison of comparisons) {
       const hasIssues =
-        comparison.renamedArgs.length > 0 ||
-        comparison.newArgs.length > 0 ||
-        comparison.missingArgs.length > 0 ||
-        comparison.differentValues.length > 0;
+        comparison.renamedArgs.length > 0 || comparison.newArgs.length > 0 || comparison.missingArgs.length > 0;
 
       if (hasIssues) {
         totalIssues++;
       }
 
-      reportComparison(comparison, fix, dryRun);
+      reportComparison(comparison);
     }
 
     console.log("\n");
@@ -386,11 +279,7 @@ const main = async (rawArgs: string[]) => {
       prettyLog.success("🎉 All files are up to date with beta version!");
     } else {
       prettyLog.warning(`${totalIssues} files have migration issues`);
-
-      if (!fix) {
-        prettyLog.info("Run with --fix to automatically fix simple issues");
-        prettyLog.info("Run with --dry-run to see what changes would be made");
-      }
+      prettyLog.info("Review the output above for detailed migration guidance");
     }
   } catch (err: any) {
     prettyLog.error(`Error: ${err.message}`);

@@ -9,13 +9,9 @@ We've created a migration script that automatically detects differences between 
 - **Detect renamed arguments** (e.g., `menuIconImports` → `preContent`)
 - **Find new beta arguments** that need to be added
 - **Identify removed arguments** that are no longer used
-- **Detect missing files** that exist in beta but not in your extension
 - **Find extra files** that exist in your extension but not in beta
-- **Automatically fix simple issues** like argument renames
 
 ## Usage
-
-### Basic Analysis
 
 To analyze your extension and see what needs to be migrated:
 
@@ -23,29 +19,14 @@ To analyze your extension and see what needs to be migrated:
 yarn migrate-to-beta path/to/your/extension
 ```
 
-### Dry Run
+**Note**: You only need to provide the base path to your extension directory. The script will automatically look for the `/extension` subdirectory.
 
-To see what changes would be made without actually modifying files:
+For example:
 
-```bash
-yarn migrate-to-beta path/to/your/extension --dry-run
-```
+- `yarn migrate-to-beta externalExtensions/my-extension` (script looks for `externalExtensions/my-extension/extension`)
+- `yarn migrate-to-beta externalExtensions/se-2-challenges` (script looks for `externalExtensions/se-2-challenges/extension`)
 
-### Auto-fix
-
-To automatically fix simple issues (like argument renames):
-
-```bash
-yarn migrate-to-beta path/to/your/extension --fix
-```
-
-### Auto-fix with Dry Run
-
-To see what would be fixed without making changes:
-
-```bash
-yarn migrate-to-beta path/to/your/extension --fix --dry-run
-```
+The script will analyze all `.args.mjs` files in your extension and compare them with the beta format, showing you exactly what needs to be changed.
 
 ## Major Changes in Beta
 
@@ -95,15 +76,15 @@ All `.args.mjs` files have been updated with new argument structures. Check the 
 
 ## Manual Migration Steps
 
-After running the migration script, you may need to manually:
+After running the migration script, you'll need to manually:
 
 1. **Review removed arguments**: The script will tell you which arguments were removed. You'll need to migrate their functionality to the new argument structure.
 
-2. **Update custom logic**: If your args files contain complex logic, you may need to adapt it to the new structure.
+2. **Add new arguments**: For new arguments shown by the script, refer to the beta examples to understand their usage and add them to your files.
 
-3. **Test your extension**: Always test your extension after migration to ensure everything works correctly.
+3. **Update custom logic**: If your args files contain complex logic, you may need to adapt it to the new structure.
 
-4. **Create missing files**: For files that exist in beta but not in your extension, create them using the beta examples as templates.
+4. **Test your extension**: Always test your extension after migration to ensure everything works correctly.
 
 ## Example Migration
 
@@ -151,11 +132,11 @@ If you encounter issues during migration:
 
 ## Migration Checklist
 
-- [ ] Run `yarn migrate-to-beta your-extension-path` to analyze differences
+- [ ] Run `yarn migrate-to-beta your-extension-base-path` to analyze differences
 - [ ] Review all reported issues and understand the changes needed
-- [ ] Run `yarn migrate-to-beta your-extension-path --fix` to auto-fix simple issues
+- [ ] Add new arguments shown by the script to your `.args.mjs` files
+- [ ] Remove or update arguments that were removed in beta
 - [ ] Manually migrate complex argument logic to new structure
-- [ ] Create any missing files using beta examples as templates
 - [ ] Remove any files that are no longer needed in beta
 - [ ] Test your extension thoroughly
 - [ ] Update your extension's documentation if needed
