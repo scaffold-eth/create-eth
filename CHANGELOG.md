@@ -4,12 +4,10 @@
 
 ### Patch Changes
 
-- c2b1cd2: readme arg extraContent => extraContents
-
-  manifest.json.template.mjs arg extraContent => extraContents
-
-- 417df71: - fix dark mode variant (https://github.com/scaffold-eth/scaffold-eth-2/pull/1096)
-  - Up viem, wagmi and rainbowkit (fixes indexDB warning)(https://github.com/scaffold-eth/scaffold-eth-2/pull/1099)
+- rename arg `preConfigContent` => `preContent`
+- new way of passing providers to `ScaffoldEthAppWithProviders.tsx` checkout [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- readme arg `extraContent` => `extraContents`
+- manifest.json.template.mjs arg `extraContent` => `extraContents`
 
 ## 1.0.0-beta.2
 
