@@ -13,6 +13,7 @@
     "build": "rollup -c rollup.config.js",
     "build:dev": "yarn build && rollup -c src/dev/rollup.config.js",
     "create-extension": "node dist/create-extension/create-extension.js",
+    "migrate-to-beta": "node dist/migrate-to-beta/migrate-to-beta.js",
     "dev": "rollup -c rollup.config.js --watch",
     "cli": "node bin/create-dapp-se2.js",
     "lint": "eslint .",
