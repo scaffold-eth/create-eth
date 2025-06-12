@@ -1,5 +1,14 @@
 # create-eth
 
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- rename arg `preConfigContent` => `preContent`
+- new way of passing providers to `ScaffoldEthAppWithProviders.tsx` checkout [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- readme arg `extraContent` => `extraContents`
+- manifest.json.template.mjs arg `extraContent` => `extraContents`
+
 ## 1.0.0-beta.2
 
 ### Patch Changes
@@ -33,6 +42,14 @@
 - updated `next.config.ts.template.mjs` checkout new args example in [next.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/next.config.ts.args.mjs)
 - updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
 - updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
+
+## 0.2.2
+
+### Patch Changes
+
+- fix dark mode variant (https://github.com/scaffold-eth/scaffold-eth-2/pull/1096)
+- Up viem, wagmi and rainbowkit (fixes indexDB warning)(https://github.com/scaffold-eth/scaffold-eth-2/pull/1099)
+- Add prediction markets challege to curated extensions
 
 ## 0.2.1
 
