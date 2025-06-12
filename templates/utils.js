@@ -11,6 +11,28 @@ const getType = (value) => {
   return typeof value;
 };
 
+const getCallerFile = () => {
+  const stackTrace = new Error().stack;
+  const callerLine = stackTrace
+    ?.split('\n')
+    ?.slice(1)
+    ?.find(line => !line.includes('utils.js'));
+  
+  if (!callerLine) return 'unknown';
+  
+  const match = callerLine.match(/file:\/\/(.*?):\d+:\d+/);
+  if (!match) return 'unknown';
+  
+  const fullPath = match[1].replace(/^\/+|\/+$/g, '');
+  
+  const parts = fullPath.split('/');
+  const templatesIndex = parts.lastIndexOf('templates');
+  
+  if (templatesIndex === -1) return fullPath;
+  
+  return parts.slice(templatesIndex).join('/');
+};
+
 // https://github.com/fastify/deepmerge?tab=readme-ov-file#mergearray Example 1
 const replaceByClonedSource = options => {
   const clone = options.clone;
@@ -36,8 +58,10 @@ export const deepMerge = (...args) => {
 };
 
 export const withDefaults =
-  (template, expectedArgsDefaults, debug = false) =>
-  receivedArgs => {
+  (template, expectedArgsDefaults, debug = false) => {
+    const callerFile = getCallerFile();
+
+    return receivedArgs => {
     const argsWithDefault = Object.fromEntries(
       Object.entries(expectedArgsDefaults).map(([argName, argDefault]) => [
         argName,
@@ -53,7 +77,7 @@ export const withDefaults =
     Object.keys(receivedArgs).forEach(receivedArgName => {
       if (!expectedArgsNames.includes(receivedArgName)) {
         throw new Error(
-          `Template received unexpected argument \`${receivedArgName}\`. Expecting only ${expectedArgsNames
+          `Template ${callerFile} received unexpected argument \`${receivedArgName}\`. Expected only ${expectedArgsNames
             .map(name => `\`${name}\``)
             .join(", ")}`,
         );
@@ -64,15 +88,16 @@ export const withDefaults =
 
       if (receivedType !== expectedType) {
         throw new Error(
-          `Template argument \`${receivedArgName}\` has wrong type. Expecting ${
+          `Template ${callerFile} argument \`${receivedArgName}\` has wrong type. Expected ${
             expectedType
-          }. Received ${receivedType}.`,
+          } but received ${receivedType}.`,
         );
       }
     });
 
     return template(argsWithDefault);
   };
+};
 
 const addComments = (val, comments = {}) => {
   let str = inspect(val, {
