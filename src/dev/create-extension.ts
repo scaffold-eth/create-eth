@@ -161,14 +161,20 @@ const copyChanges = async (
         console.log("\n");
         continue;
       }
+
       const argsFilePath = `${destPath}.args.mjs`;
+      if (fs.existsSync(argsFilePath)) {
+        prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
+        console.log("\n");
+        continue;
+      }
       await createDirectories(file, projectName);
       const constants = convertDefaultArgsToConstants(defaultArgs);
 
       const referenceComment = `// Reference the template file that will use this here: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
       const fileContent = `${referenceComment}\n\n// Default args:\n${constants}\n`;
       await fs.promises.writeFile(argsFilePath, fileContent);
-      prettyLog.info(`Please instead update file: ${argsFilePath}`, 3);
+      prettyLog.info(`Created corresponding args file. Please update it: ${argsFilePath}`, 3);
       console.log("\n");
       continue;
     }
