@@ -171,8 +171,9 @@ const copyChanges = async (
       await createDirectories(file, projectName);
       const constants = convertDefaultArgsToConstants(defaultArgs);
 
-      const referenceComment = `// Reference the template file that will use this here: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
-      const fileContent = `${referenceComment}\n\n// Default args:\n${constants}\n`;
+      const referenceTemplateComment = `// Reference the template file that will use this here: https://github.com/scaffold-eth/create-eth/blob/main/templates/${templatesArray[templateIndex]}.template.mjs`;
+      const referenceArgsFileComment = `// Reference the example args file: https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/${file}.args.mjs`;
+      const fileContent = `${referenceTemplateComment}\n${referenceArgsFileComment}\n\n// Default args:\n${constants}\n`;
       await fs.promises.writeFile(argsFilePath, fileContent);
       prettyLog.info(`Created corresponding args file. Please update it: ${argsFilePath}`, 3);
       console.log("\n");
