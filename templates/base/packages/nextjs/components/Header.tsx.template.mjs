@@ -12,7 +12,7 @@ const defaultMenuLinks = [
   },
 ];
 
-const contents = ({ preConfigContent, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
+const contents = ({ preContent, extraMenuLinksObjects, logoTitle, logoSubtitle }) => {
   // make sure debug contracts is the last item
   const menuLinks = [defaultMenuLinks[0], ...(extraMenuLinksObjects[0] || []), defaultMenuLinks[1]];
 
@@ -26,7 +26,7 @@ import { hardhat } from "viem/chains";
 import { Bars3Icon, BugAntIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick, useTargetNetwork } from "~~/hooks/scaffold-eth";
-${preConfigContent[0] || ''}
+${preContent[0] || ''}
 
 
 type HeaderMenuLink = {
@@ -114,8 +114,8 @@ export const Header = () => {
 };
 
 export default withDefaults(contents, {
-  preConfigContent: "",
-  extraMenuLinksObjects: "",
+  preContent: "",
+  extraMenuLinksObjects: [],
   logoTitle: "Scaffold-ETH",
   logoSubtitle: "Ethereum dev stack"
 });
