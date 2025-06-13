@@ -1,5 +1,12 @@
 # create-eth
 
+## 0.2.4
+
+### Patch Changes
+
+- 1e415ad: up wagmi, viem and rainbow-me/rainbwkit (https://github.com/scaffold-eth/scaffold-eth-2/pull/1108)
+- b392657: templatise abi.d.ts to allow AddressType override
+
 ## 0.2.3
 
 ### Patch Changes
