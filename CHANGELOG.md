@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.0-beta.4
+
+### Patch Changes
+
+- f3854cc: backmerge main
+
 ## 1.0.0-beta.3
 
 ### Patch Changes
