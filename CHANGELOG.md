@@ -43,6 +43,19 @@
 - updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
 - updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
 
+## 0.2.4
+
+### Patch Changes
+
+- 4f31b79: up burner-connector version
+
+## 0.2.3
+
+### Patch Changes
+
+- up wagmi, viem and rainbow-me/rainbwkit (https://github.com/scaffold-eth/scaffold-eth-2/pull/1108)
+- remove hardcode string and use AddressType (https://github.com/scaffold-eth/scaffold-eth-2/pull/1103)
+
 ## 0.2.2
 
 ### Patch Changes
