@@ -1,5 +1,11 @@
 # create-eth
 
+## 0.2.5
+
+### Patch Changes
+
+- 0d12cec: Fetch solidity framework folder correctly for default git branch
+
 ## 0.2.4
 
 ### Patch Changes
