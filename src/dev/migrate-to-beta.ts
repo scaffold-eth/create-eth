@@ -261,7 +261,22 @@ const main = async (rawArgs: string[]) => {
 
     let totalIssues = 0;
 
-    for (const comparison of comparisons) {
+    // Sort comparisons by priority: no issues first, then only new args, then other issues
+    const getPriority = (comparison: ArgsComparison): number => {
+      const hasRenamed = comparison.renamedArgs.length > 0;
+      const hasNew = comparison.newArgs.length > 0;
+      const hasMissing = comparison.missingArgs.length > 0;
+
+      if (!hasRenamed && !hasNew && !hasMissing) return 0; // No issues
+      if (hasNew && !hasRenamed && !hasMissing) return 1; // Only new args
+      return 2; // Other issues (renamed, missing, or mixed)
+    };
+
+    const sortedComparisons = comparisons.sort((a, b) => {
+      return getPriority(a) - getPriority(b);
+    });
+
+    for (const comparison of sortedComparisons) {
       const hasIssues =
         comparison.renamedArgs.length > 0 || comparison.newArgs.length > 0 || comparison.missingArgs.length > 0;
 
