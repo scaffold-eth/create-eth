@@ -4,6 +4,7 @@
 
 ### Patch Changes
 
+- 2e0b44b: foundry: allow extensions to add library
 - 4187258: fix foundry .env.example
 - 0d12cec: Fetch solidity framework folder correctly for default git branch
 
