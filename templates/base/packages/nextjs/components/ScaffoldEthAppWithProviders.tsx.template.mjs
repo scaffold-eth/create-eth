@@ -16,20 +16,16 @@ const contents = ({ preContent, globalClassNames, extraProviders, overrideProvid
       : { ...defaultProviders, ...(extraProviders[0] || {}) };
 
   const providerEntries = Object.entries(providersObject);
-  const providerOpeningTags = providerEntries.map(([providerName, props], index) => {
+  const providerOpeningTags = providerEntries.map(([providerName, props]) => {
     const propAssignments = Object.entries(props).map(([propName, propValue]) => 
       `${propName}={${stringify(propValue)}}`
     ).join(' ');
-    const openingIndentation = index === 0 ? '' : '    ' + '  '.repeat(index);
-    return `${openingIndentation}<${providerName} ${propAssignments}>`;
-  }).join('\n');
+    return `<${providerName} ${propAssignments}>`;
+  }).join('\n    ');
 
-  const contentIndentation = '  '.repeat(providerEntries.length);
-
-  const providerClosingTags = providerEntries.reverse().map(([providerName], index) => {
-    const closingIndentation = (index === 0 ? '' : '    ') + '  '.repeat(providerEntries.length - index - 1);
-    return `${closingIndentation}</${providerName}>`;
-  }).join('\n');
+  const providerClosingTags = providerEntries.reverse().map(([providerName]) => {
+    return `</${providerName}>`;
+  }).join('\n    ');
 
   return `"use client";
 
@@ -81,8 +77,8 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
 
   return (
     ${providerOpeningTags}
-    ${contentIndentation}<ProgressBar height="3px" color="#2299dd" />
-    ${contentIndentation}<ScaffoldEthApp>{children}</ScaffoldEthApp>
+      <ProgressBar height="3px" color="#2299dd" />
+      <ScaffoldEthApp>{children}</ScaffoldEthApp>
     ${providerClosingTags}
   );
 };`;
