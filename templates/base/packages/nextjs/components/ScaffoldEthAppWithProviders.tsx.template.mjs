@@ -15,9 +15,17 @@ const contents = ({ preContent, globalClassNames, extraProviders, overrideProvid
       ? overrideProviders[0]
       : { ...defaultProviders, ...(extraProviders[0] || {}) };
 
-  const providers = Object.entries(providersObject).map(([providerName, props]) =>
-    `$$createProvider(${providerName}, ${JSON.stringify(props)})$$`
-  );
+  const providerEntries = Object.entries(providersObject);
+  const providerOpeningTags = providerEntries.map(([providerName, props]) => {
+    const propAssignments = Object.entries(props).map(([propName, propValue]) => 
+      `${propName}={${stringify(propValue)}}`
+    ).join(' ');
+    return `<${providerName} ${propAssignments}>`;
+  }).join('\n    ');
+
+  const providerClosingTags = providerEntries.reverse().map(([providerName]) => {
+    return `</${providerName}>`;
+  }).join('\n    ');
 
   return `"use client";
 
@@ -33,7 +41,6 @@ import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
-import { composeProviders, createProvider } from "~~/utils/scaffold-eth/composeProviders";
 ${preContent[0] || ''}
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
@@ -68,15 +75,11 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
     setMounted(true);
   }, []);
 
-  const providers = ${stringify(providers)};
-
-  const ComposedProviders = composeProviders(providers);
-
   return (
-    <ComposedProviders>
+    ${providerOpeningTags}
       <ProgressBar height="3px" color="#2299dd" />
       <ScaffoldEthApp>{children}</ScaffoldEthApp>
-    </ComposedProviders>
+    ${providerClosingTags}
   );
 };`;
 };
