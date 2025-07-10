@@ -1,5 +1,25 @@
 # create-eth
 
+## 1.0.0
+
+### Major Changes
+
+- 0f12a40: adjust level of customization and improved ways to pass args to tmeplates
+
+### Patch Changes
+
+- 0f12a40: move fastify/deepmerge to main dependency
+- 0f12a40: readme arg extraContent => extraContents
+
+  manifest.json.template.mjs arg extraContent => extraContents
+
+- 0f12a40: rename args from ${somethingImports} => ${preConfigContent} in templates files
+- 0f12a40: - remove hardcode string and use AddressType (https://github.com/scaffold-eth/scaffold-eth-2/pull/1103)
+- 0f12a40: backmerge main
+- 0f12a40: foundry: allow extensions to add library
+- 0f12a40: fix providers rendering the whole tree
+- 0f12a40: templatise abi.d.ts to allow AddressType override
+
 ## 1.0.0-beta.6
 
 ### Patch Changes
