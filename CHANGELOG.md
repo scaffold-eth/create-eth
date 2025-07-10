@@ -63,6 +63,12 @@
 - updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
 - updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
 
+## 0.2.6
+
+### Patch Changes
+
+- 585715d: add stablecoin challenge to curated extensions
+
 ## 0.2.5
 
 ### Patch Changes
