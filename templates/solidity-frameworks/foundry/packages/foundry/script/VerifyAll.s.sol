@@ -66,15 +66,13 @@ contract VerifyAll is Script {
         inputs[7] = vm.toString(constructorArgs);
         inputs[8] = "--watch";
 
-        try tempVm(address(vm)).tryFfi(inputs) returns (FfiResult memory f) {
-            if (f.stderr.length != 0) {
-                console.logString(string.concat("Submitting verification for contract: ", vm.toString(contractAddr)));
-                console.logString(string(f.stderr));
-            } else {
-                console.logString(string(f.stdout));
-            }
-        } catch {
-            console.logString(string.concat("Contract ", vm.toString(contractAddr), " is already verified. Skipping verification."));
+        FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
+
+        if (f.stderr.length != 0) {
+            console.logString(string.concat("Submitting verification for contract: ", vm.toString(contractAddr)));
+            console.logString(string(f.stderr));
+        } else {
+            console.logString(string(f.stdout));
         }
         return;
     }
