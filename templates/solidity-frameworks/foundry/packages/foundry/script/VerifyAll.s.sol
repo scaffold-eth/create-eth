@@ -29,7 +29,7 @@ contract VerifyAll is Script {
             string.concat(root, "/broadcast/Deploy.s.sol/", vm.toString(block.chainid), "/run-latest.json");
         string memory content = vm.readFile(path);
 
-        while (this.nextTransaction(content)) {
+        while (nextTransaction(content)) {
             _verifyIfContractDeployment(content);
             currTransactionIdx++;
         }
@@ -66,19 +66,26 @@ contract VerifyAll is Script {
         inputs[7] = vm.toString(constructorArgs);
         inputs[8] = "--watch";
 
-        FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
-
-        if (f.stderr.length != 0) {
-            console.logString(string.concat("Submitting verification for contract: ", vm.toString(contractAddr)));
-            console.logString(string(f.stderr));
-        } else {
-            console.logString(string(f.stdout));
+        try tempVm(address(vm)).tryFfi(inputs) returns (FfiResult memory f) {
+            if (f.stderr.length != 0) {
+                console.logString(string.concat("Submitting verification for contract: ", vm.toString(contractAddr)));
+                console.logString(string(f.stderr));
+            } else {
+                console.logString(string(f.stdout));
+            }
+        } catch {
+            console.logString(string.concat("Contract ", vm.toString(contractAddr), " is already verified. Skipping verification."));
         }
         return;
     }
 
-    function nextTransaction(string memory content) external view returns (bool) {
-        try this.getTransactionFromRaw(content, currTransactionIdx) {
+    function nextTransaction(string memory content) internal view returns (bool) {
+        string memory hashPath = searchStr(currTransactionIdx, "hash");
+
+        try vm.parseJson(content, hashPath) returns (bytes memory hashBytes) {
+            if (hashBytes.length == 0) {
+                return false;
+            }
             return true;
         } catch {
             return false;
@@ -89,10 +96,6 @@ contract VerifyAll is Script {
         string memory root = vm.projectRoot();
         string memory path = string.concat(root, "/out/", contractName, ".sol/", contractName, ".json");
         compiledBytecode = vm.readFile(path);
-    }
-
-    function getTransactionFromRaw(string memory content, uint96 idx) external pure {
-        abi.decode(vm.parseJson(content, searchStr(idx, "hash")), (bytes32));
     }
 
     function searchStr(uint96 idx, string memory searchKey) internal pure returns (string memory) {
