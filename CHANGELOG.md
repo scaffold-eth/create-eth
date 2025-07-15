@@ -1,5 +1,11 @@
 # create-eth
 
+## 1.0.1
+
+### Patch Changes
+
+- 2fb038d: fix foundry verify script
+
 ## 1.0.0
 
 ### Major Changes
