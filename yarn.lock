@@ -352,6 +352,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fastify/deepmerge@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@fastify/deepmerge@npm:3.1.0"
+  checksum: 2c8e3c3fe918aaa7b5ef890ac90ca5622b95dba92c3810bd16b54489ff9961d439358bf5ea3ff8f1f5a718b154c20d30591b531e9546016dce886fee53dd129a
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -1549,6 +1556,7 @@ __metadata:
   dependencies:
     "@changesets/cli": ^2.29.4
     "@eslint/js": ^9.28.0
+    "@fastify/deepmerge": ^3.1.0
     "@inquirer/prompts": ^7.5.3
     "@rollup/plugin-json": ^6.1.0
     "@rollup/plugin-typescript": ^12.1.2
@@ -1563,7 +1571,7 @@ __metadata:
     eslint-plugin-prettier: ^5.4.1
     execa: ^9.6.0
     lefthook: ^1.11.13
-    listr2: ^8.3.3
+    listr2: ^9.0.1
     merge-packages: ^0.1.6
     ncp: ^2.0.0
     prettier: ^3.5.3
@@ -2799,9 +2807,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"listr2@npm:^8.3.3":
-  version: 8.3.3
-  resolution: "listr2@npm:8.3.3"
+"listr2@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "listr2@npm:9.0.1"
   dependencies:
     cli-truncate: ^4.0.0
     colorette: ^2.0.20
@@ -2809,7 +2817,7 @@ __metadata:
     log-update: ^6.1.0
     rfdc: ^1.4.1
     wrap-ansi: ^9.0.0
-  checksum: 77588101773677903205674e1fcfa880fda7aee64aec7797f03cbf638f3acdb6c91ca21496e938a2f29a71645aa838caee60b913d6c901d364af308d61f9bfff
+  checksum: 7880c3732951d07c1d81eeccb46a7ce4f2274b6974e0f929a5c6f5386a304c65da102bc646b8372c55ba5cc5e5510b634c15c13b6492663f2a59b401ace3abbe
   languageName: node
   linkType: hard
 

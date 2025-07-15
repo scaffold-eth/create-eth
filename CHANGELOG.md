@@ -1,5 +1,105 @@
 # create-eth
 
+## 1.0.0
+
+### Major Changes
+
+- adjust level of customization and improved ways to pass args to tmeplates
+
+## 1.0.0-beta.6
+
+### Patch Changes
+
+- b897e43: fix providers rendering the whole tree
+
+## 1.0.0-beta.5
+
+### Patch Changes
+
+- 2e0b44b: foundry: allow extensions to add library
+- 4187258: fix foundry .env.example
+- 0d12cec: Fetch solidity framework folder correctly for default git branch
+
+## 1.0.0-beta.4
+
+### Patch Changes
+
+- f3854cc: backmerge main
+
+## 1.0.0-beta.3
+
+### Patch Changes
+
+- rename arg `preConfigContent` => `preContent`
+- new way of passing providers to `ScaffoldEthAppWithProviders.tsx` checkout [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- readme arg `extraContent` => `extraContents`
+- manifest.json.template.mjs arg `extraContent` => `extraContents`
+
+## 1.0.0-beta.2
+
+### Patch Changes
+
+- allow more customization with `preConfigContent` arg
+  - checkout [layout.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/layout.tsx.args.mjs) for example
+  - [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) for example
+  - [Header.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/Header.tsx.args.mjs)
+  - [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+  - [getMetadata.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/utils/scaffold-eth/getMetadata.ts.args.mjs)
+  - [Deploy.s.sol.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/foundry/script/Deploy.s.sol.args.mjs)
+- allow skipping local chain in `scaffold.config.ts` checkout [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
+- Updated `ScaffoldEthProvider` to add new providers check [ScaffoldEthAppWithProviders.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/components/ScaffoldEthAppWithProviders.tsx.args.mjs)
+- Allow overriding wagmi config in `wagmiConfig.tsx` checkout [wagmiConfig.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/services/web3/wagmiConfig.tsx.args.mjs)
+
+## 1.0.0-beta.1
+
+### Patch Changes
+
+- eff6cb2: move fastify/deepmerge to main dependency
+
+## 1.0.0-beta.0
+
+### Major Changes
+
+- adjust level of customization and improved ways to pass args to tmeplates, learn more about rules [here](https://github.com/scaffold-eth/create-eth/blob/beta/contributors/TEMPLATING.md#rules-for-template-args)
+- updated `scaffold.config.ts.template.mjs` checkout new args example in [scaffold.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/scaffold.config.ts.args.mjs)
+- updated `hardhat.config.ts.template.mjs` checkout new args example in [hardhat.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/hardhat.config.ts.args.mjs)
+- updated `tailwind.config.js.template.mjs` checkout new args example in [tailwind.config.js.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tailwind.config.js.args.mjs)
+- updated `tsconfig.json.template.mjs` (nextjs / hardhat) checkout new args example in [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/tsconfig.json.args.mjs) (nextjs) and [tsconfig.json.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/hardhat/tsconfig.json.args.mjs) (hardhat)
+- updated `next.config.ts.template.mjs` checkout new args example in [next.config.ts.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/next.config.ts.args.mjs)
+- updated `page.tsx.template.mjs` checkout new args example in [page.tsx.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/packages/nextjs/app/page.tsx.args.mjs) (allowing option for full file override)
+- updated `README.md.template.mjs` checkout new args example in [README.md.args.mjs](https://github.com/scaffold-eth/create-eth-extensions/blob/example-beta/extension/README.md.args.mjs)
+
+## 0.2.6
+
+### Patch Changes
+
+- 585715d: add stablecoin challenge to curated extensions
+
+## 0.2.5
+
+### Patch Changes
+
+- up hardhat-deploy allowing etherscan v2 api for verification (https://github.com/scaffold-eth/scaffold-eth-2/pull/1116)
+- add not found page (https://github.com/scaffold-eth/scaffold-eth-2/pull/1120)
+- add `toBlock` param to useScaffoldEventHistory (https://github.com/scaffold-eth/scaffold-eth-2/pull/1117)
+- add `blocksBatchSize` param to useScaffoldEventHistory (https://github.com/scaffold-eth/scaffold-eth-2/pull/1118)
+- add check for empty object in getContractsData (https://github.com/scaffold-eth/scaffold-eth-2/pull/1122)
+- fix foundry .env.example
+- Fetch solidity framework folder correctly for default git branch
+
+## 0.2.4
+
+### Patch Changes
+
+- 4f31b79: up burner-connector version
+
+## 0.2.3
+
+### Patch Changes
+
+- up wagmi, viem and rainbow-me/rainbwkit (https://github.com/scaffold-eth/scaffold-eth-2/pull/1108)
+- remove hardcode string and use AddressType (https://github.com/scaffold-eth/scaffold-eth-2/pull/1103)
+
 ## 0.2.2
 
 ### Patch Changes

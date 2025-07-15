@@ -1,6 +1,6 @@
 {
   "name": "create-eth",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Create a Scaffold-ETH-2 app",
   "repository": {
     "type": "git",
@@ -53,11 +53,12 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.29.4",
+    "@fastify/deepmerge": "^3.1.0",
     "@inquirer/prompts": "^7.5.3",
     "arg": "^5.0.2",
     "chalk": "^5.4.1",
     "execa": "^9.6.0",
-    "listr2": "^8.3.3",
+    "listr2": "^9.0.1",
     "merge-packages": "^0.1.6",
     "ncp": "^2.0.0",
     "semver": "^7.7.2",
