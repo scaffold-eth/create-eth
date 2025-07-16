@@ -17,6 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set dummy git user (Foundry only)
+        if: matrix.config == 'foundry'
+        run: |
+          git config --global user.name "Dummy User"
+          git config --global user.email "dummy@example.com"
+
       - name: Setup Node.js 20.x
         uses: actions/setup-node@v4
         with:
