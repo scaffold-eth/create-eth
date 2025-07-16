@@ -4,7 +4,9 @@
 
 ### Patch Changes
 
-- 2fb038d: fix foundry verify script
+-  fix foundry verify script
+-  Add deployedOnBlock to deployedContracts on Hardhat (https://github.com/scaffold-eth/scaffold-eth-2/pull/1132)
+- update hardhat mainnet rpc url (https://github.com/scaffold-eth/scaffold-eth-2/pull/1130)
 
 ## 1.0.0
 
