@@ -3,7 +3,7 @@ name: Lint Instances
 on:
   push:
     branches:
-      - main
+      - setup-gh-actions
   pull_request:
     branches:
       - main
@@ -89,9 +89,19 @@ jobs:
           npx wait-on tcp:8545
           yarn deploy
 
+      - name: Run linting hardhat package
+        if: matrix.config == 'hardhat' || matrix.config == 'hardhat_with_extension'
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn hardhat:lint --max-warnings=0
+
+      - name: Run linting foundry package
+        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn foundry:lint
+
       - name: Run linting nextjs package
         working-directory: new_project_${{ matrix.config }}
-        run: yarn next:lint
+        run: yarn next:lint --max-warnings=0
 
       - name: Check types nextjs package
         working-directory: new_project_${{ matrix.config }}
