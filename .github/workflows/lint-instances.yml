@@ -1,0 +1,61 @@
+name: Lint Instances
+
+on:
+  push:
+    branches:
+      - setup-gh-actions
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config: [hardhat, foundry, no_solidity_framework]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Install Foundry
+        if: matrix.config == 'foundry'
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          cache: false
+
+      - name: Start dev
+        run: yarn dev &
+
+      - name: Install application (Hardhat configuration)
+        if: matrix.config == 'hardhat'
+        run: yarn cli new_project_hardhat -s hardhat
+
+      - name: Install application (Foundry configuration)
+        if: matrix.config == 'foundry'
+        run: yarn cli new_project_foundry -s foundry
+
+      - name: Install application (No solidity framework configuration)
+        if: matrix.config == 'no_solidity_framework'
+        run: yarn cli new_project_no_solidity_framework -s none
+
+      - name: Run chain and deploy
+        working-directory: new_project_${{ matrix.config }}
+        if: matrix.config == 'hardhat' || matrix.config == 'foundry'
+        run: yarn install & yarn chain & yarn deploy
+
+      - name: Run linting nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:lint
+
+      - name: Check types nextjs package
+        working-directory: new_project_${{ matrix.config }}
+        run: yarn next:check-types
+
