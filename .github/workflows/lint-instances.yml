@@ -3,7 +3,7 @@ name: Lint Instances
 on:
   push:
     branches:
-      - setup-gh-actions
+      - main
   pull_request:
     branches:
       - main
