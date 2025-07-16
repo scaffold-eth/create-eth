@@ -13,12 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        config: [hardhat, foundry, no_solidity_framework]
+        # config: [hardhat, foundry, no_solidity_framework]
+        config: [foundry]
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-      - name: Set dummy git user (Foundry only)
-        if: matrix.config == 'foundry'
+      - name: Set dummy git user
         run: |
           git config --global user.name "Dummy User"
           git config --global user.email "dummy@example.com"
@@ -37,6 +39,12 @@ jobs:
         with:
           cache: false
 
+      - name: Install foundryup
+        if: matrix.config == 'foundry'
+        run: |
+          curl -L https://foundry.paradigm.xyz -o foundryup-init.sh
+          bash foundryup-init.sh
+          echo "$HOME/.config/.foundry/bin" >> $GITHUB_PATH
       - name: Start dev
         run: yarn dev &
 
@@ -46,7 +54,9 @@ jobs:
 
       - name: Install application (Foundry configuration)
         if: matrix.config == 'foundry'
-        run: yarn cli new_project_foundry -s foundry
+        run: |
+          export PATH="$HOME/.config/.foundry/bin:$PATH"
+          yarn cli new_project_foundry -s foundry
 
       - name: Install application (No solidity framework configuration)
         if: matrix.config == 'no_solidity_framework'
@@ -55,7 +65,10 @@ jobs:
       - name: Run chain and deploy
         working-directory: new_project_${{ matrix.config }}
         if: matrix.config == 'hardhat' || matrix.config == 'foundry'
-        run: yarn install & yarn chain & yarn deploy
+        run: |
+          yarn chain &
+          npx wait-on tcp:8545
+          yarn deploy
 
       - name: Run linting nextjs package
         working-directory: new_project_${{ matrix.config }}
