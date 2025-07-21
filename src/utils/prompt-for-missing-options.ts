@@ -3,15 +3,14 @@ import { input, select } from "@inquirer/prompts";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateNpmName } from "./validate-name";
 
-// default values for unspecified args
-const defaultOptions: RawOptions = {
+const defaultOptions = {
   project: "my-dapp-example",
   solidityFramework: null,
   install: true,
   dev: false,
   externalExtension: null,
   help: false,
-};
+} as const satisfies RawOptions;
 
 export async function promptForMissingOptions(
   options: RawOptions,
@@ -21,7 +20,7 @@ export async function promptForMissingOptions(
     options.project ??
     (await input({
       message: "Your project name:",
-      default: defaultOptions.project as string,
+      default: defaultOptions.project,
       validate: (name: string) => {
         const validation = validateNpmName(name);
         if (validation.valid) {
