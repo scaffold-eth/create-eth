@@ -7,7 +7,7 @@
   },
   {
     "extensionFlagValue": "eip-712",
-    "description": "Enables EIP-712 typed message signing, sending, and verification in a user-friendly way.",
+    "description": "Provides EIP-712 typed message signing, sending, and verification in a user-friendly way.",
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "eip-712"
   },
@@ -25,7 +25,7 @@
   },
   {
     "extensionFlagValue": "eip-5792",
-    "description": "Enables EIP-5792 wallet capabilities, allowing multiple calls and status checks via new JSON-RPC methods.",
+    "description": "Provides EIP-5792 wallet capabilities, allowing multiple calls and status checks via new JSON-RPC methods.",
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "eip-5792"
   },
