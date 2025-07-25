@@ -42,7 +42,7 @@
     "branch": "erc-721"
   },
   {
-    "extensionFlagValue": "challenge-simple-nft",
+    "extensionFlagValue": "challenge-simple-nft-example",
     "description": "SpeedRunEthereum Challenge: Simple NFT Example.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-simple-nft-example"
