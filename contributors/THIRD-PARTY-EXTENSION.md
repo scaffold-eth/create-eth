@@ -31,7 +31,8 @@ your-extension/
 │   │       │       ├── page.tsx
 │   │       │
 │   │       ├── ...         # any extra files/directories
-│   │       └── package.json  # Only include additional dependencies/scripts
+│   │       ├── package.json  # Only include additional dependencies/scripts
+│   │       └── root.package.json  # Only include additional scripts to the root package.json
 │   ├── package.json        # monorepo root package.json file
 │   └── README.md           # Instance README
 └── README.md               # Documentation for your extension
@@ -39,10 +40,9 @@ your-extension/
 
 ### Key Points:
 
-1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/package.json) and [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files
+1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/package.json), [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/package.json) and [foundry](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files. You can also add scripts to your root `package.json` based on the solidity framework by using a `root.package.json` file.
 
 2. The presence of `hardhat` and/or `foundry` directories in your extension affects the CLI options:
-
    - If you include only one, users won't see a solidity framework selection prompt.
 
    - If you include both, users can choose between Hardhat and Foundry.
@@ -115,7 +115,6 @@ These utilities can be used independently or together, depending on your needs:
    The name mentioned for the "Your project name" question will be used as the **extension name**. For example, if you provide `eip` as the value to the question, then the final extension name will be `eip`.
 
 4. **Develop the Extension:**
-
    - CD into the instance directory.
    - Make necessary changes to the instance project.
    - Commit the changes in the instance repository.
@@ -133,7 +132,6 @@ These utilities can be used independently or together, depending on your needs:
    This command gathers all changes from the instance and creates an extension in the `create-eth/externalExtensions/${extensionName}` directory. This directory is the actual extension directory (notice it contains only extra files related to your extension changes), which can be published to GitHub and used by others.
 
 6. **Publish the Extension:**
-
    - Go inside the extension directory.
    - Push the extension to GitHub.
 
@@ -174,7 +172,6 @@ This phase allows you to test your extension locally and see how it works when u
    Since the instance is symlinked with the extension, make necessary changes directly in the symlinked files within `my-dev-instance`, and changes should be automatically reflected in the `create-eth/externalExtensions/${extensionName}` directory.
 
 3. **Push the tweaked changes**
-
    - Go inside the extension directory.
    - Push the changes to GitHub.
 
