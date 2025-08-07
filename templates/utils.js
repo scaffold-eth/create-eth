@@ -57,26 +57,32 @@ export const deepMerge = (...args) => {
   return finalConfig;
 };
 
+// copy of the defaults from the src/utils/consts.ts file
+const GLOBAL_ARGS_DEFAULTS = {
+  solidityFramework: "",
+};
+
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) => {
-  expectedArgsDefaults.solidityFramework = ""
-  console.log("The expectedArgsDefault are:"
-  )
     const callerFile = getCallerFile();
 
     return receivedArgs => {
-    const argsWithDefault = Object.fromEntries(
-      Object.entries(expectedArgsDefaults).map(([argName, argDefault]) => [
+      const globalArgsNames = Object.keys(GLOBAL_ARGS_DEFAULTS);
+      const receivedGlobalArgs = globalArgsNames.reduce((acc, arg) => { 
+        acc[arg] = receivedArgs[arg][0]; return acc;}, {});
+
+    const argsWithDefaultsAndGlobals = Object.fromEntries(
+      Object.entries({...expectedArgsDefaults, ...receivedGlobalArgs}).map(([argName, argDefault]) => [
         argName,
         receivedArgs[argName] ?? [argDefault],
       ]),
     );
 
     if (debug) {
-      console.log(argsWithDefault, expectedArgsDefaults, receivedArgs);
+      console.log(argsWithDefaultsAndGlobals, expectedArgsDefaults, receivedArgs);
     }
 
-    const expectedArgsNames = Object.keys(expectedArgsDefaults);
+    const expectedArgsNames = Object.keys(argsWithDefaultsAndGlobals);
     Object.keys(receivedArgs).forEach(receivedArgName => {
       if (!expectedArgsNames.includes(receivedArgName)) {
         throw new Error(
@@ -87,7 +93,7 @@ export const withDefaults =
       }
 
       const receivedType = getType(receivedArgs[receivedArgName][0]);
-      const expectedType = getType(expectedArgsDefaults[receivedArgName]);
+      const expectedType = getType(argsWithDefaultsAndGlobals[receivedArgName][0]);
 
       if (receivedType !== expectedType) {
         throw new Error(
@@ -98,7 +104,7 @@ export const withDefaults =
       }
     });
 
-    return template(argsWithDefault);
+    return template(argsWithDefaultsAndGlobals);
   };
 };
 
