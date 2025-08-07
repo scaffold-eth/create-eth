@@ -1,6 +1,8 @@
 import { inspect } from "util";
 import createDeepMerge from "@fastify/deepmerge";
 
+export const upperCaseFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
 const getType = (value) => {
   if (Array.isArray(value)) {
     return 'array';

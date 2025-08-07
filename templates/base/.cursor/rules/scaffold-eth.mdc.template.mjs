@@ -1,4 +1,4 @@
-import { withDefaults } from "../../../utils.js"
+import { withDefaults, upperCaseFirstLetter } from "../../../utils.js"
 
 const contents = ({ solidityFramework, deployScriptDir }) => {
   return `---
@@ -11,7 +11,7 @@ This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps
 
 It's a yarn monorepo that contains following packages:
 
-${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0].toUpperCase()} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
+${Boolean(solidityFramework[0]) ? `- ${upperCaseFirstLetter(solidityFramework[0])} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
 - NextJS (\`packages/nextjs\`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
 
 
@@ -115,4 +115,4 @@ They live under \`packages/nextjs/components/scaffold-eth\`.
 Find the relevant information from the documentation and the codebase. Think step by step before answering the question.`
 }
 
-export default withDefaults(contents, { solidityFramework: "", deployScriptDir: "" });
+export default withDefaults(contents, { deployScriptDir: "" });
