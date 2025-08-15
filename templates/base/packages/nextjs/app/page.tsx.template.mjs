@@ -1,6 +1,6 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ preContent, externalExtensionName, description, fullContentOverride }) => {
+const contents = ({ preContent, externalExtensionName, description, fullContentOverride, solidityFramework }) => {
   if (fullContentOverride[0]) {
     return fullContentOverride[0];
   }
@@ -21,6 +21,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex items-center flex-col grow pt-10">
+        ${solidityFramework[0] ? `<span className="block text-xl font-bold">(Solidity framework is ${solidityFramework[0]})</span>` : ''}
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
