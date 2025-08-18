@@ -43,6 +43,7 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           cache: false
+          version: 1.3.0
 
       - name: Install foundryup
         if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
