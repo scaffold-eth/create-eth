@@ -42,6 +42,13 @@
     "branch": "erc-721"
   },
   {
+    "extensionFlagValue": "porto",
+    "description": "This extension brings porto.sh SDK to Scaffold-ETH 2.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "porto"
+  },
+
+  {
     "extensionFlagValue": "challenge-simple-nft-example",
     "description": "SpeedRunEthereum Challenge: Simple NFT Example.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
