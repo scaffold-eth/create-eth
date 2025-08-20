@@ -24,15 +24,22 @@ your-extension/
 ├── extension/
 │   ├── packages/
 │   │   ├── hardhat/        # (optional) For Hardhat-specific additions
+│   │   │   ├── ...         # any extra files/directories
+│   │   │   ├── package.json  # Only include additional dependencies/scripts
+│   │   │   └── root.package.json  # Only include additional scripts to the root package.json
+│   │   │
 │   │   ├── foundry/        # (optional) For Foundry-specific additions
+│   │   │   ├── ...         # any extra files/directories
+│   │   │   ├── package.json  # Only include additional dependencies/scripts
+│   │   │   └── root.package.json  # Only include additional scripts to the root package.json
+│   │   │
 │   │   └── nextjs/
 │   │       ├── app/        # any new pages/files
 │   │       │   └── my-page
 │   │       │       ├── page.tsx
 │   │       │
 │   │       ├── ...         # any extra files/directories
-│   │       ├── package.json  # Only include additional dependencies/scripts
-│   │       └── root.package.json  # Only include additional scripts to the root package.json
+│   │       └──  package.json  # Only include additional dependencies/scripts
 │   ├── package.json        # monorepo root package.json file
 │   └── README.md           # Instance README
 └── README.md               # Documentation for your extension

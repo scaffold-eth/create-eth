@@ -140,11 +140,13 @@ const copyExtensionFiles = async (
         isDev,
       );
 
-      mergePackageJson(
-        path.join(targetDir, "package.json"),
-        path.join(extensionPath, "packages", packageName, "root.package.json"),
-        isDev,
-      );
+      if (packageName === solidityFramework) {
+        mergePackageJson(
+          path.join(targetDir, "package.json"),
+          path.join(extensionPath, "packages", packageName, "root.package.json"),
+          isDev,
+        );
+      }
     });
   }
 };
