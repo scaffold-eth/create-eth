@@ -24,14 +24,22 @@ your-extension/
 ├── extension/
 │   ├── packages/
 │   │   ├── hardhat/        # (optional) For Hardhat-specific additions
+│   │   │   ├── ...         # any extra files/directories
+│   │   │   ├── package.json  # Only include additional dependencies/scripts
+│   │   │   └── root.package.json  # Only include additional scripts to the root package.json
+│   │   │
 │   │   ├── foundry/        # (optional) For Foundry-specific additions
+│   │   │   ├── ...         # any extra files/directories
+│   │   │   ├── package.json  # Only include additional dependencies/scripts
+│   │   │   └── root.package.json  # Only include additional scripts to the root package.json
+│   │   │
 │   │   └── nextjs/
 │   │       ├── app/        # any new pages/files
 │   │       │   └── my-page
 │   │       │       ├── page.tsx
 │   │       │
 │   │       ├── ...         # any extra files/directories
-│   │       └── package.json  # Only include additional dependencies/scripts
+│   │       └──  package.json  # Only include additional dependencies/scripts
 │   ├── package.json        # monorepo root package.json file
 │   └── README.md           # Instance README
 └── README.md               # Documentation for your extension
@@ -39,7 +47,7 @@ your-extension/
 
 ### Key Points:
 
-1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/package.json) and [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files
+1. The `package.json` in your extension should only include dependencies that are additional to the base instance. Refer to the base `package.json` files for [root](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/package.json), [nextjs](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/package.json), [hardhat](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/package.json) and [foundry](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/package.json) to determine which dependencies and scripts are already included. Only add dependencies that are not present in these base files. You can also add scripts to your root `package.json` based on the solidity framework by using a `root.package.json` file.
 
 2. The presence of `hardhat` and/or `foundry` directories in your extension affects the CLI options:
    - If you include only one, users won't see a solidity framework selection prompt.
