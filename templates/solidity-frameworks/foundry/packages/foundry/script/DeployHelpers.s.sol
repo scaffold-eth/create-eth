@@ -80,26 +80,6 @@ contract ScaffoldETHDeploy is Script {
         vm.writeJson(jsonWrite, path);
     }
 
-    function anvil_setBalance(address addr, uint256 amount) public {
-        string memory addressString = vm.toString(addr);
-        string memory amountString = vm.toString(amount);
-        string memory requestPayload = string.concat(
-            '{"method":"anvil_setBalance","params":["', addressString, '","', amountString, '"],"id":1,"jsonrpc":"2.0"}'
-        );
-
-        string[] memory inputs = new string[](8);
-        inputs[0] = "curl";
-        inputs[1] = "-X";
-        inputs[2] = "POST";
-        inputs[3] = "http://localhost:8545";
-        inputs[4] = "-H";
-        inputs[5] = "Content-Type: application/json";
-        inputs[6] = "--data";
-        inputs[7] = requestPayload;
-
-        vm.ffi(inputs);
-    }
-
     function findChainName() public returns (string memory) {
         uint256 thisChainId = block.chainid;
         string[2][] memory allRpcUrls = vm.rpcUrls();
