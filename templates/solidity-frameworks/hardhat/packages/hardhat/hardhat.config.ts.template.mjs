@@ -97,7 +97,7 @@ const defaultConfig = {
     },
     celoSepolia: {
       url: "https://forno.celo-sepolia.celo-testnet.org/",
-      accounts: [deployerPrivateKey],
+      accounts: ["$$deployerPrivateKey$$"],
     },
   },
   etherscan: {
