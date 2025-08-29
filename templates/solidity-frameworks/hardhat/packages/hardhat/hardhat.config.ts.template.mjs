@@ -95,9 +95,9 @@ const defaultConfig = {
       url: "https://forno.celo.org",
       accounts: ["$$deployerPrivateKey$$"],
     },
-    celoAlfajores: {
-      url: "https://alfajores-forno.celo-testnet.org",
-      accounts: ["$$deployerPrivateKey$$"],
+    celoSepolia: {
+      url: "https://forno.celo-sepolia.celo-testnet.org/",
+      accounts: [deployerPrivateKey],
     },
   },
   etherscan: {
