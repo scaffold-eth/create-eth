@@ -1,12 +1,27 @@
 # create-eth
 
+## 1.0.4
+
+### Patch Changes
+
+- 763ac11: - feat: lazy load wallet connectors to prevent ssr errors (https://github.com/scaffold-eth/scaffold-eth-2/pull/1163)
+  - up wagmi viem and rainbow version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1172)
+  - fix bg rpc url (https://github.com/scaffold-eth/scaffold-eth-2/pull/1174)
+  - update Celo Testnet from Celo Alfajores to Celo Sepolia (https://github.com/scaffold-eth/scaffold-eth-2/pull/1171)
+  - docs: add production usage warning for `useScaffoldEventHistory` (https://github.com/scaffold-eth/scaffold-eth-2/pull/1173)
+- ffe522a: - fix: refocus for AddressInput component on success (https://github.com/scaffold-eth/scaffold-eth-2/pull/1152)
+  - fix: deployments chainId error (https://github.com/scaffold-eth/scaffold-eth-2/pull/1160)
+  - fix: prevent text overflow in inheritance tooltip (https://github.com/scaffold-eth/scaffold-eth-2/pull/1165)
+  - remove duplicate events from end (https://github.com/scaffold-eth/scaffold-eth-2/pull/1162)
+- c9cae41: fix deployHelpers.s.sol
+
 ## 1.0.3
 
 ### Patch Changes
 
 - fix: getting deployedOnBlock when no receipt (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1143>)
--   fix contract interactions error (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1146>)
--   fix `useScaffoldEventHistory` to properly calculate `nextBlock` (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1144>)
+- fix contract interactions error (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1146>)
+- fix `useScaffoldEventHistory` to properly calculate `nextBlock` (<https://github.com/scaffold-eth/scaffold-eth-2/pull/1144>)
 
 ## 1.0.2
 
@@ -667,9 +682,7 @@
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502)
-  3. Update and typescript version (#499)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499)
   4. fix: header links wrapping icons and text (#510)
 
   5. Fix typos in useScaffoldContractWrite logs (#512)
@@ -706,9 +719,7 @@
 
 ### Patch Changes
 
-- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502
-  3. Update and typescript version #499
-
+- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499
   4. add grid and grid-flow class to li manually #510
 
   5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512
