@@ -4,16 +4,16 @@
 
 ### Patch Changes
 
-- 763ac11: - feat: lazy load wallet connectors to prevent ssr errors (https://github.com/scaffold-eth/scaffold-eth-2/pull/1163)
-  - up wagmi viem and rainbow version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1172)
-  - fix bg rpc url (https://github.com/scaffold-eth/scaffold-eth-2/pull/1174)
-  - update Celo Testnet from Celo Alfajores to Celo Sepolia (https://github.com/scaffold-eth/scaffold-eth-2/pull/1171)
-  - docs: add production usage warning for `useScaffoldEventHistory` (https://github.com/scaffold-eth/scaffold-eth-2/pull/1173)
-- ffe522a: - fix: refocus for AddressInput component on success (https://github.com/scaffold-eth/scaffold-eth-2/pull/1152)
-  - fix: deployments chainId error (https://github.com/scaffold-eth/scaffold-eth-2/pull/1160)
-  - fix: prevent text overflow in inheritance tooltip (https://github.com/scaffold-eth/scaffold-eth-2/pull/1165)
-  - remove duplicate events from end (https://github.com/scaffold-eth/scaffold-eth-2/pull/1162)
-- c9cae41: fix deployHelpers.s.sol
+- feat: lazy load wallet connectors to prevent ssr errors (https://github.com/scaffold-eth/scaffold-eth-2/pull/1163)
+- up wagmi viem and rainbow version (https://github.com/scaffold-eth/scaffold-eth-2/pull/1172)
+- fix bg rpc url (https://github.com/scaffold-eth/scaffold-eth-2/pull/1174)
+- update Celo Testnet from Celo Alfajores to Celo Sepolia (https://github.com/scaffold-eth/scaffold-eth-2/pull/1171)
+- docs: add production usage warning for `useScaffoldEventHistory` (https://github.com/scaffold-eth/scaffold-eth-2/pull/1173)
+- fix: refocus for AddressInput component on success (https://github.com/scaffold-eth/scaffold-eth-2/pull/1152)
+- fix: deployments chainId error (https://github.com/scaffold-eth/scaffold-eth-2/pull/1160)
+- fix: prevent text overflow in inheritance tooltip (https://github.com/scaffold-eth/scaffold-eth-2/pull/1165)
+- remove duplicate events from end (https://github.com/scaffold-eth/scaffold-eth-2/pull/1162)
+- fix deployHelpers.s.sol
 
 ## 1.0.3
 
