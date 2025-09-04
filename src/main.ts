@@ -67,12 +67,6 @@ export async function createProject(options: Options) {
     { rendererOptions: { collapseSkips: false, suffixSkips: true } },
   );
 
-  try {
-    await tasks.run();
-    renderOutroMessage(options);
-  } catch (error) {
-    console.log("%s Error occurred", chalk.red.bold("ERROR"), error);
-    console.log("%s Exiting...", chalk.red.bold("Uh oh! 😕 Sorry about that!"));
-    throw error;
-  }
+  await tasks.run();
+  renderOutroMessage(options);
 }
