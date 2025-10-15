@@ -11,7 +11,7 @@ const defaultScaffoldConfig = {
 
 const contents = ({ preContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
   // add solidityFramework network
-  let targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
+  let targetNetworks = configOverrides.map(override => override.targetNetworks).flat().filter(network => network);
   // if skipLocalChainInTargetNetworks is true, don't include solidityFramework network
   targetNetworks = skipLocalChainInTargetNetworks?.[0] ? targetNetworks.slice(1) : targetNetworks;
   const extensionConfigOverrides = configOverrides[configOverrides.length - 1] || {};
