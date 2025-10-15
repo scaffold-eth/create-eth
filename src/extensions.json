@@ -47,7 +47,12 @@
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "porto"
   },
-
+  {
+    "extensionFlagValue": "envio",
+    "description": "This extension integrates Envio Indexer, it makes indexing your deployed smart contracts as simple as possible",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "envio"
+  },
   {
     "extensionFlagValue": "challenge-tokenization",
     "description": "SpeedRunEthereum Challenge: Tokenization.",
