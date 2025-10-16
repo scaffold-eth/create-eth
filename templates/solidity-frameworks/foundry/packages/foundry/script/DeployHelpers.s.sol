@@ -41,7 +41,7 @@ contract ScaffoldETHDeploy is Script {
         (, address _deployer,) = vm.readCallers();
 
         if (block.chainid == 31337 && _deployer.balance == 0) {
-            try this.anvil_setBalance(_deployer, ANVIL_BASE_BALANCE) {
+            try vm.deal(_deployer, ANVIL_BASE_BALANCE) {
                 emit AnvilSetBalance(_deployer, ANVIL_BASE_BALANCE);
             } catch {
                 emit FailedAnvilRequest();
@@ -71,37 +71,13 @@ contract ScaffoldETHDeploy is Script {
 
         string memory chainName;
 
-        try this.getChain() returns (Chain memory chain) {
+        try vm.getChain(block.chainid) returns (Vm.Chain memory chain) {
             chainName = chain.name;
         } catch {
             chainName = findChainName();
         }
         jsonWrite = vm.serializeString(jsonWrite, "networkName", chainName);
         vm.writeJson(jsonWrite, path);
-    }
-
-    function getChain() public returns (Chain memory) {
-        return getChain(block.chainid);
-    }
-
-    function anvil_setBalance(address addr, uint256 amount) public {
-        string memory addressString = vm.toString(addr);
-        string memory amountString = vm.toString(amount);
-        string memory requestPayload = string.concat(
-            '{"method":"anvil_setBalance","params":["', addressString, '","', amountString, '"],"id":1,"jsonrpc":"2.0"}'
-        );
-
-        string[] memory inputs = new string[](8);
-        inputs[0] = "curl";
-        inputs[1] = "-X";
-        inputs[2] = "POST";
-        inputs[3] = "http://localhost:8545";
-        inputs[4] = "-H";
-        inputs[5] = "Content-Type: application/json";
-        inputs[6] = "--data";
-        inputs[7] = requestPayload;
-
-        vm.ffi(inputs);
     }
 
     function findChainName() public returns (string memory) {

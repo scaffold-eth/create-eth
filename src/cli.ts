@@ -33,7 +33,8 @@ export async function cli(args: Args) {
 
     await createProject(options);
   } catch (error: any) {
-    console.error(chalk.red.bold(error.message || "An unknown error occurred."));
+    console.log("%s Error occurred", chalk.red.bold("ERROR"), error);
+    console.log("%s Exiting...", chalk.red.bold("Uh oh! 😕 Sorry about that!"));
     process.exitCode = 1;
     return;
   }

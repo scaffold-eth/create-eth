@@ -11,7 +11,7 @@ const defaultScaffoldConfig = {
 
 const contents = ({ preContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
   // add solidityFramework network
-  let targetNetworks = configOverrides.map(override => override.targetNetworks).flat();
+  let targetNetworks = configOverrides.map(override => override.targetNetworks).flat().filter(network => network);
   // if skipLocalChainInTargetNetworks is true, don't include solidityFramework network
   targetNetworks = skipLocalChainInTargetNetworks?.[0] ? targetNetworks.slice(1) : targetNetworks;
   const extensionConfigOverrides = configOverrides[configOverrides.length - 1] || {};
@@ -45,7 +45,7 @@ const scaffoldConfig = ${stringify(finalConfig, {
   alchemyApiKey: "This is ours Alchemy's default API key.\nYou can get your own at https://dashboard.alchemyapi.io\nIt's recommended to store it in an env variable:\n.env.local for local testing, and in the Vercel/system env config for live apps.",
   walletConnectProjectId: "This is ours WalletConnect's default project ID.\nYou can get your own at https://cloud.walletconnect.com\nIt's recommended to store it in an env variable:\n.env.local for local testing, and in the Vercel/system env config for live apps.",
   rpcOverrides: "If you want to use a different RPC for a specific network, you can add it here.\nThe key is the chain ID, and the value is the HTTP RPC URL",
-  "rpcOverrides.": "Example:\n[chains.mainnet.id]: \"https://mainnet.buidlguidl.com\",",
+  "rpcOverrides.": "Example:\n[chains.mainnet.id]: \"https://mainnet.rpc.buidlguidl.com\",",
 })} as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;`;

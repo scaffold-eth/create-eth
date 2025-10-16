@@ -47,12 +47,17 @@
     "repository": "https://github.com/scaffold-eth/create-eth-extensions",
     "branch": "porto"
   },
-
   {
-    "extensionFlagValue": "challenge-simple-nft-example",
-    "description": "SpeedRunEthereum Challenge: Simple NFT Example.",
+    "extensionFlagValue": "envio",
+    "description": "This extension integrates Envio Indexer, it makes indexing your deployed smart contracts as simple as possible",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "envio"
+  },
+  {
+    "extensionFlagValue": "challenge-tokenization",
+    "description": "SpeedRunEthereum Challenge: Tokenization.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
-    "branch": "challenge-simple-nft-example"
+    "branch": "challenge-tokenization"
   },
   {
     "extensionFlagValue": "challenge-decentralized-staking",
