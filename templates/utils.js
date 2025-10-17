@@ -74,10 +74,13 @@ export const withDefaults =
         acc[arg] = receivedArgs[arg][0]; return acc;}, {});
 
     const argsWithDefaultsAndGlobals = Object.fromEntries(
-      Object.entries({...expectedArgsDefaults, ...receivedGlobalArgs}).map(([argName, argDefault]) => [
-        argName,
-        receivedArgs[argName] ?? [argDefault],
-      ]),
+      Object.entries({...expectedArgsDefaults, ...receivedGlobalArgs}).map(([argName, argDefault]) => {
+        const receivedArg = receivedArgs[argName] ?? [argDefault];
+        if (receivedArg[0] instanceof Function) {
+          return [argName, [receivedArg[0](receivedGlobalArgs)]];
+        }
+        return [argName, receivedArg];
+      }),
     );
 
     if (debug) {
@@ -94,7 +97,10 @@ export const withDefaults =
         );
       }
 
-      const receivedType = getType(receivedArgs[receivedArgName][0]);
+      let receivedType = getType(receivedArgs[receivedArgName][0]);
+      if (receivedType === "function") {
+        receivedType = getType(receivedArgs[receivedArgName][0]({receivedGlobalArgs}));
+      }
       const expectedType = getType(argsWithDefaultsAndGlobals[receivedArgName][0]);
 
       if (receivedType !== expectedType) {
