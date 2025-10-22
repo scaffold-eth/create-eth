@@ -1,5 +1,12 @@
 # create-eth
 
+## 1.0.7
+
+### Patch Changes
+
+- 6841903: Add drizzle-neon to curated extensions
+  Accept `postContent` args in `.gitignores` tempaltes
+
 ## 1.0.6
 
 ### Patch Changes
@@ -695,9 +702,7 @@
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512)
-  6. fix: spelling in test file name (#522)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522)
   7. Add polygonZkEvm and polygonZkEvmTestnet (#309)
 
   8. fix: eth price showing 0 on sepolia network (#532)
@@ -728,9 +733,7 @@
 
 ### Patch Changes
 
-- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512
-  6. fix: test file name #522
-
+- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512 6. fix: test file name #522
   7. add support for `yarn verify --network networkName` in foundry similar to hardhat #489
 
   8. updated the Git task title from "Initializing Git repository" => "Initializing Git repository and submodules" when the user selects foundry as an extension
