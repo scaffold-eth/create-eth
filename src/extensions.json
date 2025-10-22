@@ -54,6 +54,12 @@
     "branch": "envio"
   },
   {
+    "extensionFlagValue": "drizzle-neon",
+    "description": "This extension sets up a local database with Drizzle ORM. Optimized to work using Neon as the database provider.",
+    "repository": "https://github.com/scaffold-eth/create-eth-extensions",
+    "branch": "drizzle-neon"
+  },
+  {
     "extensionFlagValue": "challenge-tokenization",
     "description": "SpeedRunEthereum Challenge: Tokenization.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
