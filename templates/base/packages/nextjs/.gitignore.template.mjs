@@ -1,4 +1,6 @@
-const contents = () => 
+import { withDefaults } from "../../../utils.js";
+
+const contents = ({ postContent }) =>
 `# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -36,6 +38,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-ipfs-upload.config.json`
+ipfs-upload.config.json
 
-export default contents
+${postContent[0] || ''}`;
+
+export default withDefaults(contents, {
+  postContent: ''
+})
