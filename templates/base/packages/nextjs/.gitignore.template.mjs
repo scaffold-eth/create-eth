@@ -39,7 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 ipfs-upload.config.json
-
 ${postContent[0] || ''}`;
 
 export default withDefaults(contents, {
