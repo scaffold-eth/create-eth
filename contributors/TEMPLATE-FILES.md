@@ -15,12 +15,14 @@ If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTE
 | [(script) `Deploy.s.sol.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/script/Deploy.s.sol.template.mjs) | [`Deploy.s.sol.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/foundry/script/Deploy.s.sol.args.mjs) |
 | [(config) `foundry.toml.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/foundry.toml.template.mjs)        | [`foundry.toml.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/foundry/foundry.toml.args.mjs)        |
 | [(config) `Makefile.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/Makefile.template.mjs)                | [`Makefile.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/foundry/Makefile.args.mjs)                |
+| [(gitignore) `.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/foundry/packages/foundry/.gitignore.template.mjs)         | [`.gitignore.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/foundry/.gitignore.args.mjs)            |
 
 #### Hardhat
 
 | Template                                                                                                                                                                                | Example args file                                                                                                                                        |
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [(config) `hardhat.config.ts.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/packages/hardhat/hardhat.config.ts.template.mjs) | [`hardhat.config.ts.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/hardhat/hardhat.config.ts.args.mjs) |
+| [(gitignore) `.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/solidity-frameworks/hardhat/packages/hardhat/.gitignore.template.mjs)            | [`.gitignore.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/hardhat/.gitignore.args.mjs)               |
 
 #### NextJS
 
@@ -40,12 +42,14 @@ If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTE
 | [(config) `getMetadata.ts.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/utils/scaffold-eth/getMetadata.ts.args.mjs)                                  | [`getMetadata.ts.teamplte.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/tree/example/extension/packages/nextjs/utils/scaffold-eth/getMetadata.ts.args.mjs)                  |
 | [(types) `abi.d.ts.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/types/abitype/abi.d.ts.template.mjs)                                                | [`abi.d.ts.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/nextjs/types/abitype/abi.d.ts.args.mjs)                                            |
 | [(env) `.env.example.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/.env.example.template.mjs)                                                        | [`.env.example.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/nextjs/.env.example.args.mjs)                                                  |
+| [(gitignore) `.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/packages/nextjs/.gitignore.template.mjs)                                                      | [`.gitignore.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/packages/nextjs/.gitignore.args.mjs)                                                      |
 
 #### Root
 
-| Template                                                                                                                     | Example args file                                                                                                       |
-| ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| [(doc) `README.md.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/README.md.template.mjs) | [`README.md.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/README.md.args.mjs) |
+| Template                                                                                                                             | Example args file                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| [(doc) `README.md.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/README.md.template.mjs)         | [`README.md.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/README.md.args.mjs)   |
+| [(gitignore) `.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.gitignore.template.mjs) | [`.gitignore.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/.gitignore.args.mjs) |
 
 ### create-eth internal use
 
