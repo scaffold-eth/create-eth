@@ -6,3 +6,7 @@ export const SOLIDITY_FRAMEWORKS = {
   HARDHAT: "hardhat",
   FOUNDRY: "foundry",
 } as const;
+
+export const GLOBAL_ARGS_DEFAULTS = {
+  solidityFramework: "",
+};
