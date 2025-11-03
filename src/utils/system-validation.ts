@@ -2,12 +2,33 @@ import chalk from "chalk";
 import { execa } from "execa";
 import semver from "semver";
 
-export const validateFoundryUp = async () => {
+const RECOMMENDED_FOUNDRY_VERSION = "1.4.0";
+
+export const validateFoundry = async () => {
   try {
-    await execa("foundryup", ["-h"]);
-  } catch {
-    const message = ` ${chalk.bold.yellow("Attention: Foundryup is not installed in your system.")}
- ${chalk.bold.yellow("To use foundry, please install foundryup")}
+    const { stdout: forgeVersion } = await execa("forge", ["--version"]);
+    // Extract version from output like "forge Version: 1.4.3-stable"
+    const versionMatch = forgeVersion.match(/forge Version: (\d+\.\d+\.\d+)/);
+    if (!versionMatch) {
+      const message = ` ${chalk.bold.yellow("Attention: Could not parse foundry version.")}
+ ${chalk.bold.yellow("Please ensure foundry is properly installed")}
+ ${chalk.bold.yellow("Checkout: https://getfoundry.sh")}
+    `;
+      throw new Error(message);
+    }
+
+    const version = versionMatch[1];
+    if (semver.lt(version, RECOMMENDED_FOUNDRY_VERSION)) {
+      console.log(chalk.bold.yellow("⚠️  Warning: Foundry version is older than recommended."));
+      console.log(chalk.yellow(`   Current version: ${version}, recommended: >= ${RECOMMENDED_FOUNDRY_VERSION}`));
+      console.log(chalk.yellow("   Consider updating foundry by running: foundryup"));
+    }
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("Attention:")) {
+      throw error;
+    }
+    const message = ` ${chalk.bold.yellow("Attention: Foundry is not installed or not accessible.")}
+ ${chalk.bold.yellow("Please install foundry using foundryup")}
  ${chalk.bold.yellow("Checkout: https://getfoundry.sh")}
     `;
     throw new Error(message);
