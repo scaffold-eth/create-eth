@@ -27,7 +27,8 @@ export const validateFoundry = async () => {
     if (error instanceof Error && error.message.includes("Attention:")) {
       throw error;
     }
-    const message = ` ${chalk.bold.yellow("Attention: Foundry is not installed or not accessible.")}
+    const message = `
+ ${chalk.bold.yellow("Foundry is not installed or not accessible.")}
  ${chalk.bold.yellow("Please install foundry using foundryup")}
  ${chalk.bold.yellow("Checkout: https://getfoundry.sh")}
     `;
