@@ -1,5 +1,5 @@
 ---
-"create-eth": minor
+"create-eth": major
 ---
 
 - migration to [scaffold-ui](https://github.com/scaffold-eth/scaffold-ui) (#1136)
