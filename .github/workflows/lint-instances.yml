@@ -24,6 +24,11 @@ jobs:
             eip-5792-migrate-scaffold-ui,
             erc-721-migrate-scaffold-ui,
           ]
+        exclude:
+          - config: no_solidity_framework_with_extension
+            extension_branch: erc-20-scaffold-ui
+          - config: no_solidity_framework_with_extension
+            extension_branch: erc-721-migrate-scaffold-ui
 
     steps:
       - uses: actions/checkout@v4
