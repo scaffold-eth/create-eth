@@ -22,6 +22,16 @@ jobs:
             foundry_with_extension,
             no_solidity_framework_with_extension,
           ]
+        extension_branch:
+          [
+            example-scaffold-ui,
+            subgraph-scaffold-ui,
+            ponder-scaffold-ui,
+            erc-20-scaffold-ui,
+            eip-5792-migrate-scaffold-ui,
+            erc-721-migrate-scaffold-ui,
+          ]
+
     steps:
       - uses: actions/checkout@v4
 
@@ -39,14 +49,14 @@ jobs:
         run: yarn
 
       - name: Install Foundry
-        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        if: matrix.config == 'foundry_with_extension'
         uses: foundry-rs/foundry-toolchain@v1
         with:
           cache: false
           version: v1.3.0
 
       - name: Install foundryup
-        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        if: matrix.config == 'foundry_with_extension'
         run: |
           curl -L https://foundry.paradigm.xyz -o foundryup-init.sh
           bash foundryup-init.sh
@@ -55,49 +65,34 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Install application (Hardhat configuration)
-        if: matrix.config == 'hardhat'
-        run: yarn cli new_project_hardhat -s hardhat
-
       - name: Install application (Hardhat with extension configuration)
         if: matrix.config == 'hardhat_with_extension'
-        run: yarn cli new_project_hardhat_with_extension -s hardhat -e scaffold-eth/create-eth-extensions:example-scaffold-ui
-
-      - name: Install application (Foundry configuration)
-        if: matrix.config == 'foundry'
-        run: |
-          export PATH="$HOME/.config/.foundry/bin:$PATH"
-          yarn cli new_project_foundry -s foundry
+        run: yarn cli new_project_hardhat_with_extension -s hardhat -e scaffold-eth/create-eth-extensions:${{ matrix.extension_branch }}
 
       - name: Install application (Foundry with extension configuration)
         if: matrix.config == 'foundry_with_extension'
         run: |
           export PATH="$HOME/.config/.foundry/bin:$PATH"
-          yarn cli new_project_foundry_with_extension -s foundry -e scaffold-eth/create-eth-extensions:example-scaffold-ui
-
-      - name: Install application (No solidity framework configuration)
-        if: matrix.config == 'no_solidity_framework'
-        run: yarn cli new_project_no_solidity_framework -s none
+          yarn cli new_project_foundry_with_extension -s foundry -e scaffold-eth/create-eth-extensions:${{ matrix.extension_branch }}
 
       - name: Install application (No solidity framework with extension configuration)
         if: matrix.config == 'no_solidity_framework_with_extension'
-        run: yarn cli new_project_no_solidity_framework_with_extension -s none -e scaffold-eth/create-eth-extensions:example-scaffold-ui
+        run: yarn cli new_project_no_solidity_framework_with_extension -s none -e scaffold-eth/create-eth-extensions:${{ matrix.extension_branch }}
 
       - name: Run chain and deploy
         working-directory: new_project_${{ matrix.config }}
-        if: matrix.config == 'hardhat' || matrix.config == 'foundry' || matrix.config == 'hardhat_with_extension' || matrix.config == 'foundry_with_extension'
         run: |
           yarn chain &
           npx wait-on tcp:8545
           yarn deploy
 
       - name: Run linting hardhat package
-        if: matrix.config == 'hardhat' || matrix.config == 'hardhat_with_extension'
+        if: matrix.config == 'hardhat_with_extension'
         working-directory: new_project_${{ matrix.config }}
         run: yarn hardhat:lint --max-warnings=0
 
       - name: Run linting foundry package
-        if: matrix.config == 'foundry' || matrix.config == 'foundry_with_extension'
+        if: matrix.config == 'foundry_with_extension'
         working-directory: new_project_${{ matrix.config }}
         run: yarn foundry:lint
 
