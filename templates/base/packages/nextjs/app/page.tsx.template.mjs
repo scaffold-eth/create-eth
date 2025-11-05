@@ -9,14 +9,17 @@ const contents = ({ preContent, externalExtensionName, description, fullContentO
 "use client";
 
 import { useAccount } from "wagmi";
-import { Address } from "~~/components/scaffold-eth";
+import { Address } from "@scaffold-ui/components";
 import type { NextPage } from "next";
+import { hardhat } from "viem/chains";
 import Link from "next/link";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth";
 ${preContent[0] || ''}
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
+  const { targetNetwork } = useTargetNetwork();
 
   return (
     <>
@@ -29,7 +32,13 @@ const Home: NextPage = () => {
           </h1>
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
+            <Address
+              address={connectedAddress}
+              chain={targetNetwork}
+              blockExplorerAddressLink={
+                targetNetwork.id === hardhat.id ? \`/blockexplorer/address/\${connectedAddress}\` : undefined
+              }
+            />
           </div>
           ${description}
         </div>
