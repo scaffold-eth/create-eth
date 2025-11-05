@@ -1,5 +1,31 @@
 # create-eth
 
+## 2.0.0
+
+### Major Changes
+
+- 38919fc: This update replaces most of the built-in UI components from Scaffold-ETH 2 codebase with the new [Scaffold-UI](https://github.com/scaffold-eth/scaffold-ui) library.
+
+  [Scaffold-UI](https://github.com/scaffold-eth/scaffold-ui) provides a clean set of reusable components + hooks that expose everything you need to build ethereum components.
+
+  ### For Extension Developers
+
+  If your extension previously imported components directly from Scaffold-ETH 2, you'll need to update those import paths.
+
+  To help with the migration, we've released a **codemod**:
+
+  ```
+  cd your-extension-directory
+  npx create-eth-codemod migrate-scaffold-ui-imports .
+  ```
+
+  This should automatically refactor your imports to use scaffold-ui where appropriate.
+
+### Patch Changes
+
+- 6841903: Add drizzle-neon to curated extensions
+  Accept `postContent` args in `.gitignores` tempaltes
+
 ## 1.0.6
 
 ### Patch Changes
@@ -695,9 +721,7 @@
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512)
-  6. fix: spelling in test file name (#522)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522)
   7. Add polygonZkEvm and polygonZkEvmTestnet (#309)
 
   8. fix: eth price showing 0 on sepolia network (#532)
@@ -728,9 +752,7 @@
 
 ### Patch Changes
 
-- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512
-  6. fix: test file name #522
-
+- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512 6. fix: test file name #522
   7. add support for `yarn verify --network networkName` in foundry similar to hardhat #489
 
   8. updated the Git task title from "Initializing Git repository" => "Initializing Git repository and submodules" when the user selects foundry as an extension
