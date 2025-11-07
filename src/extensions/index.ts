@@ -1,4 +1,9 @@
-import createEthExtensions from "./create-eth-extensions.json";
-import challenges from "./challenges.json";
+import { createEthExtensions } from "./create-eth-extensions";
+import { challenges } from "./challenges";
+import { organizations } from "./organizations";
+import { Extension } from "./types";
 
-export default [...createEthExtensions, ...challenges];
+const extensions: Extension[] = [...createEthExtensions, ...challenges, ...organizations];
+
+export default extensions;
+export { Extension, createEthExtensions, challenges, organizations };
