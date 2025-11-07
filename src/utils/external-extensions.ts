@@ -3,7 +3,7 @@ import path from "path";
 import * as https from "https";
 import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
-import curatedExtension from "../extensions.json";
+import curatedExtension from "../extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 
 type ExtensionJSON = {
