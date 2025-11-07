@@ -6,5 +6,4 @@ export type Extension = {
   description: string;
   version?: string; // if not present we default to latest
   name?: string; // human readable name, if not present we default to branch or extensionFlagValue on UI
-  installCommand?: string;
 };

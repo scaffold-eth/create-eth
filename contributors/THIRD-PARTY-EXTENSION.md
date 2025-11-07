@@ -216,18 +216,18 @@ import { Extension } from "./types";
 export const organizations: Extension[] = [
   // ... other extensions
   {
-    extensionFlagValue: "your-extension-name", // Short name users will use
-    name: "Your Extension Display Name", // Optional: Human-readable name
+    extensionFlagValue: "metamask/gator-extension", // Must follow: githubOrg/repoName
+    name: "Delegation Toolkit Extension", // Optional: Human-readable name
     description: "Clear description of what your extension does",
-    repository: "https://github.com/your-org/your-extension-repo",
+    repository: "https://github.com/metamask/gator-extension",
     branch: "main", // Optional: specific branch
-    installCommand: "npx create-eth@latest -e your-org/your-extension", // Optional
+    installCommand: "npx create-eth@latest -e metamask/gator-extension", // Optional
   },
 ];
 ```
 
 2. **Required fields** (TypeScript will enforce these):
-   - `extensionFlagValue` - Unique short identifier (e.g., "subgraph", "eip-712")
+   - `extensionFlagValue` - **Must follow the format `githubOrg/repoName`** to avoid conflicts (e.g., "metamask/gator-extension", "envio/hyperindex")
    - `description` - What the extension provides
    - `repository` - Full GitHub repository URL
 
