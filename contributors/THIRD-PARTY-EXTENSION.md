@@ -192,9 +192,9 @@ This phase allows you to test your extension locally and see how it works when u
 
    Next time users call your extension via `npx create-eth@latest -e`, they will get the updated version.
 
-## Contributing to the Known Extensions List
+## Contributing to the Curated Extensions List
 
-If your organization has created an extension and you'd like to add it to create-eth's known extensions list (allowing users to install it via short flag names), you can submit a PR.
+If your organization has created an extension and you'd like to add it to create-eth's curated extensions list (allowing users to install it via short flag names), you can submit a PR.
 
 **Note**: This list is curated for established organizations and projects. Individual developers can still publish and share their extensions via the standard GitHub URL format (`npx create-eth@latest -e owner/repo:branch`).
 
