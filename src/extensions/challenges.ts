@@ -67,4 +67,10 @@ export const challenges: Extension[] = [
     repository: "https://github.com/scaffold-eth/se-2-challenges",
     branch: "challenge-stablecoins",
   },
+  {
+    extensionFlagValue: "challenge-zk-voting",
+    description: "SpeedRunEthereum Challenge: ZK Voting.",
+    repository: "https://github.com/scaffold-eth/se-2-challenges",
+    branch: "challenge-zk-voting",
+  },
 ];
