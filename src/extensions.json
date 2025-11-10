@@ -61,73 +61,73 @@
   },
   {
     "extensionFlagValue": "challenge-tokenization",
-    "description": "SpeedRunEthereum Challenge: Tokenization.",
+    "description": "Speedrun Ethereum Challenge: Tokenization.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-tokenization"
   },
   {
     "extensionFlagValue": "challenge-decentralized-staking",
-    "description": "SpeedRunEthereum Challenge: Decentralized Staking App.",
+    "description": "Speedrun Ethereum Challenge: Decentralized Staking App.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-decentralized-staking"
   },
   {
     "extensionFlagValue": "challenge-token-vendor",
-    "description": "SpeedRunEthereum Challenge: Token Vendor.",
+    "description": "Speedrun Ethereum Challenge: Token Vendor.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-token-vendor"
   },
   {
     "extensionFlagValue": "challenge-dice-game",
-    "description": "SpeedRunEthereum Challenge: Dice Game.",
+    "description": "Speedrun Ethereum Challenge: Dice Game.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-dice-game"
   },
   {
     "extensionFlagValue": "challenge-dex",
-    "description": "SpeedRunEthereum Challenge: Build a DEX.",
+    "description": "Speedrun Ethereum Challenge: Build a DEX.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-dex"
   },
   {
     "extensionFlagValue": "challenge-state-channels",
-    "description": "SpeedRunEthereum Challenge: A State Channel Application.",
+    "description": "Speedrun Ethereum Challenge: A State Channel Application.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-state-channels"
   },
   {
     "extensionFlagValue": "challenge-multisig",
-    "description": "SpeedRunEthereum Challenge: Multisig Wallet.",
+    "description": "Speedrun Ethereum Challenge: Multisig Wallet.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-multisig"
   },
   {
     "extensionFlagValue": "challenge-svg-nft",
-    "description": "SpeedRunEthereum Challenge: SVG NFT.",
+    "description": "Speedrun Ethereum Challenge: SVG NFT.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-svg-nft"
   },
   {
     "extensionFlagValue": "challenge-over-collateralized-lending",
-    "description": "SpeedRunEthereum Challenge: Over-collateralized Lending.",
+    "description": "Speedrun Ethereum Challenge: Over-collateralized Lending.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-over-collateralized-lending"
   },
   {
     "extensionFlagValue": "challenge-prediction-markets",
-    "description": "SpeedRunEthereum Challenge: Prediction Markets.",
+    "description": "Speedrun Ethereum Challenge: Prediction Markets.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-prediction-markets"
   },
   {
     "extensionFlagValue": "challenge-stablecoins",
-    "description": "SpeedRunEthereum Challenge: Stablecoins.",
+    "description": "Speedrun Ethereum Challenge: Stablecoins.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-stablecoins"
   },
   {
     "extensionFlagValue": "challenge-zk-voting",
-    "description": "SpeedRunEthereum Challenge: ZK Voting.",
+    "description": "Speedrun Ethereum Challenge: ZK Voting.",
     "repository": "https://github.com/scaffold-eth/se-2-challenges",
     "branch": "challenge-zk-voting"
   }
