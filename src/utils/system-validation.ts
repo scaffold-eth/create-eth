@@ -2,15 +2,53 @@ import chalk from "chalk";
 import { execa } from "execa";
 import semver from "semver";
 
-export const validateFoundryUp = async () => {
+const REQUIRED_FOUNDRY_VERSION = "1.4.0";
+
+// Custom error for Foundry validation
+class FoundryValidationError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "FoundryValidationError";
+  }
+}
+
+export const validateFoundry = async () => {
+  let versionMatch: RegExpMatchArray | null = null;
+  // Check if forge is installed
   try {
-    await execa("foundryup", ["-h"]);
+    const { stdout: forgeVersion } = await execa("forge", ["--version"]);
+    // Extract version from output like "forge Version: 1.4.3-stable"
+    versionMatch = forgeVersion.match(/forge Version: (\d+\.\d+\.\d+)/);
+    if (!versionMatch) {
+      throw new Error();
+    }
   } catch {
-    const message = ` ${chalk.bold.yellow("Attention: Foundryup is not installed in your system.")}
- ${chalk.bold.yellow("To use foundry, please install foundryup")}
+    const message = ` 
+    ${chalk.bold.yellow("Could not parse foundry version.")}
+    ${chalk.bold.yellow("Please ensure foundry is properly installed")}
+    ${chalk.bold.yellow("Checkout: https://getfoundry.sh")}
+       `;
+    throw new FoundryValidationError(message);
+  }
+
+  // Parse and validate version
+  try {
+    const version = versionMatch[1];
+    if (semver.lt(version, REQUIRED_FOUNDRY_VERSION)) {
+      const message = `
+ ${chalk.bold.yellow("Foundry version is older than required.")}
+ ${chalk.bold.yellow(`Current version: ${version}, required: >= ${REQUIRED_FOUNDRY_VERSION}`)}
+ ${chalk.bold.yellow("Please update foundry by running: foundryup")}
  ${chalk.bold.yellow("Checkout: https://getfoundry.sh")}
     `;
-    throw new Error(message);
+      throw new FoundryValidationError(message);
+    }
+  } catch (error) {
+    // Re-throw custom validation errors
+    if (error instanceof FoundryValidationError) {
+      throw error;
+    }
+    throw new Error("Unknown error occurred while validating Foundry version");
   }
 };
 
