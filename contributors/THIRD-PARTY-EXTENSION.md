@@ -248,5 +248,3 @@ yarn build       # Builds the project
    - Brief description of your organization and the extension's purpose
 
 Your PR will be reviewed by the maintainers. We prioritize extensions from established organizations that provide value to the broader Ethereum development community.
-
-**Note**: The scaffoldeth.io website fetches and combines the TypeScript extension files directly, so no JSON generation is needed.
