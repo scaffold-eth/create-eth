@@ -3,7 +3,6 @@ import arg from "arg";
 import { getSolidityFrameworkDirsFromExternalExtension, validateExternalExtension } from "./external-extensions";
 import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
-import { validateFoundryUp } from "./system-validation";
 import { validateNpmName } from "./validate-name";
 
 // TODO update smartContractFramework code with general extensions
@@ -84,10 +83,6 @@ export async function parseArgumentsIntoOptions(
   // if length is 1, we don't give user a choice and set it ourselves.
   const solidityFramework =
     solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : (args["--solidity-framework"] ?? null);
-
-  if (solidityFramework === SOLIDITY_FRAMEWORKS.FOUNDRY) {
-    await validateFoundryUp();
-  }
 
   return {
     rawOptions: {
