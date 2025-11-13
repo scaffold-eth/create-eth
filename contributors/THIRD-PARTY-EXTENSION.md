@@ -234,7 +234,7 @@ export const organizations: Extension[] = [
 3. **Optional fields**:
    - `branch` - Specific branch (defaults to repo default branch)
    - `name` - Display name for UI (defaults to extensionFlagValue)
-   - `version` - create-eth version specification (defaults to latest)
+   - `createEthVersion` - create-eth version specification (defaults to latest)
 
 4. **Test your addition**:
 

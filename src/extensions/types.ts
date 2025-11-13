@@ -4,6 +4,6 @@ export type Extension = {
   branch?: string;
   // fields useful for scaffoldeth.io
   description: string;
-  version?: string; // if not present we default to latest
+  createEthVersion?: string; // if not present we default to latest
   name?: string; // human readable name, if not present we default to branch or extensionFlagValue on UI
 };
