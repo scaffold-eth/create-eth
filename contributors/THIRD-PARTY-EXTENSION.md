@@ -240,18 +240,13 @@ export const organizations: Extension[] = [
 
 ```bash
 yarn type-check  # Ensures all required fields are present
-yarn build       # Generates extensions.json
+yarn build       # Builds the project
 ```
 
 5. **Submit your PR** with:
    - Updated TypeScript file (`src/extensions/organizations.ts`)
-   - The generated `src/extensions.json` (auto-generated during build)
    - Brief description of your organization and the extension's purpose
 
 Your PR will be reviewed by the maintainers. We prioritize extensions from established organizations that provide value to the broader Ethereum development community.
 
-### Generated Output
-
-When the project builds, it automatically generates `src/extensions.json`. This file contains all extensions merged into a single array and is consumed by scaffoldeth.io website.
-
-**Important**: Don't edit `src/extensions.json` directly - always edit the TypeScript source files!
+**Note**: The scaffoldeth.io website fetches and combines the TypeScript extension files directly, so no JSON generation is needed.
