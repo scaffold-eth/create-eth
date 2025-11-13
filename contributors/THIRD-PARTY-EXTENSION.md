@@ -191,3 +191,60 @@ This phase allows you to test your extension locally and see how it works when u
    ```
 
    Next time users call your extension via `npx create-eth@latest -e`, they will get the updated version.
+
+## Contributing to the Curated Extensions List
+
+If your organization has created an extension and you'd like to add it to create-eth's curated extensions list (allowing users to install it via short flag names), you can submit a PR.
+
+**Note**: This list is curated for established organizations and projects. Individual developers can still publish and share their extensions via the standard GitHub URL format (`npx create-eth@latest -e owner/repo:branch`).
+
+### Extension Registry Structure
+
+Extensions are organized in `src/extensions/` by category:
+
+- **`create-eth-extensions.ts`** - Core extensions from scaffold-eth organization
+- **`challenges.ts`** - SpeedRunEthereum challenge extensions
+- **`organizations.ts`** - Third-party organization extensions (your extension goes here!)
+
+### Adding Your Extension
+
+1. **Edit `src/extensions/organizations.ts`** to add your extension:
+
+```typescript
+import { Extension } from "./types";
+
+export const organizations: Extension[] = [
+  // ... other extensions
+  {
+    extensionFlagValue: "metamask/gator-extension", // Must follow: githubOrg/repoName
+    name: "Delegation Toolkit Extension", // Optional: Human-readable name
+    description: "Clear description of what your extension does",
+    repository: "https://github.com/metamask/gator-extension",
+    branch: "main", // Optional: specific branch
+    installCommand: "npx create-eth@latest -e metamask/gator-extension", // Optional
+  },
+];
+```
+
+2. **Required fields** (TypeScript will enforce these):
+   - `extensionFlagValue` - **Must follow the format `githubOrg/repoName`** to avoid conflicts (e.g., "metamask/gator-extension", "envio/hyperindex")
+   - `description` - What the extension provides
+   - `repository` - Full GitHub repository URL
+
+3. **Optional fields**:
+   - `branch` - Specific branch (defaults to repo default branch)
+   - `name` - Display name for UI (defaults to extensionFlagValue)
+   - `createEthVersion` - create-eth version specification (defaults to latest)
+
+4. **Test your addition**:
+
+```bash
+yarn type-check  # Ensures all required fields are present
+yarn build       # Builds the project
+```
+
+5. **Submit your PR** with:
+   - Updated TypeScript file (`src/extensions/organizations.ts`)
+   - Brief description of your organization and the extension's purpose
+
+Your PR will be reviewed by the maintainers. We prioritize extensions from established organizations that provide value to the broader Ethereum development community.

@@ -3,22 +3,12 @@ import path from "path";
 import * as https from "https";
 import { fileURLToPath } from "url";
 import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
-import curatedExtension from "../extensions.json";
+import curatedExtension, { Extension } from "../extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
-
-type ExtensionJSON = {
-  extensionFlagValue: string;
-  repository: string;
-  branch?: string;
-  // fields useful for scaffoldeth.io
-  description: string;
-  version?: string; // if not present we default to latest
-  name?: string; // human readable name, if not present we default to branch or extensionFlagValue on UI
-};
 
 const TRUSTED_GITHUB_ORGANIZATIONS = ["scaffold-eth", "buidlguidl"];
 
-const extensions: ExtensionJSON[] = curatedExtension;
+const extensions: Extension[] = curatedExtension;
 const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>((acc, ext) => {
   if (!ext.repository) {
     throw new Error(`Extension must have 'repository': ${JSON.stringify(ext)}`);
