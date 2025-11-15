@@ -1,4 +1,6 @@
-const contents = () =>
+import { withDefaults } from "../../../../utils.js";
+
+const contents = ({ postContent }) =>
   `# Compiler files
 cache/
 out/
@@ -13,7 +15,9 @@ docs/
 # Dotenv file
 .env
 localhost.json
-`;
+${postContent[0] || ''}`;
 
-export default contents;
+export default withDefaults(contents, {
+  postContent: ''
+})
 

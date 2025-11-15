@@ -165,7 +165,7 @@ const copyChanges = async (
       const defaultArgs = extractWithDefaultsArg(templateContent);
 
       if (!defaultArgs) {
-        prettyLog.info(`.gitignore and .env files could not be changed`, 3);
+        prettyLog.info(`${file} could not be changed (does not accept arguments)`, 3);
         console.log("\n");
         continue;
       }
