@@ -99,7 +99,7 @@ export const withDefaults =
 
       let receivedType = getType(receivedArgs[receivedArgName][0]);
       if (receivedType === "function") {
-        receivedType = getType(receivedArgs[receivedArgName][0]({receivedGlobalArgs}));
+        receivedType = getType(receivedArgs[receivedArgName][0]({...receivedGlobalArgs}));
       }
       const expectedType = getType(argsWithDefaultsAndGlobals[receivedArgName][0]);
 
