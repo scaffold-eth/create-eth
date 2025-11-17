@@ -4,6 +4,8 @@ import { getSolidityFrameworkDirsFromExternalExtension, validateExternalExtensio
 import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateNpmName } from "./validate-name";
+import { confirm } from "@inquirer/prompts";
+import packageJson from "../../package.json";
 
 // TODO update smartContractFramework code with general extensions
 export async function parseArgumentsIntoOptions(
@@ -52,6 +54,29 @@ export async function parseArgumentsIntoOptions(
         )}\n`,
       ),
     );
+  }
+
+  // Check if extension createEthVersion matches current version
+  if (extension && typeof extension === "object" && extension.recommendedCreateEthVersion) {
+    const currentVersion = packageJson.version;
+
+    if (extension.recommendedCreateEthVersion !== currentVersion) {
+      console.log(
+        chalk.yellow(
+          `\n⚠️  This extension is designed for create-eth ${chalk.bold(`v${extension.recommendedCreateEthVersion}`)}, but you're running ${chalk.bold(`v${currentVersion}`)}. We highly recommend using the same version to avoid any issues:\n${chalk.bold(`yarn create-eth@${extension.recommendedCreateEthVersion} -e ${extensionName}`)}\n`,
+        ),
+      );
+
+      const proceed = await confirm({
+        message: "Do you want to proceed?",
+        default: false,
+      });
+
+      if (!proceed) {
+        console.log(chalk.gray("\nOperation cancelled."));
+        process.exit(0);
+      }
+    }
   }
 
   if (project) {
