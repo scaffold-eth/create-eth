@@ -6,6 +6,7 @@ import { SOLIDITY_FRAMEWORKS } from "./consts";
 import { validateNpmName } from "./validate-name";
 import { confirm } from "@inquirer/prompts";
 import packageJson from "../../package.json";
+import { execa } from "execa";
 
 // TODO update smartContractFramework code with general extensions
 export async function parseArgumentsIntoOptions(
@@ -63,12 +64,27 @@ export async function parseArgumentsIntoOptions(
     if (extension.recommendedCreateEthVersion !== currentVersion) {
       console.log(
         chalk.yellow(
-          `\n⚠️  This extension is designed for create-eth ${chalk.bold(`v${extension.recommendedCreateEthVersion}`)}, but you're running ${chalk.bold(`v${currentVersion}`)}. We highly recommend using the same version to avoid any issues:\n${chalk.bold(`yarn create-eth@${extension.recommendedCreateEthVersion} -e ${extensionName}`)}\n`,
+          `\n⚠️  This extension requires create-eth ${chalk.bold(`v${extension.recommendedCreateEthVersion}`)}, but you're running ${chalk.bold(`v${currentVersion}`)}.\n`,
         ),
       );
 
+      const switchVersion = await confirm({
+        message: `Would you like to run with the correct version (${extension.recommendedCreateEthVersion})?`,
+        default: true,
+      });
+
+      if (switchVersion) {
+        console.log(chalk.gray(`\nSwitching to create-eth@${extension.recommendedCreateEthVersion}...\n`));
+
+        await execa("npx", [`create-eth@${extension.recommendedCreateEthVersion}`, ...rawArgs.slice(2)], {
+          stdio: "inherit",
+        });
+
+        process.exit(0);
+      }
+
       const proceed = await confirm({
-        message: "Do you want to proceed?",
+        message: "Do you want to proceed with the current version anyway?",
         default: false,
       });
 
