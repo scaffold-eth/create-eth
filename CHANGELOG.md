@@ -1,5 +1,14 @@
 # create-eth
 
+## 2.0.1
+
+### Patch Changes
+
+- 5e847b7: - (foundry) https://github.com/scaffold-eth/scaffold-eth-2/pull/1180
+  - (foundry) https://github.com/scaffold-eth/scaffold-eth-2/pull/1197
+- 8076163: validate foundry version
+- 77e7dc0: update cursor rules with scaffold-ui
+
 ## 2.0.0
 
 ### Major Changes
@@ -721,9 +730,7 @@ This should automatically refactor your imports to use scaffold-ui where appropr
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522)
-  7. Add polygonZkEvm and polygonZkEvmTestnet (#309)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309)
   8. fix: eth price showing 0 on sepolia network (#532)
 
   9. use websockets client in useFetchBlocks hooks (#529)
@@ -752,7 +759,5 @@ This should automatically refactor your imports to use scaffold-ui where appropr
 
 ### Patch Changes
 
-- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512 6. fix: test file name #522
-  7. add support for `yarn verify --network networkName` in foundry similar to hardhat #489
-
+- 32caee5: 1. Fix RainbowKitCustomConnectButton dropdown styles #500 2. chore: footer missalignment on mobile screens #502 3. Update and typescript version #499 4. add grid and grid-flow class to li manually #510 5. Fix typos in getScaffoldContractWrite lines 57 & 65 #512 6. fix: test file name #522 7. add support for `yarn verify --network networkName` in foundry similar to hardhat #489
   8. updated the Git task title from "Initializing Git repository" => "Initializing Git repository and submodules" when the user selects foundry as an extension
