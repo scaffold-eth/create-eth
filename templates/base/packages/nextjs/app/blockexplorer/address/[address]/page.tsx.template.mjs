@@ -1,6 +1,10 @@
 import { withDefaults } from "../../../../../../../utils.js";
 
-const contents = ({ solidityFramework, artifactsDirName }) => `
+const contents = ({ solidityFramework, artifactsDirName }) => {
+  if (!solidityFramework[0]) {
+    solidityFramework[0] = "hardhat";
+  }
+  return `
 import fs from "fs";
 import path from "path";
 import { Address } from "viem";
@@ -101,7 +105,7 @@ const AddressPage = async (props: PageProps) => {
   return <AddressComponent address={address} contractData={contractData} />;
 };
 
-export default AddressPage;`;
+export default AddressPage;`};
 
 export default withDefaults(contents, {
   artifactsDirName: "artifacts",
