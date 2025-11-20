@@ -89,7 +89,7 @@ export async function parseArgumentsIntoOptions(
       });
 
       if (!proceed) {
-        console.log(chalk.gray("\nOperation cancelled."));
+        console.log(chalk.gray("\nSetup cancelled. No project was created"));
         process.exit(0);
       }
     }
