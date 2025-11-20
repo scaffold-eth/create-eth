@@ -1,10 +1,10 @@
 import { withDefaults } from "../../../../../../../utils.js";
 
-const contents = ({ chainName, artifactsDirName }) => `
+const contents = ({ solidityFramework, artifactsDirName }) => `
 import fs from "fs";
 import path from "path";
 import { Address } from "viem";
-import { ${chainName[0]} } from "viem/chains";
+import { ${solidityFramework[0]} } from "viem/chains";
 import { AddressComponent } from "~~/app/blockexplorer/_components/AddressComponent";
 import deployedContracts from "~~/contracts/deployedContracts";
 import { isZeroAddress } from "~~/utils/scaffold-eth/common";
@@ -42,7 +42,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
 
 const getContractData = async (address: Address) => {
   const contracts = deployedContracts as GenericContractsDeclaration | null;
-  const chainId = ${chainName[0]}.id;
+  const chainId = ${solidityFramework[0]}.id;
 
   if (!contracts || !contracts[chainId] || Object.keys(contracts[chainId]).length === 0) {
     return null;
@@ -59,7 +59,7 @@ const getContractData = async (address: Address) => {
     "..",
     "..",
     "..",
-    "${chainName[0]}",
+    "${solidityFramework[0]}",
     "${artifactsDirName[0]}",
     "build-info",
   );
@@ -104,6 +104,5 @@ const AddressPage = async (props: PageProps) => {
 export default AddressPage;`;
 
 export default withDefaults(contents, {
-  chainName: "hardhat",
   artifactsDirName: "artifacts",
 });
