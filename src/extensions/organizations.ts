@@ -2,10 +2,15 @@ import { Extension } from "./types";
 
 export const organizations: Extension[] = [
   {
+    extensionFlagValue: "metamask/erc-7715-extension",
+    name: "MetaMask Advanced Permissions",
+    description: "This extension helps you get started with MetaMask Advanced Permissions (ERC-7715).",
+    repository: "https://github.com/MetaMask/erc-7715-extension",
+  },
+  {
     extensionFlagValue: "metamask/gator-extension",
-    name: "Delegation Toolkit Extension",
-    description:
-      "The MetaMask Delegation Toolkit is a Viem-based collection of tools for integrating embedded smart accounts, known as MetaMaskSmartAccount, into dapps. Developers can create and manage delegator accounts that delegate specific permissions, such as spending limits or time-based access, to other accounts. This extension demonstrates the end-to-end flow for initializing a MetaMask Smart Account, generating and signing a delegation, and redeeming the delegation according to [ERC-7710](https://eips.ethereum.org/EIPS/eip-7710) specifications.",
+    name: "Smart Accounts Kit",
+    description: "This extension helps you get started with MetaMask Smart Accounts, and ERC-7710 delegations.",
     repository: "https://github.com/MetaMask/gator-extension",
   },
 ];
