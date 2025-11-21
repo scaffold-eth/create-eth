@@ -10,8 +10,7 @@ export const createEthExtensions: Extension[] = [
   },
   {
     extensionFlagValue: "x402",
-    description:
-      "This x402 extension demonstrate how to use the x402 protocol to monetize your APIs and pages with micropayments.",
+    description: "Adds support for monetizing APIs and pages with x402 protocol micropayments.",
     repository: "https://github.com/scaffold-eth/create-eth-extensions",
     branch: "x402",
   },
