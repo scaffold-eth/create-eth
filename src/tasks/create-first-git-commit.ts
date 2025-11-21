@@ -10,7 +10,7 @@ const createEthVersion = packageJson.version;
 export async function createFirstGitCommit(targetDir: string, options: Options) {
   try {
     await execa("git", ["add", "-A"], { cwd: targetDir });
-    await execa("git", ["commit", "-m", `Initial commit with 🏗️ Scaffold-ETH 2 @ ${createEthVersion}`, "--no-verify"], {
+    await execa("git", ["commit", "-m", `Initial commit with 🏗️ create-eth @ ${createEthVersion}`, "--no-verify"], {
       cwd: targetDir,
     });
 
