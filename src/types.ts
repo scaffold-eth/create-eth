@@ -5,6 +5,7 @@ export type ExternalExtensionNameDev = string;
 export type ExternalExtension = {
   repository: string;
   branch?: string | null;
+  createEthVersion?: string;
 };
 
 type BaseOptions = {
