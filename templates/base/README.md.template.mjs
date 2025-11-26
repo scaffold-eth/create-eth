@@ -1,4 +1,4 @@
-import { withDefaults } from "../utils.js";
+import { upperCaseFirstLetter, withDefaults } from "../utils.js";
 
 const getQuickStart = ({
   solidityFramework,
@@ -26,7 +26,7 @@ ${
 yarn chain
 \`\`\`
 
-This command starts a local Ethereum network using ${solidityFramework[0]}. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in ${networkConfigPath[0]}.
+This command starts a local Ethereum network using ${upperCaseFirstLetter(solidityFramework[0])}. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in ${networkConfigPath[0]}.
 
 3. On a second terminal, deploy the test contract:
 
@@ -84,7 +84,7 @@ const contents = ({
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
 ⚙️ Built using NextJS, RainbowKit, ${
-    Boolean(solidityFramework[0]) ? solidityFramework[0] + ", " : ""
+    Boolean(solidityFramework[0]) ? upperCaseFirstLetter(solidityFramework[0]) + ", " : ""
   }Wagmi, Viem, and Typescript.
 ${
   Boolean(solidityFramework[0])
@@ -128,7 +128,6 @@ Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob
 
 export default withDefaults(contents, {
   skipQuickStart: false,
-  solidityFramework: "",
   networkConfigPath: "",
   contractsPath: "",
   scriptsPath: "",

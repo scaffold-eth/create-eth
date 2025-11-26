@@ -1,6 +1,8 @@
 import { inspect } from "util";
 import createDeepMerge from "@fastify/deepmerge";
 
+export const upperCaseFirstLetter = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+
 const getType = (value) => {
   if (Array.isArray(value)) {
     return 'array';
@@ -57,23 +59,35 @@ export const deepMerge = (...args) => {
   return finalConfig;
 };
 
+// copy of the defaults from the src/utils/consts.ts file
+const GLOBAL_ARGS_DEFAULTS = {
+  solidityFramework: "",
+};
+
 export const withDefaults =
   (template, expectedArgsDefaults, debug = false) => {
     const callerFile = getCallerFile();
 
     return receivedArgs => {
-    const argsWithDefault = Object.fromEntries(
-      Object.entries(expectedArgsDefaults).map(([argName, argDefault]) => [
-        argName,
-        receivedArgs[argName] ?? [argDefault],
-      ]),
+      const globalArgsNames = Object.keys(GLOBAL_ARGS_DEFAULTS);
+      const receivedGlobalArgs = globalArgsNames.reduce((acc, arg) => { 
+        acc[arg] = receivedArgs[arg][0]; return acc;}, {});
+
+    const argsWithDefaultsAndGlobals = Object.fromEntries(
+      Object.entries({...expectedArgsDefaults, ...receivedGlobalArgs}).map(([argName, argDefault]) => {
+        const receivedArg = receivedArgs[argName] ?? [argDefault];
+        if (receivedArg[0] instanceof Function) {
+          return [argName, [receivedArg[0](receivedGlobalArgs)]];
+        }
+        return [argName, receivedArg];
+      }),
     );
 
     if (debug) {
-      console.log(argsWithDefault, expectedArgsDefaults, receivedArgs);
+      console.log(argsWithDefaultsAndGlobals, expectedArgsDefaults, receivedArgs);
     }
 
-    const expectedArgsNames = Object.keys(expectedArgsDefaults);
+    const expectedArgsNames = Object.keys(argsWithDefaultsAndGlobals);
     Object.keys(receivedArgs).forEach(receivedArgName => {
       if (!expectedArgsNames.includes(receivedArgName)) {
         throw new Error(
@@ -83,8 +97,11 @@ export const withDefaults =
         );
       }
 
-      const receivedType = getType(receivedArgs[receivedArgName][0]);
-      const expectedType = getType(expectedArgsDefaults[receivedArgName]);
+      let receivedType = getType(receivedArgs[receivedArgName][0]);
+      if (receivedType === "function") {
+        receivedType = getType(receivedArgs[receivedArgName][0]({...receivedGlobalArgs}));
+      }
+      const expectedType = getType(argsWithDefaultsAndGlobals[receivedArgName][0]);
 
       if (receivedType !== expectedType) {
         throw new Error(
@@ -95,7 +112,7 @@ export const withDefaults =
       }
     });
 
-    return template(argsWithDefault);
+    return template(argsWithDefaultsAndGlobals);
   };
 };
 
