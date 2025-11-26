@@ -9,6 +9,12 @@ export const createEthExtensions: Extension[] = [
     branch: "subgraph",
   },
   {
+    extensionFlagValue: "x402",
+    description: "Adds support for monetizing APIs and pages with x402 protocol micropayments.",
+    repository: "https://github.com/scaffold-eth/create-eth-extensions",
+    branch: "x402",
+  },
+  {
     extensionFlagValue: "eip-712",
     description: "Provides EIP-712 typed message signing, sending, and verification in a user-friendly way.",
     repository: "https://github.com/scaffold-eth/create-eth-extensions",

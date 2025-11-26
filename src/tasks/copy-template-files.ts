@@ -9,7 +9,13 @@ import path from "path";
 import { promisify } from "util";
 import link from "../utils/link";
 import { getArgumentFromExternalExtensionOption } from "../utils/external-extensions";
-import { BASE_DIR, SOLIDITY_FRAMEWORKS, SOLIDITY_FRAMEWORKS_DIR, EXAMPLE_CONTRACTS_DIR } from "../utils/consts";
+import {
+  BASE_DIR,
+  SOLIDITY_FRAMEWORKS,
+  SOLIDITY_FRAMEWORKS_DIR,
+  EXAMPLE_CONTRACTS_DIR,
+  GLOBAL_ARGS_DEFAULTS,
+} from "../utils/consts";
 
 const EXTERNAL_EXTENSION_TMP_DIR = "tmp-external-extension";
 
@@ -282,7 +288,11 @@ const processTemplatedFiles = async (
         return accumulated;
       }, freshArgs);
 
-      const output = fileTemplate(combinedArgs);
+      const globalArgs = {
+        solidityFramework: [solidityFramework || GLOBAL_ARGS_DEFAULTS.solidityFramework],
+      };
+
+      const output = fileTemplate({ ...combinedArgs, ...globalArgs });
 
       const targetPath = path.join(
         targetDir,

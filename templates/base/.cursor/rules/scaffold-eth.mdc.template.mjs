@@ -1,4 +1,4 @@
-import { withDefaults } from "../../../utils.js"
+import { withDefaults, upperCaseFirstLetter } from "../../../utils.js"
 
 const contents = ({ solidityFramework, deployScriptDir }) => {
   return `---
@@ -11,7 +11,7 @@ This codebase contains Scaffold-ETH 2 (SE-2), everything you need to build dApps
 
 It's a yarn monorepo that contains following packages:
 
-${Boolean(solidityFramework[0]) ? `- ${solidityFramework[0].toUpperCase()} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
+${Boolean(solidityFramework[0]) ? `- ${upperCaseFirstLetter(solidityFramework[0])} (\`packages/${solidityFramework[0]}\`): The solidity framework to write, test and deploy EVM Smart Contracts.` : ""}
 - NextJS (\`packages/nextjs\`): The UI framework extended with utilities to make interacting with Smart Contracts easy (using Next.js App Router, not Pages Router).
 
 
@@ -103,16 +103,18 @@ The \`data\` property consists of an array of events and can be displayed as:
 
 ### Other Hooks
 SE-2 also provides other hooks to interact with blockchain data: \`useScaffoldWatchContractEvent\`, \`useScaffoldEventHistory\`, \`useDeployedContractInfo\`, \`useScaffoldContract\`, \`useTransactor\`. They live under \`packages/nextjs/hooks/scaffold-eth\`.
+
 ## Display Components guidelines
-SE-2 provides a set of pre-built React components for common Ethereum use cases: 
+With the \`@scaffold-ui/components\` library, SE-2 provides a set of pre-built React components for common Ethereum use cases:
+
 - \`Address\`: Always use this when displaying an ETH address
 - \`AddressInput\`: Always use this when users need to input an ETH address
 - \`Balance\`: Display the ETH/USDC balance of a given address
 - \`EtherInput\`: An extended number input with ETH/USD conversion.
 
-They live under \`packages/nextjs/components/scaffold-eth\`.
+For fully customizable components, you can use the hooks from the \`@scaffold-ui/hooks\` library to get the data you need.
 
 Find the relevant information from the documentation and the codebase. Think step by step before answering the question.`
 }
 
-export default withDefaults(contents, { solidityFramework: "", deployScriptDir: "" });
+export default withDefaults(contents, { deployScriptDir: "" });

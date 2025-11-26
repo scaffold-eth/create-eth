@@ -144,6 +144,28 @@ export default { one: 1, two: 2}
 
 To avoid issues when named arguments have typos, the `withDefaults` utility will also throw an error when an argument is passed with a name that wasn't expected by the template.
 
+### Using global variables in args file content
+
+You can use global variables in your argument values by defining your argument values as functions.
+
+Instead of static values, export functions that receive global variables as parameters and return the desired content.
+
+**Important:** The function's return type must match the default argument value type defined in the template.
+
+Example:
+
+```js
+// Static value (basic approach)
+export const description = "Hello world";
+
+// Dynamic value using global variables (advanced approach)
+export const description = ({ solidityFramework }) => `Hello ${solidityFramework}`;
+```
+
+**Available global variables:**
+
+- `solidityFramework` - The selected Solidity framework (e.g., "hardhat", "foundry")
+
 # Args files injection in Template files
 
 For each Template file, we search on the extensions the user selected for the existence of Args files in the exact same relative path. If Args files are found, we combine them into an array.
