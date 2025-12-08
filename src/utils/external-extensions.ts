@@ -20,6 +20,7 @@ const CURATED_EXTENSIONS = extensions.reduce<Record<string, ExternalExtension>>(
   acc[ext.extensionFlagValue] = {
     repository: ext.repository,
     branch: ext.branch,
+    createEthVersion: ext.createEthVersion,
   };
   return acc;
 }, {});
@@ -36,7 +37,9 @@ function deconstructGithubUrl(url: string) {
 export const validateExternalExtension = async (
   extensionName: string,
   dev: boolean,
-): Promise<{ repository: string; branch?: string; isTrusted: boolean } | string> => {
+): Promise<
+  { repository: string; branch?: string; isTrusted: boolean; recommendedCreateEthVersion?: string } | string
+> => {
   if (dev) {
     // Check externalExtensions/${extensionName} exists
     try {
@@ -55,6 +58,7 @@ export const validateExternalExtension = async (
 
   const { githubUrl, githubBranchUrl, branch, owner } = getDataFromExternalExtensionArgument(extensionName);
   const isTrusted = TRUSTED_GITHUB_ORGANIZATIONS.includes(owner.toLowerCase()) || !!CURATED_EXTENSIONS[extensionName];
+  const recommendedCreateEthVersion = CURATED_EXTENSIONS[extensionName]?.createEthVersion;
 
   // Check if repository exists
   await new Promise((resolve, reject) => {
@@ -71,7 +75,7 @@ export const validateExternalExtension = async (
       });
   });
 
-  return { repository: githubUrl, branch, isTrusted };
+  return { repository: githubUrl, branch, isTrusted, recommendedCreateEthVersion };
 };
 
 // Gets the data from the argument passed to the `--extension` option.
