@@ -1,5 +1,17 @@
 # create-eth
 
+## 2.0.3
+
+### Patch Changes
+
+- 5a9f866: - Update cursor rules (scaffold-ui) (https://github.com/scaffold-eth/scaffold-eth-2/pull/1195)
+  - feat: up scaffold-ui (https://github.com/scaffold-eth/scaffold-eth-2/pull/1199)
+  - up wagmi, viem, rainbwokit and burner-connector (https://github.com/scaffold-eth/scaffold-eth-2/pull/1207)
+  - up next (https://github.com/scaffold-eth/scaffold-eth-2/pull/1210)
+  - fix: up react (https://github.com/scaffold-eth/scaffold-eth-2/pull/1212)
+  - add bg-mainnet-rpc as extra fallback for mainnet (https://github.com/scaffold-eth/scaffold-eth-2/pull/1213)
+- 7568441: - Upgrade React to 19.0.3 and update scaffold-ui (https://github.com/scaffold-eth/scaffold-eth-2/pull/1214)
+
 ## 2.0.2
 
 ### Patch Changes
@@ -736,9 +748,7 @@ This should automatically refactor your imports to use scaffold-ui where appropr
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532)
-  9. use websockets client in useFetchBlocks hooks (#529)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532) 9. use websockets client in useFetchBlocks hooks (#529)
   10. Move from react-blockies to blo (#538)
 
   11. add Prettify type helper locally (#541)
