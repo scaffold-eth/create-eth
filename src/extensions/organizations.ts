@@ -13,4 +13,11 @@ export const organizations: Extension[] = [
     description: "This extension helps you get started with MetaMask Smart Accounts, and ERC-7710 delegations.",
     repository: "https://github.com/MetaMask/gator-extension",
   },
+  {
+    extensionFlagValue: "signinwithethereum/scaffold-siwe-ext",
+    name: "SIWE Extension",
+    description:
+      "This extension helps you get started with SIWE (Sign-In with Ethereum). Authenticate using your Ethereum wallet. No passwords needed.",
+    repository: "https://github.com/signinwithethereum/scaffold-siwe-ext",
+  },
 ];
