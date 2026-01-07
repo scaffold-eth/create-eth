@@ -1,5 +1,11 @@
 # create-eth
 
+## 2.0.4
+
+### Patch Changes
+
+- 7a07603: add crowdfunding-challenge
+
 ## 2.0.3
 
 ### Patch Changes
@@ -748,9 +754,7 @@ This should automatically refactor your imports to use scaffold-ui where appropr
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532) 9. use websockets client in useFetchBlocks hooks (#529)
-  10. Move from react-blockies to blo (#538)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532) 9. use websockets client in useFetchBlocks hooks (#529) 10. Move from react-blockies to blo (#538)
   11. add Prettify type helper locally (#541)
 
   12. update hardhat version (#546)
