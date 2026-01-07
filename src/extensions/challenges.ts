@@ -8,10 +8,10 @@ export const challenges: Extension[] = [
     branch: "challenge-tokenization",
   },
   {
-    extensionFlagValue: "challenge-decentralized-staking",
-    description: "Speedrun Ethereum Challenge: Decentralized Staking App.",
+    extensionFlagValue: "challenge-crowdfunding",
+    description: "Speedrun Ethereum Challenge: Crowdfunding App.",
     repository: "https://github.com/scaffold-eth/se-2-challenges",
-    branch: "challenge-decentralized-staking",
+    branch: "challenge-crowdfunding",
   },
   {
     extensionFlagValue: "challenge-token-vendor",
@@ -48,6 +48,12 @@ export const challenges: Extension[] = [
     description: "Speedrun Ethereum Challenge: SVG NFT.",
     repository: "https://github.com/scaffold-eth/se-2-challenges",
     branch: "challenge-svg-nft",
+  },
+  {
+    extensionFlagValue: "challenge-oracles",
+    description: "Speedrun Ethereum Challenge: Oracles.",
+    repository: "https://github.com/scaffold-eth/se-2-challenges",
+    branch: "challenge-oracles",
   },
   {
     extensionFlagValue: "challenge-over-collateralized-lending",
