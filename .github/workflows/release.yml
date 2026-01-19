@@ -34,5 +34,6 @@ jobs:
         uses: changesets/action@v1.5.3
         with:
           publish: yarn changeset:release
+          commitMode: github-api
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
