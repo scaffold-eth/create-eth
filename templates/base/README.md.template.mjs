@@ -83,6 +83,9 @@ const contents = ({
 
 🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
 
+> [!NOTE]
+> 🤖 Scaffold-ETH 2 is AI-ready! It has everything agents need to build on Ethereum. Check \`.agents/\`, \`.claude/\`, \`.opencode\` or \`.cursor/\` for more info.
+
 ⚙️ Built using NextJS, RainbowKit, ${
     Boolean(solidityFramework[0]) ? upperCaseFirstLetter(solidityFramework[0]) + ", " : ""
   }Wagmi, Viem, and Typescript.
