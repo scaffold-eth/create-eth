@@ -2,7 +2,7 @@ import { withDefaults, stringify, deepMerge } from "../../../../templates/utils.
 
 const defaultScaffoldConfig = {
     targetNetworks: ["$$chains.mainnet$$"],
-    pollingInterval: 30000,
+    pollingInterval: 3000,
     alchemyApiKey: "$$process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY$$",
     rpcOverrides: {},
     walletConnectProjectId: "$$process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '3a8170812b534d0ff9d794f19a901d64'$$",
