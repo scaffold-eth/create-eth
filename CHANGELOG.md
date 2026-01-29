@@ -1,5 +1,12 @@
 # create-eth
 
+## 2.0.6
+
+### Patch Changes
+
+- 34d5cca: - add agents.md (https://github.com/scaffold-eth/scaffold-eth-2/pull/1221)
+  - Reduce polling interval from 30s to 3s (https://github.com/scaffold-eth/scaffold-eth-2/pull/1224)
+
 ## 2.0.5
 
 ### Patch Changes
@@ -761,9 +768,7 @@ This should automatically refactor your imports to use scaffold-ui where appropr
 
 ### Patch Changes
 
-- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532) 9. use websockets client in useFetchBlocks hooks (#529) 10. Move from react-blockies to blo (#538) 11. add Prettify type helper locally (#541)
-  12. update hardhat version (#546)
-
+- 9c967d9: 1. Fix RainbowKitCustomConnectButton dropdown styles (#500) 2. chore: footer missalignment & home page on small screens (#502) 3. Update and typescript version (#499) 4. fix: header links wrapping icons and text (#510) 5. Fix typos in useScaffoldContractWrite logs (#512) 6. fix: spelling in test file name (#522) 7. Add polygonZkEvm and polygonZkEvmTestnet (#309) 8. fix: eth price showing 0 on sepolia network (#532) 9. use websockets client in useFetchBlocks hooks (#529) 10. Move from react-blockies to blo (#538) 11. add Prettify type helper locally (#541) 12. update hardhat version (#546)
   13. Add indexed args to events (#540)
 
   14. add out of box compatibility with SAFE{Wallet} (#346)
