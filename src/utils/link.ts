@@ -1,9 +1,9 @@
 import type { Options } from "ncp";
-import { existsSync, lstatSync, readdirSync } from "fs";
+import { existsSync, lstatSync, readdirSync, readlinkSync } from "fs";
 import { promises } from "fs";
 import path from "path";
 
-const { mkdir, link } = promises;
+const { mkdir, link, symlink } = promises;
 
 const passesFilter = (source: string, options?: Options) => {
   const isDSStore = /\.DS_Store$/.test(source);
@@ -28,7 +28,14 @@ const linkRecursive = async (source: string, destination: string, options?: Opti
     return;
   }
 
-  if (lstatSync(source).isDirectory()) {
+  const stat = lstatSync(source);
+
+  if (stat.isSymbolicLink()) {
+    const linkTarget = readlinkSync(source);
+    return symlink(linkTarget, destination);
+  }
+
+  if (stat.isDirectory()) {
     const subPaths = readdirSync(source);
     await Promise.all(
       subPaths.map(async subPath => {
