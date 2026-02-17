@@ -49,6 +49,7 @@ If you're interested in developing third-party extensions, the [THIRD-PARTY-EXTE
 | Template                                                                                                                             | Example args file                                                                                                         |
 | ------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
 | [(doc) `README.md.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/README.md.template.mjs)         | [`README.md.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/README.md.args.mjs)   |
+| [(doc) `AGENTS.md.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/AGENTS.md.template.mjs)         | [`AGENTS.md.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/AGENTS.md.args.mjs)   |
 | [(gitignore) `.gitignore.template.mjs`](https://github.com/scaffold-eth/create-eth/blob/main/templates/base/.gitignore.template.mjs) | [`.gitignore.args.mjs`](https://github.com/scaffold-eth/create-eth-extensions/blob/example/extension/.gitignore.args.mjs) |
 
 ### create-eth internal use
