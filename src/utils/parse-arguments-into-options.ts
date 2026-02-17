@@ -25,6 +25,10 @@ export async function parseArgumentsIntoOptions(
       "--extension": String,
       "-e": "--extension",
 
+      "--project": String,
+      "-p": "--project",
+      "--name": "--project",
+
       "--help": Boolean,
       "-h": "--help",
     },
@@ -39,7 +43,7 @@ export async function parseArgumentsIntoOptions(
 
   const help = args["--help"] ?? false;
 
-  let project: string | null = args._[0] ?? null;
+  let project: string | null = args["--project"] ?? args._[0] ?? null;
 
   // use the original extension arg
   const extensionName = args["--extension"];
