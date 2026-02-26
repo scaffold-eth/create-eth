@@ -146,6 +146,10 @@ SE-2 also provides other hooks to interact with blockchain data: `useScaffoldWat
 - `EtherInput`: Number input with ETH/USD conversion toggle
 - `IntegerInput`: Integer-only input with wei conversion
 
+### Notifications & Error Handling
+
+Use `notification` from `~~/utils/scaffold-eth` for success/error/warning feedback and `getParsedError` for readable error messages.
+
 ### Styling
 
 **Use DaisyUI classes** for building frontend components.
@@ -226,8 +230,10 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 
 - **erc-20** — fungible tokens, decimals, approve patterns, OpenZeppelin ERC-20
 - **erc-721** — NFTs, metadata standards, royalties (ERC-2981), ERC721A, soulbound
+- **eip-712** — typed structured data signing, off-chain signatures, signature verification
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
 - **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
+- **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
 - **defi-protocol-templates** — staking, AMMs, governance, flash loans, lending
 - **solidity-security** — security audits, reentrancy, access control, gas optimization
 
