@@ -7,33 +7,13 @@ description: "Add EIP-5792 batched transaction support to a Scaffold-ETH 2 proje
 
 ## Prerequisites
 
-This skill is designed for Scaffold-ETH 2 (SE-2) projects. If the user is **not already inside an SE-2 project**, use the `ethereum-app-builder` skill from this same skill package to scaffold one first, then come back here to add EIP-5792.
-
-How to check: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
+Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
 
 ## Overview
 
 [EIP-5792](https://eips.ethereum.org/EIPS/eip-5792) (Wallet Call API) lets apps send batched onchain write calls to wallets via `wallet_sendCalls`, check their status with `wallet_getCallsStatus`, and query wallet capabilities with `wallet_getCapabilities`. This replaces the one-tx-at-a-time pattern of `eth_sendTransaction`.
 
 This skill covers integrating EIP-5792 batched transactions into an SE-2 project using [wagmi's EIP-5792 hooks](https://wagmi.sh/react/api/hooks/useWriteContracts). For anything not covered here, refer to the [EIP-5792 docs](https://www.eip5792.xyz/) or [wagmi docs](https://wagmi.sh/). This skill focuses on SE-2 integration specifics and the wallet compatibility gotchas that trip people up.
-
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-The deployment scripts go alongside the existing deploy scripts, and the frontend page goes in the nextjs package. After deployment, `deployedContracts.ts` auto-generates the ABI and address, so the frontend can interact with contracts using SE-2's scaffold hooks (`useScaffoldReadContract`, `useScaffoldWriteContract`) for individual calls and wagmi's EIP-5792 hooks for batched calls.
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
 
 ## Dependencies
 
@@ -151,13 +131,7 @@ This is the main source of confusion with EIP-5792. Not all wallets behave the s
 
 **Graceful degradation is important.** The UI should work for both EIP-5792 and non-EIP-5792 wallets. Use SE-2's standard `useScaffoldWriteContract` for individual calls as a fallback, and only show the batch button when `useCapabilities` succeeds. Consider offering a "switch to Coinbase Wallet" prompt when the connected wallet doesn't support EIP-5792.
 
-## SE-2 Integration
-
-### Header navigation
-
-Add a tab to the SE-2 header menu for the EIP-5792 demo page. Pick an appropriate icon from `@heroicons/react/24/outline`.
-
-### Frontend page
+## Frontend
 
 Build a page that demonstrates both individual and batched contract interactions. The key UX pattern:
 
@@ -167,9 +141,7 @@ Build a page that demonstrates both individual and batched contract interactions
 4. **Status display** — use `useShowCallsStatus` to show batch result
 5. **Wallet detection** — conditionally show/disable batch UI based on `useCapabilities`
 
-Use SE-2's `notification` utility (`~~/utils/scaffold-eth`) for success/error feedback and `getParsedError` for readable error messages. SE-2 uses `@scaffold-ui/components` for blockchain components and DaisyUI + Tailwind for general styling.
-
-## Development
+## How to Test
 
 1. Deploy the contract: `yarn deploy`
 2. Start the frontend: `yarn start`
