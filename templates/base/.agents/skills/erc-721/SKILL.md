@@ -7,35 +7,13 @@ description: "Add an ERC-721 NFT contract to a Scaffold-ETH 2 project. Use when 
 
 ## Prerequisites
 
-This skill is designed for Scaffold-ETH 2 (SE-2) projects. If the user is **not already inside an SE-2 project**, use the `ethereum-app-builder` skill from this same skill package to scaffold one first, then come back here to add ERC-721.
-
-How to check: look for `packages/nextjs/` and either `packages/hardhat/` or `packages/foundry/` in the project root, along with a root `package.json` with SE-2 workspace scripts (`yarn chain`, `yarn deploy`, `yarn start`).
+Check if `./packages/nextjs/scaffold.config.ts` exists directly in the current working directory (do not search subdirectories). If it doesn't exist, this is not a Scaffold-ETH 2 project. Follow the instructions at https://docs.scaffoldeth.io/SKILL.md to scaffold it first. If it exists, continue directly with building.
 
 ## Overview
 
 [ERC-721](https://eips.ethereum.org/EIPS/eip-721) is the standard interface for non-fungible tokens (NFTs) on Ethereum. This skill covers adding an ERC-721 contract to a Scaffold-ETH 2 project using [OpenZeppelin's ERC-721 implementation](https://docs.openzeppelin.com/contracts/5.x/erc721), along with deployment scripts and a frontend for minting, listing, and transferring NFTs.
 
 For anything not covered here, refer to the [OpenZeppelin ERC-721 docs](https://docs.openzeppelin.com/contracts/5.x/api/token/erc721) or search the web. This skill focuses on what's hard to discover: SE-2 integration specifics, common pitfalls, and ERC-721 gotchas.
-
-## SE-2 Project Context
-
-Scaffold-ETH 2 (SE-2) is a yarn (v3) monorepo for building dApps on Ethereum. It comes in two flavors based on the Solidity framework:
-
-- **Hardhat flavor**: contracts at `packages/hardhat/contracts/`, deploy scripts at `packages/hardhat/deploy/`
-- **Foundry flavor**: contracts at `packages/foundry/contracts/`, deploy scripts at `packages/foundry/script/`
-
-Check which exists in the project to know the flavor. Both flavors share:
-
-- **`packages/nextjs/`**: React frontend (Next.js App Router, Tailwind + DaisyUI, RainbowKit, Wagmi, Viem). Uses `~~` path alias for imports.
-- **`packages/nextjs/contracts/deployedContracts.ts`**: auto-generated after `yarn deploy`, contains ABIs, addresses, and deployment block numbers for all contracts, keyed by chain ID.
-- **`packages/nextjs/scaffold.config.ts`**: project config including `targetNetworks` (array of viem chain objects).
-- **Root `package.json`**: monorepo scripts that proxy into workspaces (e.g. `yarn chain`, `yarn deploy`, `yarn start`).
-
-SE-2 uses `@scaffold-ui/components` for blockchain/Ethereum components (addresses, balances, etc.) and DaisyUI + Tailwind for general component and styling.
-
-The deployment scripts go alongside the existing deploy scripts, and the frontend page goes in the nextjs package. After deployment, `deployedContracts.ts` auto-generates the ABI and address, so the frontend can interact with the NFT contract using SE-2's scaffold hooks (`useScaffoldReadContract`, `useScaffoldWriteContract`, `useScaffoldContract`).
-
-Look at the actual project structure and contracts before setting things up. Adapt to what's there rather than following this skill rigidly.
 
 ## Dependencies
 
@@ -101,16 +79,6 @@ If referencing older tutorials or code, note these breaking changes in OpenZeppe
 - **Custom errors** replaced revert strings (e.g. `ERC721NonexistentToken`, `ERC721InsufficientApproval`)
 - **`Ownable` requires explicit owner**: `Ownable(msg.sender)` instead of `Ownable()`
 - **`ERC721URIStorage`** now emits ERC-4906 `MetadataUpdate` events when `_setTokenURI` is called
-
-## Deployment
-
-### Hardhat
-
-Deploy script goes in `packages/hardhat/deploy/`. SE-2 uses `hardhat-deploy`, so the script exports a `DeployFunction`. Use a filename like `01_deploy_my_nft.ts` (numbered to control deploy order). The `autoMine` flag speeds up local deployments.
-
-### Foundry
-
-Add a deploy script in `packages/foundry/script/` and wire it into the main `Deploy.s.sol`. SE-2's Foundry setup uses a `ScaffoldETHDeploy` base contract and `DeployHelpers.s.sol`. Import and call the new deploy script from `Deploy.s.sol`'s run function.
 
 ## Metadata: The Part Most People Get Wrong
 
