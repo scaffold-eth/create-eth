@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "create-eth-backmerge": {
+      "source": "buidlguidl/sandgarden-skills",
+      "sourceType": "github",
+      "computedHash": "d553ddad67718219fec07a55c0244e07a43bc6f89ab690e6277d7710512429ab"
+    }
+  }
+}
