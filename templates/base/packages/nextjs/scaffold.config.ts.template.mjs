@@ -6,7 +6,7 @@ const defaultScaffoldConfig = {
     alchemyApiKey: "$$process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || DEFAULT_ALCHEMY_API_KEY$$",
     rpcOverrides: {},
     walletConnectProjectId: "$$process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '3a8170812b534d0ff9d794f19a901d64'$$",
-    onlyLocalBurnerWallet: true,
+    burnerWalletMode: "localNetworksOnly",
   };
 
 const contents = ({ preContent, configOverrides, extraConfigTypeName, skipLocalChainInTargetNetworks }) => {
@@ -32,7 +32,7 @@ export type BaseConfig = {
   alchemyApiKey: string;
   rpcOverrides?: Record<number, string>;
   walletConnectProjectId: string;
-  onlyLocalBurnerWallet: boolean;
+  burnerWalletMode: "localNetworksOnly" | "allNetworks" | "disabled";
 };
 
 export type ScaffoldConfig = BaseConfig ${extraConfigTypeName[0] ? `& ${extraConfigTypeName[0]}` : ''};
@@ -46,6 +46,7 @@ const scaffoldConfig = ${stringify(finalConfig, {
   walletConnectProjectId: "This is ours WalletConnect's default project ID.\nYou can get your own at https://cloud.walletconnect.com\nIt's recommended to store it in an env variable:\n.env.local for local testing, and in the Vercel/system env config for live apps.",
   rpcOverrides: "If you want to use a different RPC for a specific network, you can add it here.\nThe key is the chain ID, and the value is the HTTP RPC URL",
   "rpcOverrides.": "Example:\n[chains.mainnet.id]: \"https://mainnet.rpc.buidlguidl.com\",",
+  burnerWalletMode: "Configure Burner Wallet visibility:\n- \"localNetworksOnly\": only show when all target networks are local (hardhat/anvil)\n- \"allNetworks\": show on any configured target networks\n- \"disabled\": completely disable",
 })} as const satisfies ScaffoldConfig;
 
 export default scaffoldConfig;`;
