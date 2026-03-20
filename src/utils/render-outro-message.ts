@@ -9,7 +9,7 @@ export function renderOutroMessage(options: Options) {
 
   ${chalk.bold("Next steps:")}
   
-  ${chalk.dim("cd")} ${options.project}
+  ${options.project === "." ? "" : `${chalk.dim("cd")} ${options.project}`}
   `;
 
   if (!options.install) {
