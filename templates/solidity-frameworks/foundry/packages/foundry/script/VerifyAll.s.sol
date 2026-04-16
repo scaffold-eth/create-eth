@@ -90,10 +90,22 @@ contract VerifyAll is Script {
         }
     }
 
-    function _getCompiledBytecode(string memory contractName) internal view returns (string memory compiledBytecode) {
+    function _getCompiledBytecode(string memory contractName) internal returns (string memory compiledBytecode) {
         string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/out/", contractName, ".sol/", contractName, ".json");
-        compiledBytecode = vm.readFile(path);
+        string memory defaultPath = string.concat(root, "/out/", contractName, ".sol/", contractName, ".json");
+
+        try vm.readFile(defaultPath) returns (string memory content) {
+            compiledBytecode = content;
+        } catch {
+            string[] memory inputs = new string[](3);
+            inputs[0] = "bash";
+            inputs[1] = "-c";
+            inputs[2] = string.concat(
+                "find '", root, "/out' -name '", contractName, ".json' -not -path '*/build-info/*' -print -quit | tr -d '\\n'"
+            );
+            FfiResult memory f = tempVm(address(vm)).tryFfi(inputs);
+            compiledBytecode = vm.readFile(string(f.stdout));
+        }
     }
 
     function searchStr(uint96 idx, string memory searchKey) internal pure returns (string memory) {
