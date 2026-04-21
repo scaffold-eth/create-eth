@@ -23,9 +23,19 @@ type PageProps = {
 ${
   isFoundry
     ? `function fetchByteCodeAndAssembly(foundryOutDirectory: string, contractName: string) {
-  const artifactPath = path.join(foundryOutDirectory, \`\${contractName}.sol\`, \`\${contractName}.json\`);
+  // Foundry organizes artifacts by source file name, not contract name, so we scan all .sol dirs.
+  const solDirs = fs.readdirSync(foundryOutDirectory).filter(entry => entry.endsWith(".sol"));
 
-  if (!fs.existsSync(artifactPath)) {
+  let artifactPath = "";
+  for (const solDir of solDirs) {
+    const candidate = path.join(foundryOutDirectory, solDir, \`\${contractName}.json\`);
+    if (fs.existsSync(candidate)) {
+      artifactPath = candidate;
+      break;
+    }
+  }
+
+  if (!artifactPath) {
     return { bytecode: "", assembly: "" };
   }
 
