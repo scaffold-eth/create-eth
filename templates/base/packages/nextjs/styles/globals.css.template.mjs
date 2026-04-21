@@ -38,7 +38,7 @@ const contents = ({ postContent }) =>
   --color-warning: #ffcf72;
   --color-error: #ff8863;
 
-  --radius-field: 9999rem;
+  --radius-field: 1rem;
   --radius-box: 1rem;
   --tt-tailw: 6px;
 }
@@ -63,7 +63,7 @@ const contents = ({ postContent }) =>
   --color-warning: #ffcf72;
   --color-error: #ff8863;
 
-  --radius-field: 9999rem;
+  --radius-field: 1rem;
   --radius-box: 1rem;
 
   --tt-tailw: 6px;
@@ -111,6 +111,7 @@ const contents = ({ postContent }) =>
 
 .btn {
   @apply shadow-md;
+  border-radius: 9999rem;
 }
 
 .btn.btn-ghost {
