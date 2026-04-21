@@ -23,15 +23,19 @@ type PageProps = {
 ${
   isFoundry
     ? `function fetchByteCodeAndAssembly(foundryOutDirectory: string, contractName: string) {
-  // Foundry organizes artifacts by source file name, not contract name, so we scan all .sol dirs.
-  const solDirs = fs.readdirSync(foundryOutDirectory).filter(entry => entry.endsWith(".sol"));
+  // Foundry organizes artifacts by source file name, not contract name.
+  // Try the default path first, then fall back to scanning all .sol dirs (skipping build-info).
+  let artifactPath = path.join(foundryOutDirectory, \`\${contractName}.sol\`, \`\${contractName}.json\`);
 
-  let artifactPath = "";
-  for (const solDir of solDirs) {
-    const candidate = path.join(foundryOutDirectory, solDir, \`\${contractName}.json\`);
-    if (fs.existsSync(candidate)) {
-      artifactPath = candidate;
-      break;
+  if (!fs.existsSync(artifactPath)) {
+    artifactPath = "";
+    const solDirs = fs.readdirSync(foundryOutDirectory).filter(entry => entry.endsWith(".sol"));
+    for (const solDir of solDirs) {
+      const candidate = path.join(foundryOutDirectory, solDir, \`\${contractName}.json\`);
+      if (fs.existsSync(candidate)) {
+        artifactPath = candidate;
+        break;
+      }
     }
   }
 
