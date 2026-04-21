@@ -11,6 +11,8 @@ src = 'contracts'
 out = 'out'
 libs = ['lib', 'node_modules']
 fs_permissions = [{ access = "read-write", path = "./"}]
+optimizer = true
+optimizer_runs = 200
 ${extraProfileDefaults.filter(Boolean).join("\n")}
 
 [rpc_endpoints]
