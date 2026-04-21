@@ -11,6 +11,7 @@ src = 'contracts'
 out = 'out'
 libs = ['lib', 'node_modules']
 fs_permissions = [{ access = "read-write", path = "./"}]
+extra_output = ["evm.bytecode.opcodes"]
 ${extraProfileDefaults.filter(Boolean).join("\n")}
 
 [rpc_endpoints]

@@ -4,6 +4,8 @@ const contents = ({ solidityFramework, artifactsDirName }) => {
   if (!solidityFramework[0]) {
     solidityFramework[0] = "hardhat";
   }
+  const isFoundry = solidityFramework[0] === "foundry";
+
   return `
 import fs from "fs";
 import path from "path";
@@ -18,7 +20,23 @@ type PageProps = {
   params: Promise<{ address: Address }>;
 };
 
-async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath: string) {
+${
+  isFoundry
+    ? `function fetchByteCodeAndAssembly(foundryOutDirectory: string, contractName: string) {
+  const artifactPath = path.join(foundryOutDirectory, \`\${contractName}.sol\`, \`\${contractName}.json\`);
+
+  if (!fs.existsSync(artifactPath)) {
+    return { bytecode: "", assembly: "" };
+  }
+
+  const artifact = JSON.parse(fs.readFileSync(artifactPath, "utf8"));
+  const bytecode: string = artifact?.bytecode?.object ?? "";
+  const assembly: string = artifact?.opcodes ?? artifact?.bytecode?.opcodes ?? "";
+
+  return { bytecode, assembly };
+}`
+    : `async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractName: string) {
+  const contractPath = \`contracts/\${contractName}.sol\`;
   const buildInfoFiles = fs.readdirSync(buildInfoDirectory);
   let bytecode = "";
   let assembly = "";
@@ -42,6 +60,7 @@ async function fetchByteCodeAndAssembly(buildInfoDirectory: string, contractPath
   }
 
   return { bytecode, assembly };
+}`
 }
 
 const getContractData = async (address: Address) => {
@@ -52,9 +71,7 @@ const getContractData = async (address: Address) => {
     return null;
   }
 
-  let contractPath = "";
-
-  const buildInfoDirectory = path.join(
+  const artifactsDirectory = path.join(
     __dirname,
     "..",
     "..",
@@ -64,28 +81,29 @@ const getContractData = async (address: Address) => {
     "..",
     "..",
     "${solidityFramework[0]}",
-    "${artifactsDirName[0]}",
-    "build-info",
+    "${artifactsDirName[0]}"${isFoundry ? "" : `,
+    "build-info"`},
   );
 
-  if (!fs.existsSync(buildInfoDirectory)) {
-    throw new Error(\`Directory \${buildInfoDirectory} not found.\`);
+  if (!fs.existsSync(artifactsDirectory)) {
+    throw new Error(\`Directory \${artifactsDirectory} not found.\`);
   }
 
+  let matchedContractName = "";
   const deployedContractsOnChain = contracts[chainId];
   for (const [contractName, contractInfo] of Object.entries(deployedContractsOnChain)) {
     if (contractInfo.address.toLowerCase() === address.toLowerCase()) {
-      contractPath = \`contracts/\${contractName}.sol\`;
+      matchedContractName = contractName;
       break;
     }
   }
 
-  if (!contractPath) {
+  if (!matchedContractName) {
     // No contract found at this address
     return null;
   }
 
-  const { bytecode, assembly } = await fetchByteCodeAndAssembly(buildInfoDirectory, contractPath);
+  const { bytecode, assembly } = await fetchByteCodeAndAssembly(artifactsDirectory, matchedContractName);
 
   return { bytecode, assembly };
 };
@@ -105,7 +123,8 @@ const AddressPage = async (props: PageProps) => {
   return <AddressComponent address={address} contractData={contractData} />;
 };
 
-export default AddressPage;`};
+export default AddressPage;`;
+};
 
 export default withDefaults(contents, {
   artifactsDirName: "artifacts",
