@@ -1,5 +1,15 @@
 # create-eth
 
+## 2.0.14
+
+### Patch Changes
+
+- 960b2cc: - upgrade yarn version to 4.13.0 in base template (https://github.com/scaffold-eth/scaffold-eth-2/pull/1211)
+  - update nextjs package.json packageManager to yarn@4.13.0 (https://github.com/scaffold-eth/scaffold-eth-2/pull/1274)
+  - add hardhat deploy script gas-limit guidance to AGENTS.md (https://github.com/scaffold-eth/scaffold-eth-2/pull/1263)
+- 94da397: fix: foundry block explorer contract details page not showing bytecode/opcodes
+- 037e932: foundry: fix verfiyAll script
+
 ## 2.0.13
 
 ### Patch Changes
