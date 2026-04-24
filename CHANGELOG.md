@@ -1,5 +1,11 @@
 # create-eth
 
+## 2.0.15
+
+### Patch Changes
+
+- 43a7c8d: fix(foundry): VerifyAll supports linked libs; enable optimizer
+
 ## 2.0.14
 
 ### Patch Changes
