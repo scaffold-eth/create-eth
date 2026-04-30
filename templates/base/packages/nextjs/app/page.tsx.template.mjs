@@ -11,7 +11,6 @@ const contents = ({ preContent, externalExtensionName, description, fullContentO
 import { useAccount } from "wagmi";
 import { Address } from "@scaffold-ui/components";
 import type { NextPage } from "next";
-import { hardhat } from "viem/chains";
 import Link from "next/link";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { useTargetNetwork } from "~~/hooks/scaffold-eth";
@@ -32,13 +31,7 @@ const Home: NextPage = () => {
           </h1>
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
-            <Address
-              address={connectedAddress}
-              chain={targetNetwork}
-              blockExplorerAddressLink={
-                targetNetwork.id === hardhat.id ? \`/blockexplorer/address/\${connectedAddress}\` : undefined
-              }
-            />
+            <Address address={connectedAddress} chain={targetNetwork} />
           </div>
           ${description}
         </div>
