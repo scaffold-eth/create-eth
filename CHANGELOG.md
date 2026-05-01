@@ -1,5 +1,11 @@
 # create-eth
 
+## 2.0.16
+
+### Patch Changes
+
+- 6ca916d: - Drop local getBlockExplorerAddressLink and per-call blockExplorerAddressLink props (https://github.com/scaffold-eth/scaffold-eth-2/pull/1275)
+
 ## 2.0.15
 
 ### Patch Changes
