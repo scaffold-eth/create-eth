@@ -65,5 +65,5 @@
     "semver": "^7.7.2",
     "validate-npm-package-name": "^6.0.1"
   },
-  "packageManager": "yarn@3.5.0"
+  "packageManager": "yarn@4.14.1"
 }
