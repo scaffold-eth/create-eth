@@ -1,5 +1,11 @@
 # create-eth
 
+## 2.0.17
+
+### Patch Changes
+
+- 539d427: - new Alchemy key (https://github.com/scaffold-eth/scaffold-eth-2/pull/1287)
+
 ## 2.0.16
 
 ### Patch Changes
