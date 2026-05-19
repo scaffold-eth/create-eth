@@ -1,5 +1,11 @@
 # create-eth
 
+## 2.0.18
+
+### Patch Changes
+
+- b77e016: fix(foundry): generateTsAbis resolves artifacts when source file name differs from contract name
+
 ## 2.0.17
 
 ### Patch Changes
