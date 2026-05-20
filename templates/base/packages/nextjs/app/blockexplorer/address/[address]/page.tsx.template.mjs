@@ -86,13 +86,7 @@ const getContractData = async (address: Address) => {
   }
 
   const artifactsDirectory = path.join(
-    __dirname,
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
-    "..",
+    process.cwd(),
     "..",
     "${solidityFramework[0]}",
     "${artifactsDirName[0]}"${isFoundry ? "" : `,
