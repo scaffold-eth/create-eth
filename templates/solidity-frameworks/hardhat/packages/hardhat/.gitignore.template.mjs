@@ -11,9 +11,9 @@ node_modules
 coverage
 coverage.json
 
-# typechain
-typechain
-typechain-types
+# generated contract types
+types
+generated
 
 # hardhat files
 cache
@@ -23,7 +23,8 @@ artifacts
 artifacts-zk
 cache-zk
 
-# deployments
+# local deployments
+deployments/default
 deployments/localhost
 
 # typescript
