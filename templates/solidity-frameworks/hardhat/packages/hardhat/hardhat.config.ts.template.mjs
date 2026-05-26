@@ -3,17 +3,17 @@ import { withDefaults, stringify, deepMerge } from "../../../../utils.js";
 const defaultConfig = {
   plugins: '$$[hardhatToolbox, HardhatDeploy]$$',
   solidity: {
-    profiles: {
-      default: {
+    compilers: [
+      {
         version: "0.8.30",
         settings: {
           optimizer: {
             enabled: true,
             runs: 200,
           },
-        },
-      },
-    },
+        }
+      }
+    ],
   },
   generateTypedArtifacts: {
     destinations: [
