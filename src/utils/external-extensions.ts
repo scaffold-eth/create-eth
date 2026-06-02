@@ -165,7 +165,7 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
     const githubUrl = `https://github.com/${ownerName}/${repoName}/${branchOrHead}/extension/packages/${framework}`;
     try {
       const res = await fetch(githubUrl);
-      if (res.status === 200) return framework as SolidityFramework;
+      if (res.status === 200) return framework;
       if (res.status === 404) return null;
 
       throw new Error(
@@ -174,7 +174,7 @@ export const getSolidityFrameworkDirsFromExternalExtension = async (
     } catch (err) {
       console.warn((err as Error).message);
 
-      return framework as SolidityFramework;
+      return framework;
     }
   });
 
