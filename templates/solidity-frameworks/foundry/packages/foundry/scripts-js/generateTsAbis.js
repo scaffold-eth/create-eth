@@ -275,6 +275,9 @@ function main() {
     `${NEXTJS_TARGET_DIR}deployedContracts.ts`,
     format(fileTemplate("~~/utils/scaffold-eth/contract"), {
       parser: "typescript",
+      // Match the nextjs prettier config (printWidth 120) so the generated file
+      // passes the frontend lint/build instead of defaulting to printWidth 80.
+      printWidth: 120,
     })
   );
 
