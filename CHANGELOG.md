@@ -1,5 +1,12 @@
 # create-eth
 
+## 2.0.21
+
+### Patch Changes
+
+- f5e4737: - UI tweaks/redesign (https://github.com/scaffold-eth/scaffold-eth-2/pull/1282)
+  - fix: generateTsAbis formatting (https://github.com/scaffold-eth/scaffold-eth-2/pull/1303)
+
 ## 2.0.20
 
 ### Patch Changes
