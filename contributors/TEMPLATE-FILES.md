@@ -1,5 +1,8 @@
 # Template and Args File List
 
+> [!NOTE]
+> **Authoring third-party extensions is deprecated.** The template/args files listed here are still used internally by `create-eth`, but the example args files (linked to the `create-eth-extensions` repo) target extension authoring, which is no longer recommended and will be removed in a future release. Use [skills](https://docs.scaffoldeth.io/build-with-ai) instead.
+
 This document provides a comprehensive list of `.template.mjs` files and their corresponding `.args.mjs` example files used in the `create-eth` project.
 
 Template files are the base files that can be extended by third-party extensions. Args files are used to inject additional content into these template files. Understanding the relationship between these files is crucial for developing extensions and customizing the base instance created by `create-eth`.
