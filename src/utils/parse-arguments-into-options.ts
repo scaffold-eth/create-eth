@@ -105,7 +105,6 @@ const resolveSolidityFrameworkChoices = async (extension: ResolvedExtension): Pr
   return externalExtensionSolidityFrameworkDirs.length !== 0 ? externalExtensionSolidityFrameworkDirs : defaultChoices;
 };
 
-// TODO update smartContractFramework code with general extensions
 export async function parseArgumentsIntoOptions(
   rawArgs: Args,
 ): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: SolidityFrameworkChoices }> {

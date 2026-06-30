@@ -1,6 +1,7 @@
 import { execa } from "execa";
 
-// TODO: Instead of using execa, use prettier package from cli to format targetDir
+// Run the generated project's own `yarn format` so its prettier config and plugins
+// (e.g. solidity) apply — the CLI's bundled prettier would use the wrong config.
 export async function prettierFormat(targetDir: string) {
   try {
     await execa("yarn", ["format"], { cwd: targetDir });
