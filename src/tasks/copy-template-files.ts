@@ -26,6 +26,7 @@ type CopyOrLink = typeof copy;
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
+const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
@@ -116,12 +117,14 @@ const copyExtensionFiles = async (
   await copyOrLink(extensionPath, path.join(targetDir), {
     clobber: false,
     filter: path => {
+      const isConfig = isConfigRegex.test(path);
       const isArgs = isArgsRegex.test(path);
       const isSolidityFrameworkFolder = isSolidityFrameworkFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isPackagesFolder = isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isTemplate = isTemplateRegex.test(path);
       const isPackageJson = isPackageJsonRegex.test(path);
-      const shouldSkip = isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
+      const shouldSkip =
+        isConfig || isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
       return !shouldSkip;
     },
   });

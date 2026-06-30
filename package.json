@@ -32,6 +32,9 @@
     "rainbowkit"
   ],
   "license": "MIT",
+  "engines": {
+    "node": ">=22.6"
+  },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
     "@rollup/plugin-json": "^6.1.0",
