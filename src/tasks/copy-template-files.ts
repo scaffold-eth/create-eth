@@ -25,7 +25,6 @@ let copyOrLink = copy;
 const isTemplateRegex = /([^/\\]*?)\.template\./;
 const isPackageJsonRegex = /package\.json/;
 const isYarnLockRegex = /yarn\.lock/;
-const isConfigRegex = /([^/\\]*?)\\config\.json/;
 const isArgsRegex = /([^/\\]*?)\.args\./;
 const isSolidityFrameworkFolderRegex = /solidity-frameworks$/;
 const isPackagesFolderRegex = /packages$/;
@@ -60,7 +59,7 @@ const copyBaseFiles = async (basePath: string, targetDir: string, { dev: isDev }
     const basePackageJsonPaths = findFilesRecursiveSync(basePath, path => isPackageJsonRegex.test(path));
     basePackageJsonPaths.forEach(packageJsonPath => {
       const partialPath = packageJsonPath.split(basePath)[1];
-      mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath), isDev);
+      mergePackageJson(path.join(targetDir, partialPath), path.join(basePath, partialPath));
     });
 
     const baseDeployedContractsPaths = findFilesRecursiveSync(basePath, path => isDeployedContractsRegex.test(path));
@@ -84,30 +83,23 @@ const isUnselectedSolidityFrameworkFile = ({
   return unselectedSolidityFrameworks.map(sf => new RegExp(`${sf}`)).some(sfregex => sfregex.test(path));
 };
 
-const copyExtensionFiles = async (
-  { dev: isDev, solidityFramework }: Options,
-  extensionPath: string,
-  targetDir: string,
-) => {
+const copyExtensionFiles = async ({ solidityFramework }: Options, extensionPath: string, targetDir: string) => {
   // copy (or link if dev) root files
   await copyOrLink(extensionPath, path.join(targetDir), {
     clobber: false,
     filter: path => {
-      const isConfig = isConfigRegex.test(path);
       const isArgs = isArgsRegex.test(path);
       const isSolidityFrameworkFolder = isSolidityFrameworkFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isPackagesFolder = isPackagesFolderRegex.test(path) && fs.lstatSync(path).isDirectory();
       const isTemplate = isTemplateRegex.test(path);
-      // PR NOTE: this wasn't needed before because ncp had the clobber: false
       const isPackageJson = isPackageJsonRegex.test(path);
-      const shouldSkip =
-        isConfig || isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
+      const shouldSkip = isArgs || isTemplate || isPackageJson || isSolidityFrameworkFolder || isPackagesFolder;
       return !shouldSkip;
     },
   });
 
   // merge root package.json
-  mergePackageJson(path.join(targetDir, "package.json"), path.join(extensionPath, "package.json"), isDev);
+  mergePackageJson(path.join(targetDir, "package.json"), path.join(extensionPath, "package.json"));
 
   const extensionPackagesPath = path.join(extensionPath, "packages");
   const hasPackages = fs.existsSync(extensionPackagesPath);
@@ -143,14 +135,12 @@ const copyExtensionFiles = async (
       mergePackageJson(
         path.join(targetDir, "packages", packageName, "package.json"),
         path.join(extensionPath, "packages", packageName, "package.json"),
-        isDev,
       );
 
       if (packageName === solidityFramework) {
         mergePackageJson(
           path.join(targetDir, "package.json"),
           path.join(extensionPath, "packages", packageName, "root.package.json"),
-          isDev,
         );
       }
     });

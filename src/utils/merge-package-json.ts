@@ -1,7 +1,7 @@
 import mergeJsonStr from "merge-packages";
 import fs from "fs";
 
-export function mergePackageJson(targetPackageJsonPath: string, secondPackageJsonPath: string, isDev: boolean) {
+export function mergePackageJson(targetPackageJsonPath: string, secondPackageJsonPath: string) {
   const existsTarget = fs.existsSync(targetPackageJsonPath);
   const existsSecond = fs.existsSync(secondPackageJsonPath);
   if (!existsTarget && !existsSecond) {
@@ -17,8 +17,4 @@ export function mergePackageJson(targetPackageJsonPath: string, secondPackageJso
   const formattedPkgStr = JSON.stringify(JSON.parse(mergedPkgStr), null, 2);
 
   fs.writeFileSync(targetPackageJsonPath, formattedPkgStr, "utf8");
-  if (isDev) {
-    const devStr = `TODO: write relevant information for the contributor`;
-    fs.writeFileSync(`${targetPackageJsonPath}.dev`, devStr, "utf8");
-  }
 }
