@@ -1,7 +1,14 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 // templates/utils.js is plain JS shipped into generated apps and evaluated at template time.
-import { upperCaseFirstLetter, deepMerge, withDefaults, stringify } from "../templates/utils.js";
+import {
+  upperCaseFirstLetter,
+  deepMerge,
+  withDefaults,
+  stringify,
+  GLOBAL_ARGS_DEFAULTS as templatesGlobalArgsDefaults,
+} from "../templates/utils.js";
+import { GLOBAL_ARGS_DEFAULTS as srcGlobalArgsDefaults } from "./utils/consts.ts";
 
 describe("upperCaseFirstLetter", () => {
   it("capitalizes the first letter", () => {
@@ -48,5 +55,11 @@ describe("withDefaults", () => {
   it("throws on unexpected args", () => {
     const tmpl = withDefaults((args: Record<string, string[]>) => args.foo[0], { foo: "default" });
     assert.throws(() => tmpl({ foo: ["x"], bar: ["y"], ...globals }), /unexpected argument/);
+  });
+});
+
+describe("GLOBAL_ARGS_DEFAULTS", () => {
+  it("stays in sync between src/utils/consts and templates/utils", () => {
+    assert.deepEqual(templatesGlobalArgsDefaults, srcGlobalArgsDefaults);
   });
 });
