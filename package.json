@@ -17,7 +17,7 @@
     "cli": "node bin/create-dapp-se2.js",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --disable-warning=ExperimentalWarning --experimental-strip-types --import ./src/test/register.mjs --test 'src/**/*.test.ts'",
     "type-check": "tsc --noEmit",
     "changeset:release": "yarn build && changeset publish"
   },

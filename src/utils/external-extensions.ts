@@ -2,8 +2,8 @@ import fs from "fs";
 import path from "path";
 import * as https from "https";
 import { fileURLToPath } from "url";
-import { ExternalExtension, RawOptions, SolidityFramework } from "../types";
-import curatedExtension, { Extension } from "../extensions";
+import type { ExternalExtension, RawOptions, SolidityFramework } from "../types";
+import curatedExtension, { type Extension } from "../extensions";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
 
 const TRUSTED_GITHUB_ORGANIZATIONS = ["scaffold-eth", "buidlguidl"];
