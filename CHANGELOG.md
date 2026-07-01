@@ -1,5 +1,41 @@
 # create-eth
 
+## 2.0.21
+
+### Patch Changes
+
+- f5e4737: - UI tweaks/redesign (https://github.com/scaffold-eth/scaffold-eth-2/pull/1282)
+  - fix: generateTsAbis formatting (https://github.com/scaffold-eth/scaffold-eth-2/pull/1303)
+
+## 2.0.20
+
+### Patch Changes
+
+- hardhat v3 migration (https://github.com/scaffold-eth/scaffold-eth-2/pull/1272)
+- up rocketh/deploy (https://github.com/scaffold-eth/scaffold-eth-2/pull/1290)
+- Update hh artifacts and compilers (https://github.com/scaffold-eth/scaffold-eth-2/pull/1292)
+- fix(nextjs): stop excluding contracts/ from format script (https://github.com/scaffold-eth/scaffold-eth-2/pull/1291)
+- Fix blockexplorer pagination when auto mining is set (https://github.com/scaffold-eth/scaffold-eth-2/pull/1295)
+
+## 2.0.19
+
+### Patch Changes
+
+- 209ffaa: - Deps: next 15 → 16 and minor frontend updates (https://github.com/scaffold-eth/scaffold-eth-2/pull/1280)
+  - new Alchemy key (https://github.com/scaffold-eth/scaffold-eth-2/pull/1287)
+
+## 2.0.18
+
+### Patch Changes
+
+- b77e016: fix(foundry): generateTsAbis resolves artifacts when source file name differs from contract name
+
+## 2.0.17
+
+### Patch Changes
+
+- 539d427: - new Alchemy key (https://github.com/scaffold-eth/scaffold-eth-2/pull/1287)
+
 ## 2.0.16
 
 ### Patch Changes

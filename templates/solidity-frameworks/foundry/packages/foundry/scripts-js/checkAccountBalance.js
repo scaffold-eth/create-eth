@@ -9,7 +9,7 @@ import { parse } from "toml";
 import { ethers } from "ethers";
 
 const ALCHEMY_API_KEY =
-  process.env.ALCHEMY_API_KEY || "cR4WnXePioePZ5fFrnSiR";
+  process.env.ALCHEMY_API_KEY || "IZYEU2cWBgnFmgiTAgpWD";
 
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);

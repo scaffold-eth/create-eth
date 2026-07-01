@@ -90,19 +90,20 @@ function getDeploymentHistory(broadcastPath) {
 }
 
 function getArtifactOfContract(contractName) {
-  const current_path_to_artifacts = join(
-    __dirname,
-    "..",
-    `out/${contractName}.sol`
-  );
+  const outDir = join(__dirname, "..", "out");
+  const conventional = join(outDir, `${contractName}.sol`, `${contractName}.json`);
+  if (existsSync(conventional)) {
+    return JSON.parse(readFileSync(conventional));
+  }
 
-  if (!existsSync(current_path_to_artifacts)) return null;
-
-  const artifactJson = JSON.parse(
-    readFileSync(`${current_path_to_artifacts}/${contractName}.json`)
-  );
-
-  return artifactJson;
+  // Fallback: file name differs from contract name. Scan out/*.sol/ for <contractName>.json.
+  for (const dir of getDirectories(outDir)) {
+    const candidate = join(outDir, dir, `${contractName}.json`);
+    if (existsSync(candidate)) {
+      return JSON.parse(readFileSync(candidate));
+    }
+  }
+  return null;
 }
 
 function getInheritedFromContracts(artifact) {
@@ -274,6 +275,9 @@ function main() {
     `${NEXTJS_TARGET_DIR}deployedContracts.ts`,
     format(fileTemplate("~~/utils/scaffold-eth/contract"), {
       parser: "typescript",
+      // Match the nextjs prettier config (printWidth 120) so the generated file
+      // passes the frontend lint/build instead of defaulting to printWidth 80.
+      printWidth: 120,
     })
   );
 

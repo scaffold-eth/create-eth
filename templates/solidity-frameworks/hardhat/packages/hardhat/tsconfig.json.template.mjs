@@ -2,8 +2,9 @@ import { withDefaults, deepMerge } from "../../../../utils.js";
 
 const defaultTsConfig = {
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "node16",
+    "moduleResolution": "node16",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,

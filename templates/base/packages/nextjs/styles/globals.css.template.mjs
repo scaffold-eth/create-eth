@@ -36,8 +36,10 @@ const contents = ({ postContent }) =>
   --color-warning: #ffcf72;
   --color-error: #ff8863;
 
-  --radius-field: 1rem;
-  --radius-box: 1rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --radius-selector: 0rem;
+
   --tt-tailw: 6px;
 }
 
@@ -61,8 +63,9 @@ const contents = ({ postContent }) =>
   --color-warning: #ffcf72;
   --color-error: #ff8863;
 
-  --radius-field: 1rem;
-  --radius-box: 1rem;
+  --radius-field: 0rem;
+  --radius-box: 0rem;
+  --radius-selector: 0rem;
 
   --tt-tailw: 6px;
   --tt-bg: var(--color-primary);
@@ -108,12 +111,7 @@ const contents = ({ postContent }) =>
 }
 
 .btn {
-  @apply shadow-md;
-  border-radius: 9999rem;
-}
-
-.btn.btn-ghost {
-  @apply shadow-none;
+  box-shadow: none;
 }
 
 .link {
