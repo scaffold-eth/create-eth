@@ -1,5 +1,15 @@
 # create-eth
 
+## 2.0.22
+
+### Patch Changes
+
+- 6ae3c72: - fix: duplicated logs (https://github.com/scaffold-eth/scaffold-eth-2/pull/1300)
+  - cache block explorer transaction total to avoid full-chain rescans on pagination (https://github.com/scaffold-eth/scaffold-eth-2/pull/1301)
+  - UI tweaks (https://github.com/scaffold-eth/scaffold-eth-2/pull/1304)
+- 51345a7: migrate yarn to v4
+- 51345a7: up dependencies
+
 ## 2.0.21
 
 ### Patch Changes
