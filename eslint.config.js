@@ -22,7 +22,9 @@ export default tseslint.config(
     },
   },
   {
-    files: ["**/*.js"],
+    // Test files are excluded from tsconfig, and config/hook files are plain ESM,
+    // so lint them without type-aware rules to avoid the "not in project" error.
+    files: ["**/*.js", "**/*.mjs", "**/*.cjs", "**/*.test.ts"],
     ...tseslint.configs.disableTypeChecked,
   },
   {

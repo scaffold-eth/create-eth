@@ -60,7 +60,8 @@ export const deepMerge = (...args) => {
 };
 
 // copy of the defaults from the src/utils/consts.ts file
-const GLOBAL_ARGS_DEFAULTS = {
+// (kept in sync by templates-utils.test.ts since this plain-JS file can't import the TS const)
+export const GLOBAL_ARGS_DEFAULTS = {
   solidityFramework: "",
 };
 
