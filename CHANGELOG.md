@@ -1,5 +1,12 @@
 # create-eth
 
+## 2.0.23
+
+### Patch Changes
+
+- 54be272: - fix: pin @coinbase/cdp-sdk to 1.52.0 to avoid @x402 module-not-found (https://github.com/scaffold-eth/scaffold-eth-2/pull/1310)
+  - web3 deps update (https://github.com/scaffold-eth/scaffold-eth-2/pull/1281)
+
 ## 2.0.22
 
 ### Patch Changes
