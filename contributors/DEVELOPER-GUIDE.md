@@ -29,7 +29,7 @@ You can send any option or flag to the CLI command. For example, a handy command
 
 The source files for the instance projects can be found under `templates/`. You'll see there are two folders there: `base/` and `solidity-frameworks/`. The `base/` folder has the source files that will be present in all instances, whereas `solidity-frameworks/` hold the source files that will be added or not to the instances based on the user choices within the CLI tool.
 
-It's highly recommended that you go through [TEMPLATING.md](TEMPLATING.md) to understand the template API to create extensions. We use a custom template API to allow extensions to modify any file inside the `templates/` folder. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
+It's highly recommended that you go through [TEMPLATING.md](TEMPLATING.md) to understand the template API. We use a custom template API to modify any file inside the `templates/` folder based on the user's choices. While flexible and powerful, it requires developers to understand how it works. It's JS based, so there's no new technology needed to understand and use it.
 
 While you might be tempted to change files straight in the source, we've created a better way to do it with the dev mode. We feel this is worth a separate section in this document.
 
@@ -60,7 +60,7 @@ For example, `generated.txt` would have a sibling `generated.txt.dev` file with 
 While adding or removing the `.template.mjs` file, we make sure we check the below checklist:
 
 - [ ] Add or remove the `.template.mjs` file in the respective directory (check the [`TEMPLATING.md`](./TEMPLATING.md#recommended-way-to-handle-complex-arguments-in-templates))
-- [ ] Add or remove the corresponding `.args.mjs` file from `create-eth-extension` repo [`example`](https://github.com/scaffold-eth/create-eth-extensions/tree/example) branch.
+- [ ] (optional, deprecated) Add or remove the corresponding `.args.mjs` file from your extension repo.
 - [ ] Update the [`TEMPLATE-FILES.md`](./TEMPLATE-FILES.md) file to include or remove the template file.
 - [ ] (optional) If the file was removed then we add the changeset as `minor` update.
 
