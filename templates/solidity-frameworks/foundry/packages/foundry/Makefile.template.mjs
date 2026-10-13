@@ -22,6 +22,10 @@ fork: setup-anvil-wallet
 	anvil --fork-url \${FORK_URL} --chain-id 31337
 
 # Deploy the contracts
+# Non-localhost deploys use --skip-simulation: forge simulates with evm_version from
+# foundry.toml, not the target chain's fork, so it under-estimates gas on Amsterdam
+# chains (EIP-8037). Remove once forge resolves the Ethereum hardfork from the RPC
+# or once Amsterdam is active on every network in foundry.toml.
 deploy:
 	@if [ ! -f "$(DEPLOY_SCRIPT)" ]; then \
 		echo "Error: Deploy script '$(DEPLOY_SCRIPT)' not found"; \
@@ -34,7 +38,7 @@ deploy:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --ffi; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --ffi; \
+		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --ffi --skip-simulation; \
 	fi
 
 # Deploy and generate ABIs
