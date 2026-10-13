@@ -34,7 +34,7 @@ deploy:
 			forge script $(DEPLOY_SCRIPT) --rpc-url localhost --broadcast --ffi; \
 		fi \
 	else \
-		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --ffi; \
+		forge script $(DEPLOY_SCRIPT) --rpc-url $(RPC_URL) --broadcast --ffi --skip-simulation; \
 	fi
 
 # Deploy and generate ABIs
