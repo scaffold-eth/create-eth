@@ -1,5 +1,8 @@
 # Template files
 
+> [!NOTE]
+> **Authoring third-party extensions is deprecated.** The template/args mechanism documented here is still used internally by `create-eth` to assemble instances, but using it to build extensions is no longer recommended and will be removed in a future release. Use [skills](https://docs.scaffoldeth.io/build-with-ai) instead.
+
 A Template file is a file to which extensions can add content. Removing content is out of scope for this experiment.
 
 ## Template files API

@@ -1,3 +1,6 @@
+> [!WARNING]
+> **Extensions are deprecated.** Third-party extension support still ships with `create-eth` but is no longer recommended and will be removed in a future release. Use [skills](https://docs.scaffoldeth.io/build-with-ai) instead. This guide is retained for existing extension authors.
+
 ## Introduction
 
 Welcome to the guide for developing third-party extensions in the `create-eth` repository. Third-party extensions allow developers to extend the base instance created by `npx create-eth@latest`.
