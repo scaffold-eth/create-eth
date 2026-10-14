@@ -34,4 +34,4 @@ export type TemplateDescriptor = {
   source: string;
 };
 
-export type SolidityFrameworkChoices = (SolidityFramework | { value: any; name: string })[];
+export type SolidityFrameworkChoices = (SolidityFramework | { value: SolidityFramework | null; name: string })[];
