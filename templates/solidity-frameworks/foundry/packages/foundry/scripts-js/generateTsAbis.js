@@ -202,7 +202,7 @@ function processAllDeployments(broadcastPath) {
   return allContracts;
 }
 
-function main() {
+async function main() {
   const current_path_to_broadcast = join(__dirname, "..", "broadcast");
   const current_path_to_deployments = join(__dirname, "..", "deployments");
 
@@ -273,7 +273,7 @@ function main() {
 
   writeFileSync(
     `${NEXTJS_TARGET_DIR}deployedContracts.ts`,
-    format(fileTemplate("~~/utils/scaffold-eth/contract"), {
+    await format(fileTemplate("~~/utils/scaffold-eth/contract"), {
       parser: "typescript",
       // Match the nextjs prettier config (printWidth 120) so the generated file
       // passes the frontend lint/build instead of defaulting to printWidth 80.
@@ -287,7 +287,7 @@ function main() {
 }
 
 try {
-  main();
+  await main();
 } catch (error) {
   console.error("Error:", error);
   process.exitCode = 1;

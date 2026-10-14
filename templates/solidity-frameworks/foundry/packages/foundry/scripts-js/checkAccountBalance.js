@@ -40,12 +40,11 @@ async function getBalanceForEachNetwork(address) {
       const networkUrl = replaceENVAlchemyKey(rpcEndpoints[networkName]);
       console.log(`\n--${networkName}-- 📡`);
 
+      const provider = new ethers.JsonRpcProvider(networkUrl, undefined, { staticNetwork: true });
       try {
-        const provider = new ethers.providers.JsonRpcProvider(networkUrl);
-
         // Get balance and format it
         const balance = await provider.getBalance(address);
-        const formattedBalance = +ethers.utils.formatUnits(balance);
+        const formattedBalance = +ethers.formatUnits(balance);
 
         console.log("   Balance:", formattedBalance);
         console.log("   Nonce:", await provider.getTransactionCount(address));
@@ -53,6 +52,8 @@ async function getBalanceForEachNetwork(address) {
         console.log(
           `   ❌ Can't connect to network ${networkName}: ${e.message}`
         );
+      } finally {
+        provider.destroy();
       }
     }
   } catch (error) {

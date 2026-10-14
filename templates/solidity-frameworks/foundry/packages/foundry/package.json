@@ -20,14 +20,13 @@
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {
-    "dotenv": "~16.3.1",
-    "envfile": "~6.18.0",
-    "ethers": "~5.7.1",
-    "prettier": "~2.8.8",
-    "qrcode": "~1.5.3",
-    "toml": "~3.0.0"
+    "dotenv": "~18.0.5",
+    "ethers": "~6.17.0",
+    "prettier": "~3.9.9",
+    "qrcode": "~1.5.4",
+    "toml": "~5.0.0"
   },
   "devDependencies": {
-    "shx": "^0.3.4"
+    "shx": "^0.4.0"
   }
 }
