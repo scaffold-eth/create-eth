@@ -3,9 +3,7 @@ import { join } from "path";
 import readline from "readline";
 import { fileURLToPath } from "url";
 
-async function listKeystores(
-  selectMessage = "Select a keystore (enter the number, e.g., 1):"
-) {
+async function listKeystores(selectMessage = "Select a keystore (enter the number, e.g., 1):") {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -14,14 +12,10 @@ async function listKeystores(
   const keystorePath = join(process.env.HOME, ".foundry", "keystores");
 
   try {
-    const keystores = readdirSync(keystorePath).filter(
-      (keystore) => keystore !== "scaffold-eth-default"
-    );
+    const keystores = readdirSync(keystorePath).filter(keystore => keystore !== "scaffold-eth-default");
 
     if (keystores.length === 0) {
-      console.error(
-        "\n❌ No keystores found in ~/.foundry/keystores, please create a new keystore by running:"
-      );
+      console.error("\n❌ No keystores found in ~/.foundry/keystores, please create a new keystore by running:");
       console.log("\n\tyarn account:generate\n");
       process.exit(1);
     }
@@ -34,7 +28,7 @@ async function listKeystores(
       return { keystore };
     });
 
-    const answer = await new Promise((resolve) => {
+    const answer = await new Promise(resolve => {
       rl.question(`\n${selectMessage}`, resolve);
     });
 
@@ -59,10 +53,10 @@ async function listKeystores(
 // Run the selection if this script is called directly
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   listKeystores()
-    .then((keystore) => {
+    .then(keystore => {
       console.log("\n🔑 Selected keystore:", keystore);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error);
       process.exit(1);
     });

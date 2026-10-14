@@ -15,8 +15,8 @@ function prompt(question) {
     output,
   });
 
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
+  return new Promise(resolve => {
+    rl.question(question, answer => {
       rl.close();
       resolve(answer);
     });
@@ -41,24 +41,18 @@ async function importAccount() {
 
     // Check if account name is scaffold-eth-default
     if (accountName === "scaffold-eth-default") {
-      console.error(
-        "\n❌ Cannot use 'scaffold-eth-default' as account name. This is reserved for local development."
-      );
+      console.error("\n❌ Cannot use 'scaffold-eth-default' as account name. This is reserved for local development.");
       process.exit(1);
     }
 
-    const importProcess = spawn(
-      "cast",
-      ["wallet", "import", accountName, "--interactive"],
-      {
-        stdio: "inherit",
-        shell: true,
-        cwd: process.cwd(),
-      }
-    );
+    const importProcess = spawn("cast", ["wallet", "import", accountName, "--interactive"], {
+      stdio: "inherit",
+      shell: true,
+      cwd: process.cwd(),
+    });
 
     // Handle process completion
-    importProcess.on("close", (code) => {
+    importProcess.on("close", code => {
       if (code === 0) {
         process.exit(0);
       } else {
@@ -73,7 +67,7 @@ async function importAccount() {
 }
 
 // Run the import function
-importAccount().catch((error) => {
+importAccount().catch(error => {
   console.error("\n❌ Unexpected error:", error);
   process.exit(1);
 });
