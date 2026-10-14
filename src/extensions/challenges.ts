@@ -32,24 +32,6 @@ export const challenges: Extension[] = [
     branch: "challenge-dex",
   },
   {
-    extensionFlagValue: "challenge-state-channels",
-    description: "Speedrun Ethereum Challenge: A State Channel Application.",
-    repository: "https://github.com/scaffold-eth/se-2-challenges",
-    branch: "challenge-state-channels",
-  },
-  {
-    extensionFlagValue: "challenge-multisig",
-    description: "Speedrun Ethereum Challenge: Multisig Wallet.",
-    repository: "https://github.com/scaffold-eth/se-2-challenges",
-    branch: "challenge-multisig",
-  },
-  {
-    extensionFlagValue: "challenge-svg-nft",
-    description: "Speedrun Ethereum Challenge: SVG NFT.",
-    repository: "https://github.com/scaffold-eth/se-2-challenges",
-    branch: "challenge-svg-nft",
-  },
-  {
     extensionFlagValue: "challenge-oracles",
     description: "Speedrun Ethereum Challenge: Oracles.",
     repository: "https://github.com/scaffold-eth/se-2-challenges",
