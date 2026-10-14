@@ -6,10 +6,9 @@ import { fileURLToPath } from "url";
 import { toString } from "qrcode";
 import { readFileSync } from "fs";
 import { parse } from "toml";
-import { ethers } from "ethers";
+import { createPublicClient, formatEther, http } from "viem";
 
-const ALCHEMY_API_KEY =
-  process.env.ALCHEMY_API_KEY || "IZYEU2cWBgnFmgiTAgpWD";
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "IZYEU2cWBgnFmgiTAgpWD";
 
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
@@ -40,20 +39,19 @@ async function getBalanceForEachNetwork(address) {
       const networkUrl = replaceENVAlchemyKey(rpcEndpoints[networkName]);
       console.log(`\n--${networkName}-- 📡`);
 
-      const provider = new ethers.JsonRpcProvider(networkUrl, undefined, { staticNetwork: true });
       try {
+        const client = createPublicClient({ transport: http(networkUrl, { retryCount: 0 }) });
+
         // Get balance and format it
-        const balance = await provider.getBalance(address);
-        const formattedBalance = +ethers.formatUnits(balance);
+        const balance = await client.getBalance({ address });
+        const formattedBalance = +formatEther(balance);
 
         console.log("   Balance:", formattedBalance);
-        console.log("   Nonce:", await provider.getTransactionCount(address));
+        console.log("   Nonce:", await client.getTransactionCount({ address }));
       } catch (e) {
-        console.log(
-          `   ❌ Can't connect to network ${networkName}: ${e.message}`
-        );
-      } finally {
-        provider.destroy();
+        // viem errors: HTTP failures carry a status, RPC/network errors carry a one-line reason in details
+        const reason = e.status ? `HTTP ${e.status}` : (e.details || e.shortMessage || e.message).split("\n")[0];
+        console.log(`   ❌ Can't connect to network ${networkName}: ${reason}`);
       }
     }
   } catch (error) {
@@ -66,7 +64,7 @@ async function checkAccountBalance() {
     // Step 1: List accounts and let user select one
     console.log("📋 Listing available accounts...");
     const selectedKeystore = await listKeystores(
-      "Select a keystore to display its balance (enter the number, e.g., 1): "
+      "Select a keystore to display its balance (enter the number, e.g., 1): ",
     );
 
     if (!selectedKeystore) {
@@ -96,7 +94,7 @@ async function checkAccountBalance() {
 
 // Run the function if this script is called directly
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  checkAccountBalance().catch((error) => {
+  checkAccountBalance().catch(error => {
     console.error(error);
     process.exit(1);
   });
