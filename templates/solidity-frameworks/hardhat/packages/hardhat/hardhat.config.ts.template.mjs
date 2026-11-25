@@ -36,7 +36,7 @@ const defaultConfig = {
     hardhat: {
       type: "edr-simulated",
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/\${providerApiKey}`,
+        url: `https://eth-mainnet.g.alchemy.com/v2/\${providerApiKey}`,
         enabled: '$$process.env.MAINNET_FORKING_ENABLED === "true"$$',
       },
     },

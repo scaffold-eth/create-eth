@@ -19,7 +19,7 @@ ${extraProfileDefaults.filter(Boolean).join("\n")}
 [rpc_endpoints]
 default_network = "http://127.0.0.1:8545"
 
-mainnet = "https://eth-mainnet.alchemyapi.io/v2/\${ALCHEMY_API_KEY}"
+mainnet = "https://eth-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 sepolia = "https://eth-sepolia.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 arbitrum = "https://arb-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 arbitrumSepolia = "https://arb-sepolia.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
