@@ -38,6 +38,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+next-env.d.ts
+
 ipfs-upload.config.json
 ${postContent[0] || ''}`;
 
