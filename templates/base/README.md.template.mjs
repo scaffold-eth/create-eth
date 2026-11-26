@@ -64,6 +64,7 @@ const contents = ({
   contractsPath,
   scriptsPath,
   testCommand,
+  nodeVersion,
   extraContents,
   fullContentOverride,
 }) => {
@@ -105,7 +106,7 @@ ${
 
 Before you begin, you need to install the following tools:
 
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
+- [Node (>= v${nodeVersion[0]})](https://nodejs.org/en/download/)
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 ${skipQuickStart[0] ? "" : getQuickStart({
@@ -135,6 +136,7 @@ export default withDefaults(contents, {
   contractsPath: "",
   scriptsPath: "",
   testCommand: "",
+  nodeVersion: "20.18.3",
   extraContents: "",
   fullContentOverride: "",
 });
