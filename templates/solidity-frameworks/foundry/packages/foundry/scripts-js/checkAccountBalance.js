@@ -8,12 +8,12 @@ import { readFileSync } from "fs";
 import { parse } from "toml";
 import { createPublicClient, formatEther, http } from "viem";
 
-const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "IZYEU2cWBgnFmgiTAgpWD";
-
 // Load environment variables
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 dotenv.config({ path: join(__dirname, "..", ".env") });
+
+const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY || "IZYEU2cWBgnFmgiTAgpWD";
 
 async function getBalanceForEachNetwork(address) {
   try {

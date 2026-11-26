@@ -27,13 +27,10 @@ optimism = "https://opt-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 optimismSepolia = "https://opt-sepolia.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 polygon = "https://polygon-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 polygonAmoy = "https://polygon-amoy.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
-polygonZkEvm = "https://zkevm-rpc.com"
-polygonZkEvmCardona = "https://rpc.cardona.zkevm-rpc.com"
 gnosis = "https://rpc.gnosischain.com"
 chiado = "https://rpc.chiadochain.net"
 base = "https://mainnet.base.org"
 baseSepolia = "https://sepolia.base.org"
-scrollSepolia = "https://sepolia-rpc.scroll.io"
 scroll = "https://rpc.scroll.io"
 ${extraRpcEndpoints.filter(Boolean).join("\n")}
 
