@@ -136,7 +136,7 @@ export default withDefaults(contents, {
   contractsPath: "",
   scriptsPath: "",
   testCommand: "",
-  nodeVersion: "20.18.3",
+  nodeVersion: "22.13.0",
   extraContents: "",
   fullContentOverride: "",
 });

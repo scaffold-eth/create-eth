@@ -12,11 +12,11 @@
     "compile": "make compile",
     "deploy": "node scripts-js/parseArgs.js",
     "flatten": "make flatten",
-    "fork": "make fork FORK_URL=${1:-mainnet}",
+    "fork": "node scripts-js/fork.js",
     "format": "make format",
     "lint": "make lint",
     "test": "forge test",
-    "verify": "make verify RPC_URL=${1:-localhost}",
+    "verify": "node scripts-js/verify.js",
     "postinstall": "shx cp -n .env.example .env"
   },
   "dependencies": {
