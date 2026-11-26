@@ -53,12 +53,7 @@ function validateKeystore(keystoreName) {
     return true; // Default keystore is always valid
   }
 
-  const keystorePath = join(
-    process.env.HOME,
-    ".foundry",
-    "keystores",
-    keystoreName
-  );
+  const keystorePath = join(process.env.HOME, ".foundry", "keystores", keystoreName);
   return existsSync(keystorePath);
 }
 
@@ -71,7 +66,7 @@ try {
   if (!parsedToml.rpc_endpoints[network]) {
     console.log(
       `\n❌ Error: Network '${network}' not found in foundry.toml!`,
-      "\nPlease check `foundry.toml` for available networks in the [rpc_endpoints] section or add a new network."
+      "\nPlease check `foundry.toml` for available networks in the [rpc_endpoints] section or add a new network.",
     );
     process.exit(1);
   }
@@ -80,10 +75,7 @@ try {
   process.exit(1);
 }
 
-if (
-  process.env.LOCALHOST_KEYSTORE_ACCOUNT !== "scaffold-eth-default" &&
-  network === "localhost"
-) {
+if (process.env.LOCALHOST_KEYSTORE_ACCOUNT !== "scaffold-eth-default" && network === "localhost") {
   console.log(`
 ⚠️ Warning: Using ${process.env.LOCALHOST_KEYSTORE_ACCOUNT} keystore account on localhost.
 
@@ -101,9 +93,7 @@ if (network !== "localhost") {
     // Use the keystore provided via command line argument
     if (!validateKeystore(keystoreArg)) {
       console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
-      console.log(
-        `Please check that the keystore exists in ~/.foundry/keystores/`
-      );
+      console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
       process.exit(1);
     }
     selectedKeystore = keystoreArg;
@@ -120,15 +110,11 @@ if (network !== "localhost") {
   // Allow overriding the localhost keystore with --keystore flag
   if (!validateKeystore(keystoreArg)) {
     console.log(`\n❌ Error: Keystore '${keystoreArg}' not found!`);
-    console.log(
-      `Please check that the keystore exists in ~/.foundry/keystores/`
-    );
+    console.log(`Please check that the keystore exists in ~/.foundry/keystores/`);
     process.exit(1);
   }
   selectedKeystore = keystoreArg;
-  console.log(
-    `\n🔑 Using keystore: ${selectedKeystore} for localhost deployment`
-  );
+  console.log(`\n🔑 Using keystore: ${selectedKeystore} for localhost deployment`);
 }
 
 // Check for default account on live network
