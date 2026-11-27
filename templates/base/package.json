@@ -31,6 +31,6 @@
     "@coinbase/cdp-sdk": "1.52.0"
   },
   "engines": {
-    "node": ">=20.18.3"
+    "node": ">=22.13.0"
   }
 }

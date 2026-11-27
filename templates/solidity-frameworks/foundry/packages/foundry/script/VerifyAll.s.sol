@@ -24,9 +24,16 @@ contract VerifyAll is Script {
     uint96 currTransactionIdx;
 
     function run() external {
-        string memory root = vm.projectRoot();
-        string memory path =
-            string.concat(root, "/broadcast/Deploy.s.sol/", vm.toString(block.chainid), "/run-latest.json");
+        string memory deployScript = vm.replace(vm.envOr("DEPLOY_SCRIPT", string("script/Deploy.s.sol")), "script/", "");
+        string memory path = string.concat(
+            vm.projectRoot(), "/broadcast/", deployScript, "/", vm.toString(block.chainid), "/run-latest.json"
+        );
+        require(
+            vm.exists(path),
+            string.concat(
+                "No deployment of ", deployScript, " found on chain ", vm.toString(block.chainid), " (", path, ")"
+            )
+        );
         string memory content = vm.readFile(path);
 
         while (nextTransaction(content)) {

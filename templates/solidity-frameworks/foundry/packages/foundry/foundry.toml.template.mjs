@@ -26,18 +26,18 @@ arbitrumSepolia = "https://arb-sepolia.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 optimism = "https://opt-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 optimismSepolia = "https://opt-sepolia.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 polygon = "https://polygon-mainnet.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
+polygonAmoy = "https://polygon-amoy.g.alchemy.com/v2/\${ALCHEMY_API_KEY}"
 gnosis = "https://rpc.gnosischain.com"
 chiado = "https://rpc.chiadochain.net"
 base = "https://mainnet.base.org"
 baseSepolia = "https://sepolia.base.org"
 scroll = "https://rpc.scroll.io"
-pgn = "https://rpc.publicgoods.network"
-pgnTestnet = "https://sepolia.publicgoods.network"
 ${extraRpcEndpoints.filter(Boolean).join("\n")}
 
 localhost = "http://127.0.0.1:8545"
 
 [etherscan]
+polygonAmoy = { key = "\${ETHERSCAN_API_KEY}" }
 sepolia = { key = "\${ETHERSCAN_API_KEY}" }
 ${extraEthercsanConfig.filter(Boolean).join("\n")}
 
