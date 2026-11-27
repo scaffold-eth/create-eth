@@ -2,38 +2,34 @@
 
 ## 2.1.0
 
-### Minor Changes
+### Better feedback for coding agents and CLI workflows
 
-- d5d57b3: foundry: `yarn deploy`, `yarn fork` and `yarn verify` now reject arguments they can't use instead of silently falling back to `localhost`/`mainnet`. `--network=<name>`, stray positional args (`yarn fork base`), unknown flags, missing values and networks missing from `foundry.toml` `[rpc_endpoints]` exit 1 with a clear message. `yarn fork` and `yarn verify` accept `--network <name>` and `--help`. `yarn verify --file <Script.s.sol>` verifies the broadcast of a specific deploy script (default `Deploy.s.sol`), and lists the deployed scripts when the broadcast is missing. `yarn deploy` to a live network with the default keystore now exits 1.
+- **Fail loud in Foundry scripts** (https://github.com/scaffold-eth/create-eth/pull/455): `yarn deploy`, `yarn fork`, and `yarn verify` now exit 1 with a clear message on unknown flags, `--network=<name>`, stray positional arguments, missing values, or networks missing from `foundry.toml` `[rpc_endpoints]` instead of falling back to `localhost` or `mainnet`. `yarn deploy` to a live network with the default keystore also exits 1. Added `--network <name>` and `--help` to `yarn fork` and `yarn verify`, plus `yarn verify --file <Script.s.sol>` (which lists deployed scripts when a broadcast is missing).
+- **Fail `yarn ipfs` on error** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1353): `yarn ipfs` now exits non-zero when upload fails instead of returning 0.
+- **Accept `--network=<name>` in Hardhat deploy and verify scripts** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1330).
+- **Clear stale local deployments on `yarn fork`** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1357): Hardhat's `yarn fork` clears `deployments/default` before starting so forked runs do not pick up stale local state.
+- **Updated agent rules and skills** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1328, https://github.com/scaffold-eth/scaffold-eth-2/pull/1339, https://github.com/scaffold-eth/scaffold-eth-2/pull/1353): refreshed `AGENTS.md` and bundled skills for Hardhat v3, DaisyUI 5, current hook names, and working links.
+- **Exact Hardhat and rocketh pins** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1352): bumped and pinned `hardhat-deploy` (`2.4.0`), `rocketh` (`0.26.4`), and the five `@rocketh/*` packages (`@rocketh/deploy` `0.22.5`, `@rocketh/node` `0.22.5`, `@rocketh/read-execute` `0.23.1`, `@rocketh/signer` `0.20.4`, `@rocketh/verifier` `0.19.34`) so fresh projects install one compatible set without `HHE202` mismatches and match current `rocketh-deploy` skill APIs.
 
-  Raise the minimum Node.js version to 22.13.0 in the CLI check, the generated `package.json` `engines` and the README.
+### Breaking changes and minimum requirements
 
-### Patch Changes
+- **Node.js `>= 22.13.0` required** (https://github.com/scaffold-eth/create-eth/pull/455): raised the minimum Node.js version in the CLI check, generated `package.json` `engines`, and README.
+- **Removed deprecated string overloads from scaffold hooks** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1333).
 
-- 8c27373: Backmerge updates from `scaffold-eth-2`:
-  - fix: check both bytecode prefixes in decodeTxData for contract creation (https://github.com/scaffold-eth/scaffold-eth-2/pull/1316)
-  - Deps update: hardhat 3.18, TypeScript 6, ESLint 10, nextjs minors, yarn 4.18.1 (https://github.com/scaffold-eth/scaffold-eth-2/pull/1326)
-  - Update agent config for Hardhat v3, daisyUI 5 and stale skill links (https://github.com/scaffold-eth/scaffold-eth-2/pull/1328)
-  - fix: handle `--network=<name>` in deploy and verify scripts (https://github.com/scaffold-eth/scaffold-eth-2/pull/1330)
-  - chore: remove sunset chains (https://github.com/scaffold-eth/scaffold-eth-2/pull/1331)
-  - chore: remove RainbowKit SSR connector workaround (https://github.com/scaffold-eth/scaffold-eth-2/pull/1332)
-  - chore!: remove deprecated string overloads from scaffold hooks (https://github.com/scaffold-eth/scaffold-eth-2/pull/1333)
-  - chore: remove dead code and redundant wrappers (https://github.com/scaffold-eth/scaffold-eth-2/pull/1334)
-  - fix: event history data types and invalid HTML nesting (https://github.com/scaffold-eth/scaffold-eth-2/pull/1337)
-  - Review and update agent skills (https://github.com/scaffold-eth/scaffold-eth-2/pull/1339)
-  - Read `NEXT_PUBLIC_PRODUCTION_URL` for metadata origin (https://github.com/scaffold-eth/scaffold-eth-2/pull/1350)
-  - chore: bump `hardhat-deploy` to 2.4.0 and `rocketh` to 0.26.4, pin exact versions (https://github.com/scaffold-eth/scaffold-eth-2/pull/1352)
-  - fix: add Phantom wallet, fail `yarn ipfs` on error, and fix stale `AGENTS.md` rules (https://github.com/scaffold-eth/scaffold-eth-2/pull/1353)
-  - fix: pin `@coinbase/cdp-sdk` in Vercel's install command so `yarn vercel` builds (https://github.com/scaffold-eth/scaffold-eth-2/pull/1355)
-  - fix: clear stale local deployments when `yarn fork` starts (https://github.com/scaffold-eth/scaffold-eth-2/pull/1357)
-  - Pin `hardhat-deploy` and the `rocketh` packages in the Hardhat template to exact versions: `hardhat-deploy` 2.4.0, `rocketh` 0.26.4, `@rocketh/deploy` 0.22.5, `@rocketh/node` 0.22.5, `@rocketh/read-execute` 0.23.1, `@rocketh/signer` 0.20.4, `@rocketh/verifier` 0.19.34
-- 428f874: Show the selected Solidity framework's contracts path (`packages/foundry/contracts` for Foundry, omitted for `none`) on the generated home page.
-- ef4a64e: Use Alchemy's current `eth-mainnet.g.alchemy.com` host for the mainnet RPC in the Hardhat and Foundry templates. The old `eth-mainnet.alchemyapi.io` host no longer resolves, so `yarn fork` failed in new projects.
-- 4e74362: foundry: update JS deps in `packages/foundry` (dotenv 18, prettier 3, qrcode 1.5.4, toml 5, shx 0.4, viem instead of ethers), drop unused `envfile`. `checkAccountBalance.js` now uses a viem public client; `generateTsAbis.js` awaits `prettier.format`. Rename `.prettier.json` to `.prettierrc.json` so the intended config applies and format `scripts-js` with it. `checkAccountBalance.js` reads `ALCHEMY_API_KEY` after loading `.env`, so `yarn account` uses the user's key. `foundry.toml`: `polygonAmoy` instead of the dead Mumbai endpoint; remove dead `polygonZkEvm`, zkEVM testnet, `scrollSepolia` and PGN endpoints.
+### Dependencies and runtime updates
 
-  Remove `challenge-state-channels`, `challenge-multisig` and `challenge-svg-nft` from the extensions list: these branches no longer exist in `scaffold-eth/se-2-challenges`, so `-e <name>` failed.
+- **Core stack updates** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1326): updated Hardhat (`3.18`), TypeScript 6, ESLint 10, Next.js minors, and Yarn (`4.18.1`).
+- **Foundry JS scripts modernized** (https://github.com/scaffold-eth/create-eth/pull/449): updated `packages/foundry` JS dependencies (`dotenv` 18, `prettier` 3, `qrcode` 1.5.4, `toml` 5, `shx` 0.4), switched `checkAccountBalance.js` from `ethers` to `viem`, loaded `ALCHEMY_API_KEY` after `.env` so `yarn account` uses the user's key, awaited `prettier.format` in `generateTsAbis.js`, renamed `.prettier.json` to `.prettierrc.json`, and dropped unused `envfile`.
+- **Cleaned up sunset chains and dead extensions** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1331, https://github.com/scaffold-eth/create-eth/pull/449): removed sunset chains and dead RPC endpoints (`polygonZkEvm`, zkEVM testnet, `scrollSepolia`, PGN), replaced Mumbai with `polygonAmoy` in `foundry.toml`, and removed three missing challenge extensions (`challenge-state-channels`, `challenge-multisig`, `challenge-svg-nft`).
 
-- 57d381f: Remove template leftovers: delete the unused `fetchPriceFromUniswap.ts` helper, run plain `husky` in `postinstall` instead of the deprecated `husky install`, and make the generated README show the same minimum Node version as the project's `engines.node`.
+### Frontend, deploy, and template fixes
+
+- **Added Phantom wallet** to `wagmiConnectors.tsx` (https://github.com/scaffold-eth/scaffold-eth-2/pull/1353) and removed the obsolete RainbowKit SSR connector workaround (https://github.com/scaffold-eth/scaffold-eth-2/pull/1332).
+- **Fixed `yarn vercel` builds** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1355): pinned `@coinbase/cdp-sdk` (`1.52.0`) in `packages/nextjs/vercel.json`'s `installCommand`.
+- **Fixed Alchemy mainnet RPC host** (https://github.com/scaffold-eth/create-eth/pull/452): switched from `eth-mainnet.alchemyapi.io` to `eth-mainnet.g.alchemy.com` so `yarn fork` works out of the box.
+- **Metadata production URL** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1350): read `NEXT_PUBLIC_PRODUCTION_URL` for metadata origin.
+- **Block explorer and UI fixes**: check both bytecode prefixes in `decodeTxData` for contract creation (https://github.com/scaffold-eth/scaffold-eth-2/pull/1316), fix event history data types and invalid HTML nesting (https://github.com/scaffold-eth/scaffold-eth-2/pull/1337), and show the selected Solidity framework's contracts path (`packages/foundry/contracts` for Foundry, omitted for `none`) on the home page (`428f874`).
+- **Template cleanup** (https://github.com/scaffold-eth/scaffold-eth-2/pull/1334, https://github.com/scaffold-eth/create-eth/pull/451): removed dead code, redundant wrappers, and the unused `fetchPriceFromUniswap.ts` helper, switched `postinstall` to plain `husky`, and synced the README minimum Node version with `engines.node`.
 
 ## 2.0.24
 
