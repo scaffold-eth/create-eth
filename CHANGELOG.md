@@ -1,5 +1,39 @@
 # create-eth
 
+## 2.1.0
+
+### Minor Changes
+
+- d5d57b3: foundry: `yarn deploy`, `yarn fork` and `yarn verify` now reject arguments they can't use instead of silently falling back to `localhost`/`mainnet`. `--network=<name>`, stray positional args (`yarn fork base`), unknown flags, missing values and networks missing from `foundry.toml` `[rpc_endpoints]` exit 1 with a clear message. `yarn fork` and `yarn verify` accept `--network <name>` and `--help`. `yarn verify --file <Script.s.sol>` verifies the broadcast of a specific deploy script (default `Deploy.s.sol`), and lists the deployed scripts when the broadcast is missing. `yarn deploy` to a live network with the default keystore now exits 1.
+
+  Raise the minimum Node.js version to 22.13.0 in the CLI check, the generated `package.json` `engines` and the README.
+
+### Patch Changes
+
+- 8c27373: - fix: check both bytecode prefixes in decodeTxData for contract creation (https://github.com/scaffold-eth/scaffold-eth-2/pull/1316)
+  - Deps update: hardhat 3.18, rocketh 0.23, TypeScript 6, ESLint 10, nextjs minors, yarn 4.18.1 (https://github.com/scaffold-eth/scaffold-eth-2/pull/1326)
+- 8c27373: - Review and update agent skills (https://github.com/scaffold-eth/scaffold-eth-2/pull/1339)
+  - Read NEXT_PUBLIC_PRODUCTION_URL for metadata origin (https://github.com/scaffold-eth/scaffold-eth-2/pull/1350)
+  - chore: bump hardhat-deploy to 2.4.0 and rocketh to 0.26.4, pin exact versions (https://github.com/scaffold-eth/scaffold-eth-2/pull/1352)
+  - fix: add Phantom wallet, fail yarn ipfs on error, and fix stale AGENTS.md rules (https://github.com/scaffold-eth/scaffold-eth-2/pull/1353)
+  - fix: pin @coinbase/cdp-sdk in Vercel's install command so yarn vercel builds (https://github.com/scaffold-eth/scaffold-eth-2/pull/1355)
+  - fix: clear stale local deployments when yarn fork starts (https://github.com/scaffold-eth/scaffold-eth-2/pull/1357)
+  - Pin `hardhat-deploy` and the `rocketh` packages in the Hardhat template to the versions scaffold-eth-2 uses: `hardhat-deploy` 2.4.0, `rocketh` 0.26.4, `@rocketh/deploy` 0.22.5, `@rocketh/node` 0.22.5, `@rocketh/read-execute` 0.23.1, `@rocketh/signer` 0.20.4, `@rocketh/verifier` 0.19.34
+- ef4a64e: Use Alchemy's current `eth-mainnet.g.alchemy.com` host for the mainnet RPC in the Hardhat and Foundry templates. The old `eth-mainnet.alchemyapi.io` host no longer resolves, so `yarn fork` failed in new projects.
+- 4e74362: foundry: update JS deps in `packages/foundry` (dotenv 18, prettier 3, qrcode 1.5.4, toml 5, shx 0.4, viem instead of ethers), drop unused `envfile`. `checkAccountBalance.js` now uses a viem public client; `generateTsAbis.js` awaits `prettier.format`. Rename `.prettier.json` to `.prettierrc.json` so the intended config applies and format `scripts-js` with it. `checkAccountBalance.js` reads `ALCHEMY_API_KEY` after loading `.env`, so `yarn account` uses the user's key. `foundry.toml`: `polygonAmoy` instead of the dead Mumbai endpoint; remove dead `polygonZkEvm`, zkEVM testnet, `scrollSepolia` and PGN endpoints.
+
+  Remove `challenge-state-channels`, `challenge-multisig` and `challenge-svg-nft` from the extensions list: these branches no longer exist in `scaffold-eth/se-2-challenges`, so `-e <name>` failed.
+
+- 57d381f: Pin the rocketh packages in the Hardhat template to exact versions (`rocketh` 0.19.20, `@rocketh/node` 0.19.22, `@rocketh/deploy` 0.19.18, `@rocketh/read-execute` 0.19.13, `@rocketh/signer` 0.19.13, `@rocketh/verifier` 0.19.23) so new projects get one consistent set that matches `hardhat-deploy` 2.0.24 instead of mismatched newest versions.
+- 8c27373: - Update agent config for Hardhat v3, daisyUI 5 and stale skill links (https://github.com/scaffold-eth/scaffold-eth-2/pull/1328)
+  - fix: handle --network=<name> in deploy and verify scripts (https://github.com/scaffold-eth/scaffold-eth-2/pull/1330)
+  - chore: remove dead code and redundant wrappers (https://github.com/scaffold-eth/scaffold-eth-2/pull/1334)
+  - chore: remove sunset chains (https://github.com/scaffold-eth/scaffold-eth-2/pull/1331)
+  - chore: remove RainbowKit SSR connector workaround (https://github.com/scaffold-eth/scaffold-eth-2/pull/1332)
+  - chore!: remove deprecated string overloads from scaffold hooks (https://github.com/scaffold-eth/scaffold-eth-2/pull/1333)
+  - fix: event history data types and invalid HTML nesting (https://github.com/scaffold-eth/scaffold-eth-2/pull/1337)
+- 57d381f: Remove template leftovers: delete the unused `fetchPriceFromUniswap.ts` helper, run plain `husky` in `postinstall` instead of the deprecated `husky install`, and make the generated README show the same minimum Node version as the project's `engines.node` (22.10.0 for Hardhat).
+
 ## 2.0.24
 
 ### Patch Changes
