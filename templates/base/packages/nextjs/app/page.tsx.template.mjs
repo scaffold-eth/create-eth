@@ -1,9 +1,32 @@
 import { withDefaults } from "../../../../utils.js";
 
-const contents = ({ preContent, externalExtensionName, description, fullContentOverride }) => {
+const contents = ({ preContent, externalExtensionName, description, fullContentOverride, solidityFramework }) => {
   if (fullContentOverride[0]) {
     return fullContentOverride[0];
   }
+
+  const defaultDescription = `
+<p className="text-center text-lg">
+  Get started by editing{" "}
+  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
+    packages/nextjs/app/page.tsx
+  </code>
+</p>
+${
+  Boolean(solidityFramework[0])
+    ? `<p className="text-center text-lg">
+  Edit your smart contract{" "}
+  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
+    YourContract.sol
+  </code>{" "}
+  in{" "}
+  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
+    packages/${solidityFramework[0]}/contracts
+  </code>
+</p>`
+    : ""
+}
+`;
 
   return `
 "use client";
@@ -32,7 +55,7 @@ const Home: NextPage = () => {
           <p className="my-2 font-medium">Connected Address:</p>
           <Address address={connectedAddress} chain={targetNetwork} />
         </div>
-        ${description}
+        ${description[0] ? description : defaultDescription}
       </div>
 
       <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
@@ -69,24 +92,7 @@ export default Home;
 
 export default withDefaults(contents, {
   preContent: ``,
-  description: `
-<p className="text-center text-lg">
-  Get started by editing{" "}
-  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-    packages/nextjs/app/page.tsx
-  </code>
-</p>
-<p className="text-center text-lg">
-  Edit your smart contract{" "}
-  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-    YourContract.sol
-  </code>{" "}
-  in{" "}
-  <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-    packages/hardhat/contracts
-  </code>
-</p>
-`,
+  description: ``,
   externalExtensionName: "",
   fullContentOverride: "",
 });
