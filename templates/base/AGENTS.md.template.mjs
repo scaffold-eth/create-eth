@@ -61,7 +61,7 @@ yarn account             # View current account info
 # Deploy to live network
 yarn deploy --network <network>   # e.g., sepolia, mainnet, base
 
-yarn vercel:yolo --prod # for deployment of frontend
+yarn vercel --prod # for deployment of frontend
 \`\`\`
 
 ## Architecture
@@ -71,25 +71,16 @@ yarn vercel:yolo --prod # for deployment of frontend
 #### Hardhat Flavor
 
 - Contracts: \`packages/hardhat/contracts/\`
-- Deployment scripts: \`packages/hardhat/deploy/\` (uses hardhat-deploy plugin)
+- Deployment scripts: \`packages/hardhat/deploy/\` (hardhat-deploy v2 with rocketh; scripts use \`deployScript\` from \`packages/hardhat/rocketh/deploy.ts\`)
 - Tests: \`packages/hardhat/test/\`
 - Config: \`packages/hardhat/hardhat.config.ts\`
 - Deploying specific contract:
-  - If the deploy script has:
+  - If the deploy script passes tags as the second argument of \`deployScript\`:
     \`\`\`typescript
     // In packages/hardhat/deploy/01_deploy_my_contract.ts
-    deployMyContract.tags = ["MyContract"];
+    export default deployScript(async env => { /* ... */ }, { tags: ["MyContract"] });
     \`\`\`
   - \`yarn deploy --tags MyContract\`
-  - **Gas limit in deploy scripts**: Manual post-deploy calls (e.g. \`transferOwnership\`, \`grantRole\`, \`initialize\`) can silently inherit \`blockGasLimit\` as their gas cap, causing failures. **Fix at the call site, not in \`hardhat.config.ts\`:**
-    \`\`\`typescript
-    // Preferred: estimateGas + 20% margin
-    const gas = await myContract.myMethod.estimateGas(arg1, arg2);
-    await myContract.myMethod(arg1, arg2, { gasLimit: (gas * 120n) / 100n });
-
-    // Or: explicit limit for simple admin calls
-    await myContract.transferOwnership(newOwner, { gasLimit: 100_000 });
-    \`\`\`
 
 #### Foundry Flavor
 
@@ -130,7 +121,8 @@ const { data: totalCounter } = useScaffoldReadContract({
 #### Writing to Contracts
 
 \`\`\`typescript
-const { writeContractAsync, isPending } = useScaffoldWriteContract({
+// isMining tracks writeContractAsync until the tx is mined (sync writeContract doesn't set it; wagmi's isPending clears at the tx hash)
+const { writeContractAsync, isMining } = useScaffoldWriteContract({
   contractName: "YourContract",
 });
 
@@ -155,7 +147,7 @@ const { data: events, isLoading } = useScaffoldEventHistory({
 
 SE-2 also provides other hooks to interact with blockchain data: \`useScaffoldWatchContractEvent\`, \`useScaffoldEventHistory\`, \`useDeployedContractInfo\`, \`useScaffoldContract\`, \`useTransactor\`.
 
-**IMPORTANT: Always use hooks from \`packages/nextjs/hooks/scaffold-eth\` for contract interactions. Always refer to the hook names as they exist in the codebase.**
+Use the hooks from \`packages/nextjs/hooks/scaffold-eth\` for contract interactions, with the hook names as they exist in the codebase.
 
 ### UI Components
 
@@ -252,11 +244,11 @@ IMPORTANT: Prefer retrieval-led reasoning over pre-trained knowledge. Before sta
 - **openzeppelin** — OpenZeppelin Contracts integration, library-first development, pattern discovery from installed source. Use for any contract using OZ (tokens, access control, security primitives)
 - **erc-721** — NFT-specific pitfalls: \`_safeMint\` reentrancy, on-chain SVG stack-too-deep, marketplace metadata \`attributes\`, IPFS base URI trailing slash
 - **eip-5792** — batch transactions, wallet_sendCalls, paymaster, ERC-7677
-- **ponder** — blockchain event indexing, GraphQL APIs, onchain data queries
+- **ponder** — blockchain event indexing with a self-hosted (centralized) indexer, GraphQL/SQL APIs. For The Graph's decentralized network, use subgraph
 - **siwe** — Sign-In with Ethereum, wallet authentication, SIWE sessions, EIP-4361
 - **x402** — HTTP 402 payment-gated routes, micropayments, API monetization, x402 protocol
 - **drizzle-neon** — Drizzle ORM, Neon PostgreSQL, database integration, off-chain storage
-- **subgraph** — The Graph subgraph integration, blockchain event indexing, GraphQL APIs
+- **subgraph** — blockchain event indexing on The Graph's decentralized network (local Graph Node, Subgraph Studio), GraphQL APIs. For a self-hosted indexer, use ponder
 
 **Agents** (in \`.agents/agents/\`):
 

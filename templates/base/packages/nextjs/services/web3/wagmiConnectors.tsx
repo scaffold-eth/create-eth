@@ -3,6 +3,7 @@ import {
   base,
   ledgerWallet,
   metaMaskWallet,
+  phantomWallet,
   rainbowWallet,
   safeWallet,
   walletConnectWallet,
@@ -23,6 +24,7 @@ const wallets = [
   ledgerWallet,
   base,
   rainbowWallet,
+  phantomWallet,
   safeWallet,
   ...(showBurnerWallet ? [rainbowkitBurnerWallet] : []),
 ];
@@ -31,12 +33,6 @@ const wallets = [
  * wagmi connectors for the wagmi context
  */
 export const wagmiConnectors = () => {
-  // Only create connectors on client-side to avoid SSR issues
-  // TODO: update when https://github.com/rainbow-me/rainbowkit/issues/2476 is resolved
-  if (typeof window === "undefined") {
-    return [];
-  }
-
   return connectorsForWallets(
     [
       {

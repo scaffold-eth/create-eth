@@ -15,7 +15,7 @@ const defaultMetadata = {
     description: '$$description$$',
     images: [
       {
-        url: '$$imageUrl$$',
+        url: '$$imageRelativePath$$',
       },
     ],
   },
@@ -25,7 +25,7 @@ const defaultMetadata = {
       template: '$$titleTemplate$$',
     },
     description: '$$description$$',
-    images: ['$$imageUrl$$'],
+    images: ['$$imageRelativePath$$'],
   },
   icons: {
     icon: [{ url: "/favicon.png", sizes: "32x32", type: "image/png" }],
@@ -41,9 +41,10 @@ const contents = ({ titleTemplate, thumbnailPath, preContent, metadataOverrides 
 import type { Metadata } from "next";
 ${preContent[0] || ''}
 
-const baseUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? \`https://\${process.env.VERCEL_PROJECT_PRODUCTION_URL}\`
-  : \`http://localhost:\${process.env.PORT || 3000}\`;
+const productionHost = (
+  process.env.NEXT_PUBLIC_PRODUCTION_URL?.trim() || process.env.VERCEL_PROJECT_PRODUCTION_URL
+)?.replace(/^https?:\\/\\//i, "");
+const baseUrl = productionHost ? \`https://\${productionHost}\` : \`http://localhost:\${process.env.PORT || 3000}\`;
 const titleTemplate = "${titleTemplate}";
 
 export const getMetadata = ({
@@ -55,8 +56,6 @@ export const getMetadata = ({
   description: string;
   imageRelativePath?: string;
 }): Metadata => {
-  const imageUrl = \`\${baseUrl}\${imageRelativePath}\`;
-
   return ${stringify(finalMetadata)};
 }`
 }
