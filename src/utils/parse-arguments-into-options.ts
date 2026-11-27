@@ -1,5 +1,4 @@
-import type { Args, SolidityFramework, RawOptions, SolidityFrameworkChoices } from "../types";
-import arg from "arg";
+import type { Args, RawOptions, SolidityFrameworkChoices } from "../types";
 import { getSolidityFrameworkDirsFromExternalExtension, validateExternalExtension } from "./external-extensions";
 import chalk from "chalk";
 import { SOLIDITY_FRAMEWORKS } from "./consts";
@@ -7,43 +6,15 @@ import { validateNpmName } from "./validate-name";
 import { confirm } from "@inquirer/prompts";
 import packageJson from "../../package.json";
 import { execa } from "execa";
+import { parseCliArgs } from "./parse-cli-args";
 
-// TODO update smartContractFramework code with general extensions
-export async function parseArgumentsIntoOptions(
-  rawArgs: Args,
-): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: SolidityFrameworkChoices }> {
-  const args = arg(
-    {
-      "--skip-install": Boolean,
-      "--skip": "--skip-install",
+type ResolvedExtension = Awaited<ReturnType<typeof validateExternalExtension>> | null;
 
-      "--dev": Boolean,
-
-      "--solidity-framework": solidityFrameworkHandler,
-      "-s": "--solidity-framework",
-
-      "--extension": String,
-      "-e": "--extension",
-
-      "--help": Boolean,
-      "-h": "--help",
-    },
-    {
-      argv: rawArgs.slice(2),
-    },
-  );
-
-  const skipInstall = args["--skip-install"] ?? null;
-
-  const dev = args["--dev"] ?? false; // info: use false avoid asking user
-
-  const help = args["--help"] ?? false;
-
-  let project: string | null = args._[0] ?? null;
-
-  // use the original extension arg
-  const extensionName = args["--extension"];
-  // ToDo. Allow multiple
+// Validates the extension argument (network in non-dev mode) and warns on untrusted third-party sources.
+const resolveExternalExtension = async (
+  extensionName: string | undefined,
+  dev: boolean,
+): Promise<ResolvedExtension> => {
   const extension = extensionName ? await validateExternalExtension(extensionName, dev) : null;
 
   // if dev mode, extension would be a string
@@ -57,73 +28,103 @@ export async function parseArgumentsIntoOptions(
     );
   }
 
-  // Check if extension createEthVersion matches current version
-  if (extension && typeof extension === "object" && extension.recommendedCreateEthVersion) {
-    const currentVersion = packageJson.version;
+  return extension;
+};
 
-    if (extension.recommendedCreateEthVersion !== currentVersion) {
-      console.log(
-        chalk.yellow(
-          `\n⚠️  This extension requires create-eth ${chalk.bold(`v${extension.recommendedCreateEthVersion}`)}, but you're running ${chalk.bold(`v${currentVersion}`)}.\n`,
-        ),
-      );
-
-      const switchVersion = await confirm({
-        message: `Would you like to run with the correct version (${extension.recommendedCreateEthVersion})?`,
-        default: true,
-      });
-
-      if (switchVersion) {
-        console.log(chalk.gray(`\nSwitching to create-eth@${extension.recommendedCreateEthVersion}...\n`));
-
-        await execa("npx", [`create-eth@${extension.recommendedCreateEthVersion}`, ...rawArgs.slice(2)], {
-          stdio: "inherit",
-        });
-
-        process.exit(0);
-      }
-
-      const proceed = await confirm({
-        message: "Do you want to proceed with the current version anyway?",
-        default: false,
-      });
-
-      if (!proceed) {
-        console.log(chalk.gray("\nSetup cancelled. No project was created"));
-        process.exit(0);
-      }
-    }
+// Interactive guard: when the extension recommends a different create-eth version, offer to switch (and exit).
+const ensureCompatibleCreateEthVersion = async (extension: ResolvedExtension, rawArgs: Args) => {
+  if (!(extension && typeof extension === "object" && extension.recommendedCreateEthVersion)) {
+    return;
   }
 
-  if (project) {
-    const validation = validateNpmName(project);
-    if (!validation.valid) {
-      console.error(
-        `Could not create a project called ${chalk.yellow(`"${project}"`)} because of naming restrictions:`,
-      );
-
-      validation.problems.forEach(p => console.error(`${chalk.red(">>")} Project ${p}`));
-      project = null;
-    }
+  const currentVersion = packageJson.version;
+  if (extension.recommendedCreateEthVersion === currentVersion) {
+    return;
   }
 
-  let solidityFrameworkChoices = [
+  console.log(
+    chalk.yellow(
+      `\n⚠️  This extension requires create-eth ${chalk.bold(`v${extension.recommendedCreateEthVersion}`)}, but you're running ${chalk.bold(`v${currentVersion}`)}.\n`,
+    ),
+  );
+
+  const switchVersion = await confirm({
+    message: `Would you like to run with the correct version (${extension.recommendedCreateEthVersion})?`,
+    default: true,
+  });
+
+  if (switchVersion) {
+    console.log(chalk.gray(`\nSwitching to create-eth@${extension.recommendedCreateEthVersion}...\n`));
+
+    await execa("npx", [`create-eth@${extension.recommendedCreateEthVersion}`, ...rawArgs.slice(2)], {
+      stdio: "inherit",
+    });
+
+    process.exit(0);
+  }
+
+  const proceed = await confirm({
+    message: "Do you want to proceed with the current version anyway?",
+    default: false,
+  });
+
+  if (!proceed) {
+    console.log(chalk.gray("\nSetup cancelled. No project was created"));
+    process.exit(0);
+  }
+};
+
+// Returns the project name if valid, otherwise prints the problems and returns null (prompt later).
+const validateProjectName = (project: string | null): string | null => {
+  if (!project) {
+    return null;
+  }
+
+  const validation = validateNpmName(project);
+  if (validation.valid) {
+    return project;
+  }
+
+  console.error(`Could not create a project called ${chalk.yellow(`"${project}"`)} because of naming restrictions:`);
+  validation.problems.forEach(p => console.error(`${chalk.red(">>")} Project ${p}`));
+  return null;
+};
+
+const resolveSolidityFrameworkChoices = async (extension: ResolvedExtension): Promise<SolidityFrameworkChoices> => {
+  const defaultChoices: SolidityFrameworkChoices = [
     SOLIDITY_FRAMEWORKS.HARDHAT,
     SOLIDITY_FRAMEWORKS.FOUNDRY,
     { value: null, name: "none" },
   ];
 
-  if (extension) {
-    const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension(extension);
-
-    if (externalExtensionSolidityFrameworkDirs.length !== 0) {
-      solidityFrameworkChoices = externalExtensionSolidityFrameworkDirs;
-    }
+  if (!extension) {
+    return defaultChoices;
   }
 
+  const externalExtensionSolidityFrameworkDirs = await getSolidityFrameworkDirsFromExternalExtension(extension);
+  return externalExtensionSolidityFrameworkDirs.length !== 0 ? externalExtensionSolidityFrameworkDirs : defaultChoices;
+};
+
+export async function parseArgumentsIntoOptions(
+  rawArgs: Args,
+): Promise<{ rawOptions: RawOptions; solidityFrameworkChoices: SolidityFrameworkChoices }> {
+  const {
+    skipInstall,
+    dev,
+    help,
+    project: projectArg,
+    extensionName,
+    solidityFramework: solidityFrameworkArg,
+  } = parseCliArgs(rawArgs);
+
+  const extension = await resolveExternalExtension(extensionName, dev);
+  await ensureCompatibleCreateEthVersion(extension, rawArgs);
+
+  const project = validateProjectName(projectArg);
+  const solidityFrameworkChoices = await resolveSolidityFrameworkChoices(extension);
+
   // if length is 1, we don't give user a choice and set it ourselves.
-  const solidityFramework =
-    solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : (args["--solidity-framework"] ?? null);
+  const solidityFramework = solidityFrameworkChoices.length === 1 ? solidityFrameworkChoices[0] : solidityFrameworkArg;
 
   return {
     rawOptions: {
@@ -136,15 +137,4 @@ export async function parseArgumentsIntoOptions(
     },
     solidityFrameworkChoices,
   };
-}
-
-const SOLIDITY_FRAMEWORK_OPTIONS = [...Object.values(SOLIDITY_FRAMEWORKS), "none"];
-function solidityFrameworkHandler(value: string) {
-  const lowercasedValue = value.toLowerCase();
-  if (SOLIDITY_FRAMEWORK_OPTIONS.includes(lowercasedValue)) {
-    return lowercasedValue as SolidityFramework | "none";
-  }
-
-  // choose from cli prompts
-  return null;
 }
