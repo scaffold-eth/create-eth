@@ -3,6 +3,7 @@ import { execa } from "execa";
 import semver from "semver";
 
 const REQUIRED_FOUNDRY_VERSION = "1.4.0";
+const REQUIRED_NODE_VERSION = "22.13.0";
 
 // Custom error for Foundry validation
 class FoundryValidationError extends Error {
@@ -58,11 +59,11 @@ export const checkSystemRequirements = async () => {
   try {
     const { stdout: nodeVersion } = await execa("node", ["--version"]);
     const cleanNodeVersion = nodeVersion.replace("v", "");
-    if (semver.lt(cleanNodeVersion, "20.18.3")) {
-      errors.push(`Node.js version must be >= 20.18.3. Current version: ${nodeVersion}`);
+    if (semver.lt(cleanNodeVersion, REQUIRED_NODE_VERSION)) {
+      errors.push(`Node.js version must be >= ${REQUIRED_NODE_VERSION}. Current version: ${nodeVersion}`);
     }
   } catch {
-    errors.push("Node.js is not installed. Please install Node.js >= 20.18.3");
+    errors.push(`Node.js is not installed. Please install Node.js >= ${REQUIRED_NODE_VERSION}`);
   }
 
   try {

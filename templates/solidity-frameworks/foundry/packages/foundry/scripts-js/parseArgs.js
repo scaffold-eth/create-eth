@@ -1,23 +1,19 @@
 import { spawnSync } from "child_process";
 import { config } from "dotenv";
-import { join, dirname } from "path";
-import { readFileSync, existsSync } from "fs";
-import { parse } from "toml";
-import { fileURLToPath } from "url";
+import { join } from "path";
+import { existsSync } from "fs";
+import { parseFlags, validateNetwork } from "./cliArgs.js";
 import { selectOrCreateKeystore } from "./selectOrCreateKeystore.js";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
 config();
 
-// Get all arguments after the script name
-const args = process.argv.slice(2);
-let fileName = "Deploy.s.sol";
-let network = "localhost";
-let keystoreArg = null;
-
-// Show help message if --help is provided
-if (args.includes("--help") || args.includes("-h")) {
-  console.log(`
+const {
+  file: fileName = "Deploy.s.sol",
+  network = "localhost",
+  keystore: keystoreArg,
+} = parseFlags(
+  ["file", "network", "keystore"],
+  `
 Usage: yarn deploy [options]
 Options:
   --file <filename>     Specify the deployment script file (default: Deploy.s.sol)
@@ -29,23 +25,8 @@ Examples:
   yarn deploy --network sepolia --keystore my-account
   yarn deploy --file DeployYourContract.s.sol
   yarn deploy
-  `);
-  process.exit(0);
-}
-
-// Parse arguments
-for (let i = 0; i < args.length; i++) {
-  if (args[i] === "--network" && args[i + 1]) {
-    network = args[i + 1];
-    i++; // Skip next arg since we used it
-  } else if (args[i] === "--file" && args[i + 1]) {
-    fileName = args[i + 1];
-    i++; // Skip next arg since we used it
-  } else if (args[i] === "--keystore" && args[i + 1]) {
-    keystoreArg = args[i + 1];
-    i++; // Skip next arg since we used it
-  }
-}
+  `,
+);
 
 // Function to check if a keystore exists
 function validateKeystore(keystoreName) {
@@ -57,23 +38,7 @@ function validateKeystore(keystoreName) {
   return existsSync(keystorePath);
 }
 
-// Check if the network exists in rpc_endpoints
-try {
-  const foundryTomlPath = join(__dirname, "..", "foundry.toml");
-  const tomlString = readFileSync(foundryTomlPath, "utf-8");
-  const parsedToml = parse(tomlString);
-
-  if (!parsedToml.rpc_endpoints[network]) {
-    console.log(
-      `\n❌ Error: Network '${network}' not found in foundry.toml!`,
-      "\nPlease check `foundry.toml` for available networks in the [rpc_endpoints] section or add a new network.",
-    );
-    process.exit(1);
-  }
-} catch (error) {
-  console.error("\n❌ Error reading or parsing foundry.toml:", error);
-  process.exit(1);
-}
+validateNetwork(network);
 
 if (process.env.LOCALHOST_KEYSTORE_ACCOUNT !== "scaffold-eth-default" && network === "localhost") {
   console.log(`
@@ -131,17 +96,16 @@ To deploy to ${network}, please follow these steps:
 
 The default account (scaffold-eth-default) can only be used for localhost deployments.
 `);
-  process.exit(0);
+  process.exit(1);
 }
 
 // Set environment variables for the make command
-process.env.DEPLOY_SCRIPT = `script/${fileName}`;
+process.env.DEPLOY_SCRIPT = `script/${fileName.replace(/^script\//, "")}`;
 process.env.RPC_URL = network;
 process.env.ETH_KEYSTORE_ACCOUNT = selectedKeystore;
 
 const result = spawnSync("make", ["deploy-and-generate-abis"], {
   stdio: "inherit",
-  shell: true,
 });
 
-process.exit(result.status);
+process.exit(result.status ?? 1);
